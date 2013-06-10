@@ -98,6 +98,11 @@ add_executable(tpy
                src/parser/lexer.cc
                src/parser/driver.cc
 
+               src/tasks/task-invoker.cc
+               src/tasks/task-register.cc
+               src/tasks/basic-task.cc
+               src/tasks/callback-task.cc
+
                src/tpy.cc)
 
 add_dependencies(tpy tpy_grammar)
