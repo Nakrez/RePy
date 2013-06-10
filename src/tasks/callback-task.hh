@@ -5,13 +5,23 @@
 
 namespace tasks
 {
-    class CallbackTask
+    typedef void (*task_callback)();
+
+    class CallbackTask : public BasicTask
     {
         public:
-            CallbackTask();
+            CallbackTask(const std::string& name,
+                         const std::string& description,
+                         const std::string& opt,
+                         task_callback callback);
             virtual ~CallbackTask();
 
+            task_callback callback_get() const;
+
             virtual void run();
+
+        private:
+            task_callback callback_;
     };
 } // namespace tasks
 
