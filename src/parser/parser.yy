@@ -30,6 +30,7 @@
 }
 
 %token  END     0       "end_of_file"
+        TOK_DEF         "def"
 
 %%
 
@@ -41,5 +42,6 @@ program:
 void yy::tpy_parser::error(const yy::tpy_parser::location_type& l,
                            const std::string& m)
 {
-    std::cerr << l << m << std::endl;
+    driver.error_get() << misc::Error::PARSE
+                       << l << ":" << m << std::endl;
 }

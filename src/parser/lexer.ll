@@ -21,6 +21,13 @@
 %{
     typedef yy::tpy_parser::token token;
 %}
+
+"def"   { return token::TOK_DEF; }
+
+.       { driver.error_get() << misc::Error::SCAN
+                             << "Unknown char : " << yytext
+                             << std::endl;
+        }
 %%
 
 namespace parser

@@ -6,6 +6,9 @@ namespace parser
 {
     void parse_input_file()
     {
-        std::cout << "PARSING" << std::endl;
+        Driver driver;
+        driver.parse_file(typy::input_name);
+
+        driver.error_get().throw_if_needed();
     }
 } // namespace parser

@@ -17,6 +17,7 @@ namespace tasks
 
     void TaskRegister::register_task(BasicTask& task)
     {
+        // TODO : verify if tasks not already decalred
         registered_tasks_.push_back(&task);
     }
 

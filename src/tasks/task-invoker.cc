@@ -95,6 +95,7 @@ namespace tasks
 
     void TaskInvoker::enable_task(BasicTask* task)
     {
+        // TODO resolve dependancies
         tasks_to_run_.push_back(task);
     }
 } // namespace tasks

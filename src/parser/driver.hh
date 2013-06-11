@@ -4,6 +4,8 @@
 # include <stack>
 # include <string>
 
+# include <misc/error.hh>
+
 # include <parser/parser.hh>
 
 # define YY_DECL                                        \
@@ -24,6 +26,8 @@ namespace parser
             Driver();
             ~Driver();
 
+            misc::Error& error_get();
+
             void parse_file(const std::string& filename);
 
         private:
@@ -33,6 +37,7 @@ namespace parser
         private:
             std::stack<yy_buffer_state*> states_;
             std::string file_;
+            misc::Error error_;
     };
 }
 

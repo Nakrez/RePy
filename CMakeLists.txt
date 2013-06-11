@@ -51,15 +51,16 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -std=c++0x -I${CMAKE_CURRENT_SOURCE_DIR
 set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wextra -std=c++0x -I${CMAKE_CURRENT_SOURCE_DIR}/src -I${CMAKE_CURRENT_SOURCE_DIR}/lib -O2 -s -DNDEBUG")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG}")
 
-#ADD_LIBRARY(tpy_lib SHARED
-#            )
+ADD_LIBRARY(typy_lib STATIC
+            lib/misc/error.cc
+            )
 
-#SET_TARGET_PROPERTIES(
-#    tpy_lib
-#    PROPERTIES
-#    VERSION 0.0.1
-#    OUTPUT_NAME tpy
-#)
+SET_TARGET_PROPERTIES(
+    typy_lib
+    PROPERTIES
+    VERSION 0.0.1
+    OUTPUT_NAME typy
+)
 
 ##########################
 #         BISON          #
@@ -105,6 +106,8 @@ add_executable(typy
                src/tasks/callback-task.cc
 
                src/typy.cc)
+
+target_link_libraries(typy typy_lib)
 
 add_dependencies(typy typy_grammar)
 add_dependencies(typy typy_lexer)

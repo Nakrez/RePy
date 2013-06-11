@@ -8,6 +8,11 @@ namespace parser
     Driver::~Driver()
     {}
 
+    misc::Error& Driver::error_get()
+    {
+        return error_;
+    }
+
     void Driver::parse_file(const std::string& filename)
     {
         std::string old_file = file_;
