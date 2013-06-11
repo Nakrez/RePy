@@ -1,38 +1,41 @@
 #include <tasks/basic-task.hh>
+#include <tasks/task-register.hh>
 
 namespace tasks
 {
-    BasicTask::BasicTask(const std::string& name,
-                         const std::string& description,
-                         const std::string& opt)
-        : name_(name)
-        , description_(description)
+    BasicTask::BasicTask(const std::string& description,
+                         const std::string& opt,
+                         const std::string& dependancy)
+        : description_(description)
+        , dep_(dependancy)
     {
+        static int key = -1;
+
         if (opt.length() >= 2 && opt[1] == '|')
         {
-            short_opt_ = '-' + opt.substr(0, 1);
-            long_opt_ = "--" + opt.substr(2, opt.length() - 2);
+            key_ = opt[0];
+            long_opt_ = opt.substr(2, opt.length() - 2);
         }
         else
+        {
             long_opt_ = opt;
+            key_ = key--;
+        }
+
+        TaskRegister::instance().register_task(*this);
     }
 
     BasicTask::~BasicTask()
     {}
-
-    const std::string& BasicTask::name_get() const
-    {
-        return name_;
-    }
 
     const std::string& BasicTask::description_get() const
     {
         return description_;
     }
 
-    const std::string& BasicTask::short_opt_get() const
+    int BasicTask::key_get() const
     {
-        return short_opt_;
+        return key_;
     }
 
     const std::string& BasicTask::long_opt_get() const

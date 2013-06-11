@@ -2,11 +2,11 @@
 
 namespace tasks
 {
-    CallbackTask::CallbackTask(const std::string& name,
-                               const std::string& description,
+    CallbackTask::CallbackTask(const std::string& description,
                                const std::string& opt,
+                               const std::string& dependancy,
                                task_callback callback)
-        : BasicTask(name, description, opt)
+        : BasicTask(description, opt, dependancy)
         , callback_(callback)
     {}
 
@@ -20,6 +20,6 @@ namespace tasks
 
     void CallbackTask::run()
     {
-
+        callback_();
     }
 } // namespace tasks

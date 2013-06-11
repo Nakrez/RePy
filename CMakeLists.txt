@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(TPy CXX)
+project(TyPy CXX)
 
 FIND_PROGRAM(BISON_EXECUTABLE NAMES bison bison.exe )
 
@@ -75,7 +75,7 @@ ADD_CUSTOM_COMMAND(
         ${BISON_EXECUTABLE} -o${dst_parser} ${src_parser}
         )
 
-add_custom_target(tpy_grammar DEPENDS "${dst_parser}")
+add_custom_target(typy_grammar DEPENDS "${dst_parser}")
 
 ##########################
 #          FLEX          #
@@ -91,22 +91,23 @@ ADD_CUSTOM_COMMAND(
         ${FLEX_EXECUTABLE} -o${dst_lexer} ${src_lexer}
         )
 
-add_custom_target(tpy_lexer DEPENDS "${dst_lexer}")
+add_custom_target(typy_lexer DEPENDS "${dst_lexer}")
 
-add_executable(tpy
+add_executable(typy
                src/parser/parser.cc
                src/parser/lexer.cc
                src/parser/driver.cc
+               src/parser/tasks.cc
 
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
                src/tasks/basic-task.cc
                src/tasks/callback-task.cc
 
-               src/tpy.cc)
+               src/typy.cc)
 
-add_dependencies(tpy tpy_grammar)
-add_dependencies(tpy tpy_lexer)
+add_dependencies(typy typy_grammar)
+add_dependencies(typy typy_lexer)
 
 LIST(APPEND extra_clean_files
      src/parser/parser.hh

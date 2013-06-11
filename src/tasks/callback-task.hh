@@ -10,9 +10,9 @@ namespace tasks
     class CallbackTask : public BasicTask
     {
         public:
-            CallbackTask(const std::string& name,
-                         const std::string& description,
+            CallbackTask(const std::string& description,
                          const std::string& opt,
+                         const std::string& dependancy,
                          task_callback callback);
             virtual ~CallbackTask();
 
