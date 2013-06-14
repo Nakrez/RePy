@@ -174,6 +174,7 @@ int cur_indent = 0;
                 }
 
 [A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
+[0-9]+                  { return token::TOK_NUMBER; }
 
 .       { driver.error_get() << misc::Error::SCAN
                              << *yylloc << ":" << "Unknown char : " << yytext

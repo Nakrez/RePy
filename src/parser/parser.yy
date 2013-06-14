@@ -66,6 +66,7 @@
         TOK_WITH            "with"
         TOK_YIELD           "yield"
         TOK_IDENTIFIER      "identifier"
+        TOK_NUMBER          "number"
         TOK_SEMICOLON       ";"
         TOK_COMA            ","
         TOK_COLON           ":"
@@ -357,16 +358,17 @@ compound_stmt: if_stmt
              /*| decorated*/
              ;
 
-if_stmt: "if" test ":" suite elif_list else_stmt
+if_stmt: "if" test ":" suite
+       | "if" test ":" suite elif_list
+       | "if" test ":" suite else_stmt
+       | "if" test ":" suite elif_list else_stmt
        ;
 
-elif_list:
-         | "elif" test ":" suite
+elif_list: "elif" test ":" suite
          | elif_list "elif" test ":" suite
          ;
 
-else_stmt:
-         | "else" ":" suite
+else_stmt: "else" ":" suite
          ;
 
 while_stmt: "while" test ":" suite
@@ -427,7 +429,8 @@ testlist: testlist_list
         ;
 
 test: or_test
-    | or_test "if" or_test "else" test | lambdef
+    | or_test "if" or_test "else" test
+    | lambdef
     ;
 
 test_nocond: or_test
