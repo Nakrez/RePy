@@ -111,6 +111,14 @@ input_file: "newline"
           | input_file stmt
           | input_file "newline"
 
+funcdef: "def" "identifier" parameters ":" suite
+       | "def" "idenfifier" parameters ":" suite
+       ;
+
+parameters: "(" ")"
+          | "(" typedargslist ")"
+          ;
+
 stmt: simple_stmt
     | compound_stmt
     ;
@@ -139,6 +147,12 @@ expr_stmt: testlist_star_expr augassign yield_expr
          | testlist_star_expr augassign testlist
          | testlist_star_expr expr_simple_assign
          ;
+
+testlist_star_expr: test_or_star
+                  | test_or_star ","
+                  | test_or_star test_star_list
+                  | test_or_star test_star_list ","
+                  ;
 
 expr_simple_assign: "=" yield_expr
                   | "=" testlist_star_expr
@@ -259,7 +273,7 @@ compound_stmt: if_stmt
              | with_stmt
              | funcdef
              | classdef
-             | decorated
+             /*| decorated*/
              ;
 
 if_stmt: "if" test ":" suite elif_list else_stmt
