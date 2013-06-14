@@ -87,13 +87,15 @@ int cur_indent = 0;
                     else
                     {
                         indent_levels.pop();
-                        unput(EOF);
                         return token::TOK_DEDENT;
                     }
                 }
 
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
+":"         { return token::TOK_COLON; }
+"("         { return token::TOK_RBRACKET; }
+")"         { return token::TOK_LBRACKET; }
 "="         { return token::TOK_ASSIGN; }
 "+="        { return token::TOK_PLUS_ASSIGN; }
 "-="        { return token::TOK_MINUS_ASSIGN; }
@@ -126,8 +128,8 @@ int cur_indent = 0;
 "^"         { return token::TOK_XOR; }
 "&"         { return token::TOK_BAND; }
 "~"         { return token::TOK_COMPL; }
-"<<"        { return token::LSHIFT; }
-">>"        { return token::RSHIFT; }
+"<<"        { return token::TOK_LSHIFT; }
+">>"        { return token::TOK_RSHIFT; }
 
 "False"     { return token::TOK_FALSE; }
 "None"      { return token::TOK_NONE; }
@@ -167,6 +169,7 @@ int cur_indent = 0;
                     cur_indent = 0;
                     yylloc->lines(yyleng);
                     yylloc->step();
+                    yy_push_state(indent);
                     return token::TOK_NEWLINE;
                 }
 
