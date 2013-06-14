@@ -119,6 +119,47 @@ parameters: "(" ")"
           | "(" typedargslist ")"
           ;
 
+typedargslist: tfpdef tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list
+             | tfpdef tfpdef_test_list ","
+             | tfpdef "=" test tfpdef_test_list ","
+
+             | tfpdef tfpdef_test_list "," "*" tfpdef_test_list
+             | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             | tfpdef tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
+             | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | tfpdef tfpdef_test_list "," "**" tfpdef
+             | tfpdef "=" test tfpdef_test_list "," "**" tfpdef
+
+             | "*" tfpdef_test_list
+             | "*" tfpdef tfpdef_test_list
+             | "*" tfpdef_test_list "," "**" tfpdef
+             | "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | "**" tfpdef
+
+tfpdef_test_list:
+                | tfpdef_test_list_internal
+                ;
+
+tfpdef_test_list_internal: "," tfpdef
+                         | "," tfpdef "=" test
+                         | tfpdef_test_list_internal "," tfpdef "=" test
+                         | tfpdef_test_list_internal "," tfpdef
+                         ;
+
+tfpdef: "identifier" ":" test
+      ;
+
+vfpdef: "identifier"
+      ;
+
 stmt: simple_stmt
     | compound_stmt
     ;
