@@ -119,6 +119,40 @@ parameters: "(" ")"
           | "(" typedargslist ")"
           ;
 
+tfpdef: "identifier"
+      | "identifier" ":" test
+      ;
+
+typedargslist:
+             tfpdef tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list
+
+             tfpdef tfpdef_test_list "," ['*' [tfpdef] tfdef_test_list [',' '**' tfpdef]]
+             | tfpdef "=" test tfpdef_test_list "," ['*' [tfpdef] tfdef_test_list [',' '**' tfpdef]]
+
+             tfpdef tfpdef_test_list ","
+             | tfpdef "=" test tfpdef_test_list ","
+             | tfpdef "=" test tfpdef_test_list ","
+             | tfpdef tfpdef_test_list ","
+             | tfpdef "=" test tfpdef_test_list "," "**" tfpdef
+             | tfpdef tfpdef_test_list "," "**" tfpdef
+             | "*" tfpdef tfpdef_test_list "," "**" tfpdef
+             | "*" tfpdef tfpdef_test_list
+             | "*" tfpdef_test_list "," "**" tfpdef
+             | "*" tfpdef_test_list
+             | "**" tfpdef
+
+tfpdef_test_list:
+                | internal_tfpdef_test_list
+                ;
+
+internal_tfpdef_test_list:"," tfpdef
+                         | "," tfpdef "=" test
+                         | internal_tfpdef_test_list "," tfpdef
+                         | internal_tfpdef_test_list "," tfpdef "=" test
+vfpdef: "identifier"
+      ;
+
 stmt: simple_stmt
     | compound_stmt
     ;
