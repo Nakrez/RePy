@@ -499,7 +499,7 @@ bor_list: "|" xor_expr
         ;
 
 xor_expr: and_expr
-        | xor_expr_list
+        | and_expr xor_expr_list
         ;
 
 xor_expr_list: "^" and_expr
