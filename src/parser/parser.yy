@@ -184,6 +184,7 @@ varargslist: vfpdef vfpdef_test_list
            | "*" vfpdef vfpdef_test_list "," "**" vfpdef
 
            | "**" vfpdef
+           ;
 
 vfpdef_test_list:
                 | vfpdef_test_list_internal
@@ -228,6 +229,7 @@ small_stmt : expr_stmt
 expr_stmt: testlist_star_expr augassign yield_expr
          | testlist_star_expr augassign testlist
          | testlist_star_expr expr_simple_assign
+         | testlist_star_expr
          ;
 
 testlist_star_expr: test_or_star
