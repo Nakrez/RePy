@@ -196,7 +196,8 @@ vfpdef_test_list_internal: "," vfpdef
                          | vfpdef_test_list_internal "," vfpdef
                          ;
 
-tfpdef: "identifier" ":" test
+tfpdef: "identifier"
+      | "identifier" ":" test
       ;
 
 vfpdef: "identifier"
