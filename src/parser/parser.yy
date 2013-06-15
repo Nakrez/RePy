@@ -67,6 +67,7 @@
         TOK_YIELD           "yield"
         TOK_IDENTIFIER      "identifier"
         TOK_NUMBER          "number"
+        TOK_DOT             "."
         TOK_SEMICOLON       ";"
         TOK_COMA            ","
         TOK_COLON           ":"

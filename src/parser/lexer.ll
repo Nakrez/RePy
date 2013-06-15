@@ -91,6 +91,7 @@ int cur_indent = 0;
                     }
                 }
 
+"."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
 ":"         { return token::TOK_COLON; }
