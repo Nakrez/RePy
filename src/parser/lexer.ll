@@ -21,7 +21,7 @@ int cur_indent = 0;
                         yy_push_state(indent);
 %}
 
-%x indent
+%x indent string
 
 %%
 %{
@@ -91,6 +91,10 @@ int cur_indent = 0;
                     }
                 }
 
+<string>\"      { yy_pop_state(); return token::TOK_STRING; }
+<string>.       { yylloc->step(); }
+
+\"          { yy_push_state(string); }
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
