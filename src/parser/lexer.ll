@@ -21,7 +21,7 @@ int cur_indent = 0;
                         yy_push_state(indent);
 %}
 
-%x indent string
+%x indent string escaped
 
 %%
 %{
@@ -92,7 +92,27 @@ int cur_indent = 0;
                 }
 
 <string>\"      { yy_pop_state(); return token::TOK_STRING; }
+<string>\\      { yylloc->step(); yy_push_state(escaped); }
 <string>.       { yylloc->step(); }
+
+<escaped>\\    { yylloc->step(); yy_pop_state(); }
+<escaped>\n    { yylloc->lines(yyleng); yylloc->step(); yy_pop_state(); }
+<escaped>'     { yylloc->step(); yy_pop_state(); }
+<escaped>\"    { yylloc->step(); yy_pop_state(); }
+<escaped>a     { yylloc->step(); yy_pop_state(); }
+<escaped>b     { yylloc->step(); yy_pop_state(); }
+<escaped>f     { yylloc->step(); yy_pop_state(); }
+<escaped>n     { yylloc->step(); yy_pop_state(); }
+<escaped>r     { yylloc->step(); yy_pop_state(); }
+<escaped>t     { yylloc->step(); yy_pop_state(); }
+<escaped>v     { yylloc->step(); yy_pop_state(); }
+<escaped>[0-7]{3}      { yylloc->step(); yy_pop_state(); }
+<escaped>x[0-9A-F]{2}  { yylloc->step(); yy_pop_state(); }
+<escaped>.     { driver.error_get() << misc::Error::SCAN
+                                    << *yylloc << ":"
+                                    << "Unknown escaped : " << yytext
+                                    << std::endl;
+        }
 
 \"          { yy_push_state(string); }
 "."         { return token::TOK_DOT; }
