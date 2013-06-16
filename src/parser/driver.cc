@@ -20,6 +20,7 @@ namespace parser
         file_ = filename;
 
         yy::tpy_parser parser(*this);
+        // parser.set_debug_level(true);
         scan_begin();
         parser.parse();
         scan_end();

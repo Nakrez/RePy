@@ -29,44 +29,50 @@
 #include <parser/driver.hh>
 }
 
-%token  END     0       "end_of_file"
-        TOK_INDENT      "indent"
-        TOK_DEDENT      "dedent"
-        TOK_NEWLINE     "newline"
-        TOK_FALSE       "false"
-        TOK_NONE        "none"
-        TOK_TRUE        "true"
-        TOK_AND         "and"
-        TOK_ASSERT      "assert"
-        TOK_BREAK       "break"
-        TOK_CLASS       "class"
-        TOK_CONTINUE    "continue"
-        TOK_DEF         "def"
-        TOK_DEL         "del"
-        TOK_ELIF        "elif"
-        TOK_ELSE        "else"
-        TOK_EXCEPT      "except"
-        TOK_FINALLY     "finally"
-        TOK_FOR         "for"
-        TOK_FROM        "from"
-        TOK_GLOBAL      "global"
-        TOK_IF          "if"
-        TOK_IMPORT      "import"
-        TOK_IN          "in"
-        TOK_IS          "is"
-        TOK_LAMBDA      "lambda"
-        TOK_NONLOCAL    "nonlocal"
-        TOK_NOT         "not"
-        TOK_OR          "or"
-        TOK_PASS        "pass"
-        TOK_RAISE       "raise"
-        TOK_RETURN      "return"
-        TOK_TRY         "try"
+%token  END     0           "end_of_file"
+        TOK_INDENT          "indent"
+        TOK_DEDENT          "dedent"
+        TOK_NEWLINE         "newline"
+        TOK_FALSE           "false"
+        TOK_NONE            "none"
+        TOK_TRUE            "true"
+        TOK_AND             "and"
+        TOK_ASSERT          "assert"
+        TOK_BREAK           "break"
+        TOK_CLASS           "class"
+        TOK_CONTINUE        "continue"
+        TOK_DEF             "def"
+        TOK_DEL             "del"
+        TOK_ELIF            "elif"
+        TOK_ELSE            "else"
+        TOK_EXCEPT          "except"
+        TOK_FINALLY         "finally"
+        TOK_FOR             "for"
+        TOK_FROM            "from"
+        TOK_GLOBAL          "global"
+        TOK_IF              "if"
+        TOK_IMPORT          "import"
+        TOK_IN              "in"
+        TOK_IS              "is"
+        TOK_LAMBDA          "lambda"
+        TOK_NONLOCAL        "nonlocal"
+        TOK_NOT             "not"
+        TOK_OR              "or"
+        TOK_PASS            "pass"
+        TOK_RAISE           "raise"
+        TOK_RETURN          "return"
+        TOK_TRY             "try"
         TOK_WHILE           "while"
         TOK_WITH            "with"
         TOK_YIELD           "yield"
         TOK_IDENTIFIER      "identifier"
+        TOK_NUMBER          "number"
+        TOK_DOT             "."
         TOK_SEMICOLON       ";"
+        TOK_COMA            ","
+        TOK_COLON           ":"
+        TOK_RBRACKET        "("
+        TOK_LBRACKET        ")"
         TOK_ASSIGN          "="
         TOK_PLUS_ASSIGN     "+="
         TOK_MINUS_ASSIGN    "-="
@@ -110,6 +116,7 @@ input_file: "newline"
           | stmt
           | input_file stmt
           | input_file "newline"
+          ;
 
 funcdef: "def" "identifier" parameters ":" suite
        | "def" "idenfifier" parameters ":" suite
@@ -119,37 +126,81 @@ parameters: "(" ")"
           | "(" typedargslist ")"
           ;
 
+typedargslist: tfpdef tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list
+             | tfpdef tfpdef_test_list ","
+             | tfpdef "=" test tfpdef_test_list ","
+
+             | tfpdef tfpdef_test_list "," "*" tfpdef_test_list
+             | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             | tfpdef tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
+             | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
+             | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | tfpdef tfpdef_test_list "," "**" tfpdef
+             | tfpdef "=" test tfpdef_test_list "," "**" tfpdef
+
+             | "*" tfpdef_test_list
+             | "*" tfpdef tfpdef_test_list
+             | "*" tfpdef_test_list "," "**" tfpdef
+             | "*" tfpdef tfpdef_test_list "," "**" tfpdef
+
+             | "**" tfpdef
+
+tfpdef_test_list:
+                | tfpdef_test_list_internal
+                ;
+
+tfpdef_test_list_internal: "," tfpdef
+                         | "," tfpdef "=" test
+                         | tfpdef_test_list_internal "," tfpdef "=" test
+                         | tfpdef_test_list_internal "," tfpdef
+                         ;
+
+varargslist: vfpdef vfpdef_test_list
+           | vfpdef "=" test vfpdef_test_list
+           | vfpdef vfpdef_test_list ","
+           | vfpdef "=" test vfpdef_test_list ","
+
+           | vfpdef vfpdef_test_list "," "*" vfpdef_test_list
+           | vfpdef vfpdef_test_list "," "*" vfpdef vfpdef_test_list
+           | vfpdef vfpdef_test_list "," "*" vfpdef_test_list "," "**" vfpdef
+           | vfpdef vfpdef_test_list "," "*" vfpdef vfpdef_test_list "," "**" vfpdef
+
+           | vfpdef "=" test vfpdef_test_list "," "*" vfpdef_test_list
+           | vfpdef "=" test vfpdef_test_list "," "*" vfpdef vfpdef_test_list
+           | vfpdef "=" test vfpdef_test_list "," "*" vfpdef_test_list "," "**" vfpdef
+           | vfpdef "=" test vfpdef_test_list "," "*" vfpdef vfpdef_test_list "," "**" vfpdef
+
+           | vfpdef vfpdef_test_list "," "**" vfpdef
+           | vfpdef "=" test vfpdef_test_list "," "**" vfpdef
+
+           | "*" vfpdef_test_list
+           | "*" vfpdef vfpdef_test_list
+           | "*" vfpdef_test_list "," "**" vfpdef
+           | "*" vfpdef vfpdef_test_list "," "**" vfpdef
+
+           | "**" vfpdef
+           ;
+
+vfpdef_test_list:
+                | vfpdef_test_list_internal
+                ;
+
+vfpdef_test_list_internal: "," vfpdef
+                         | "," vfpdef "=" test
+                         | vfpdef_test_list_internal "," vfpdef "=" test
+                         | vfpdef_test_list_internal "," vfpdef
+                         ;
+
 tfpdef: "identifier"
       | "identifier" ":" test
       ;
 
-typedargslist:
-             tfpdef tfpdef_test_list
-             | tfpdef "=" test tfpdef_test_list
-
-             tfpdef tfpdef_test_list "," ['*' [tfpdef] tfdef_test_list [',' '**' tfpdef]]
-             | tfpdef "=" test tfpdef_test_list "," ['*' [tfpdef] tfdef_test_list [',' '**' tfpdef]]
-
-             tfpdef tfpdef_test_list ","
-             | tfpdef "=" test tfpdef_test_list ","
-             | tfpdef "=" test tfpdef_test_list ","
-             | tfpdef tfpdef_test_list ","
-             | tfpdef "=" test tfpdef_test_list "," "**" tfpdef
-             | tfpdef tfpdef_test_list "," "**" tfpdef
-             | "*" tfpdef tfpdef_test_list "," "**" tfpdef
-             | "*" tfpdef tfpdef_test_list
-             | "*" tfpdef_test_list "," "**" tfpdef
-             | "*" tfpdef_test_list
-             | "**" tfpdef
-
-tfpdef_test_list:
-                | internal_tfpdef_test_list
-                ;
-
-internal_tfpdef_test_list:"," tfpdef
-                         | "," tfpdef "=" test
-                         | internal_tfpdef_test_list "," tfpdef
-                         | internal_tfpdef_test_list "," tfpdef "=" test
 vfpdef: "identifier"
       ;
 
@@ -180,6 +231,7 @@ small_stmt : expr_stmt
 expr_stmt: testlist_star_expr augassign yield_expr
          | testlist_star_expr augassign testlist
          | testlist_star_expr expr_simple_assign
+         | testlist_star_expr
          ;
 
 testlist_star_expr: test_or_star
@@ -310,16 +362,17 @@ compound_stmt: if_stmt
              /*| decorated*/
              ;
 
-if_stmt: "if" test ":" suite elif_list else_stmt
+if_stmt: "if" test ":" suite
+       | "if" test ":" suite elif_list
+       | "if" test ":" suite else_stmt
+       | "if" test ":" suite elif_list else_stmt
        ;
 
-elif_list:
-         | "elif" test ":" suite
+elif_list: "elif" test ":" suite
          | elif_list "elif" test ":" suite
          ;
 
-else_stmt:
-         | "else" ":" suite
+else_stmt: "else" ":" suite
          ;
 
 while_stmt: "while" test ":" suite
@@ -380,7 +433,8 @@ testlist: testlist_list
         ;
 
 test: or_test
-    | or_test "if" or_test "else" test | lambdef
+    | or_test "if" or_test "else" test
+    | lambdef
     ;
 
 test_nocond: or_test
@@ -447,7 +501,7 @@ bor_list: "|" xor_expr
         ;
 
 xor_expr: and_expr
-        | xor_expr_list
+        | and_expr xor_expr_list
         ;
 
 xor_expr_list: "^" and_expr
@@ -496,14 +550,10 @@ term_list: term_content
          | term_list term_content
          ;
 
-factor: factor
-      | power
+factor: power
       | "+" factor
       | "-" factor
       | "~" factor
-      | "+" power
-      | "-" power
-      | "~" power
       ;
 
 power: atom
@@ -524,9 +574,9 @@ atom: "(" yield_expr ")"
     | "number"
     | string_list
     | "..."
-    | "None"
-    | "True"
-    | "False"
+    | "none"
+    | "true"
+    | "false"
     ;
 
 string_list: "string"
