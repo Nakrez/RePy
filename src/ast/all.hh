@@ -11,6 +11,7 @@
 # include <ast/pass-stmt.hh>
 # include <ast/break-stmt.hh>
 # include <ast/continue-stmt.hh>
+# include <ast/expr-stmt.hh>
 
 // Expression
 # include <ast/expr.hh>

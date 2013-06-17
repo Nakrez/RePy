@@ -9,6 +9,7 @@ namespace ast
     class PassStmt;
     class BreakStmt;
     class ContinueStmt;
+    class ExprStmt;
 
     class Expr;
     class NumeralExpr;

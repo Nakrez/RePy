@@ -20,6 +20,7 @@ namespace ast
             virtual void operator()(typename Const<PassStmt>::type& ast);
             virtual void operator()(typename Const<BreakStmt>::type& ast);
             virtual void operator()(typename Const<ContinueStmt>::type& ast);
+            virtual void operator()(typename Const<ExprStmt>::type& ast);
 
             virtual void operator()(typename Const<NumeralExpr>::type& ast);
     };

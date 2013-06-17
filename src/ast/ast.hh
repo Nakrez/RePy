@@ -23,4 +23,6 @@ namespace ast
     };
 } // namespace ast
 
+# include <ast/ast.hxx>
+
 #endif /* !AST_AST_HH */

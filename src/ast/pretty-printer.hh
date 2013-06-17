@@ -11,6 +11,8 @@ namespace ast
     {
         public:
             using DefaultConstVisitor::operator();
+            // Imported operators :
+            // void operator()(const ExprStmt& ast);
 
             PrettyPrinter(std::ostream& o);
             virtual ~PrettyPrinter();

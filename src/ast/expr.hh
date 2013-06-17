@@ -13,7 +13,7 @@ namespace ast
             virtual ~Expr();
 
             virtual void accept(Visitor& v) = 0;
-            virtual void accept(ConstVisitor& v) = 0;
+            virtual void accept(ConstVisitor& v) const = 0;
     };
 } // namespace ast
 
