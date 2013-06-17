@@ -5,6 +5,7 @@
 
 # include <ast/ast.hh>
 # include <ast/stmt.hh>
+# include <ast/expr.hh>
 
 # include <ast/pass-stmt.hh>
 # include <ast/break-stmt.hh>

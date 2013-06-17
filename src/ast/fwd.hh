@@ -5,6 +5,7 @@ namespace ast
 {
     class Ast;
     class Stmt;
+    class Expr;
 
     class PassStmt;
     class BreakStmt;

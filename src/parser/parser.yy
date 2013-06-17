@@ -303,7 +303,7 @@ pass_stmt: "pass" { $$ = new ast::PassStmt(@1); }
          ;
 
 flow_stmt: break_stmt { $$ = $1; }
-         | continue_stmt
+         | continue_stmt { $$ = $1; }
          | return_stmt
          | raise_stmt
          | yield_stmt
