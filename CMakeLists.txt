@@ -100,6 +100,8 @@ add_executable(typy
                src/parser/driver.cc
                src/parser/tasks.cc
 
+               src/ast/ast.cc
+               src/ast/stmt.cc
                src/ast/pretty-printer.cc
 
                src/tasks/task-invoker.cc

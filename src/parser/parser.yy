@@ -118,10 +118,8 @@ program:
        | input_file
        ;
 
-input_file: "newline"
-          | stmt
+input_file: stmt
           | input_file stmt
-          | input_file "newline"
           ;
 
 funcdef: "def" "identifier" parameters ":" suite

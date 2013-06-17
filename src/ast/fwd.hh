@@ -4,6 +4,10 @@
 namespace ast
 {
     class Ast;
+    class Stmt;
+
+    template <class T>
+    class AnyList;
 } // namespace ast
 
 #endif /* !AST_FWD_HH */
