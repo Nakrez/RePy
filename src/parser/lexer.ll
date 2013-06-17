@@ -34,16 +34,13 @@ int cur_indent = 0;
 
 <indent>" "     {
                     ++cur_indent;
-                    yylloc->step();
                 }
 <indent>\t      {
                     cur_indent = (cur_indent + TAB_SIZE) & ~(TAB_SIZE + 1);
-                    yylloc->step();
                 }
 <indent>\n      {
                     cur_indent = 0;
                     yylloc->lines(yyleng);
-                    yylloc->step();
                 }
 <indent>.       {
                     if (cur_indent == indent_levels.top())
@@ -92,38 +89,37 @@ int cur_indent = 0;
                 }
 
 <string>\"      { yy_pop_state(); return token::TOK_STRING; }
-<string>\\      { yylloc->step(); yy_push_state(escaped); }
-<string>.       { yylloc->step(); }
+<string>\\      { yy_push_state(escaped); }
+<string>.       { }
 
-<escaped>\\    { yylloc->step(); yy_pop_state(); }
-<escaped>\n    { yylloc->lines(yyleng); yylloc->step(); yy_pop_state(); }
-<escaped>'     { yylloc->step(); yy_pop_state(); }
-<escaped>\"    { yylloc->step(); yy_pop_state(); }
-<escaped>a     { yylloc->step(); yy_pop_state(); }
-<escaped>b     { yylloc->step(); yy_pop_state(); }
-<escaped>f     { yylloc->step(); yy_pop_state(); }
-<escaped>n     { yylloc->step(); yy_pop_state(); }
-<escaped>r     { yylloc->step(); yy_pop_state(); }
-<escaped>t     { yylloc->step(); yy_pop_state(); }
-<escaped>v     { yylloc->step(); yy_pop_state(); }
-<escaped>[0-7]{3}      { yylloc->step(); yy_pop_state(); }
-<escaped>x[0-9A-F]{2}  { yylloc->step(); yy_pop_state(); }
+<escaped>\\    { yy_pop_state(); }
+<escaped>\n    { yylloc->lines(yyleng); yy_pop_state(); }
+<escaped>'     { yy_pop_state(); }
+<escaped>\"    { yy_pop_state(); }
+<escaped>a     { yy_pop_state(); }
+<escaped>b     { yy_pop_state(); }
+<escaped>f     { yy_pop_state(); }
+<escaped>n     { yy_pop_state(); }
+<escaped>r     { yy_pop_state(); }
+<escaped>t     { yy_pop_state(); }
+<escaped>v     { yy_pop_state(); }
+<escaped>[0-7]{3}      { yy_pop_state(); }
+<escaped>x[0-9A-F]{2}  { yy_pop_state(); }
 <escaped>.     { driver.error_get() << misc::Error::SCAN
                                     << *yylloc << ":"
                                     << "Unknown escaped : " << yytext
                                     << std::endl;
         }
 
-<simple_comment>.    { yylloc->step(); }
+<simple_comment>.    { }
 <simple_comment>"\n" {
                         yy_pop_state();
                         yylloc->lines(yyleng);
-                        yylloc->step();
                      }
 
-<multi_comment>.     { yylloc->step(); }
-<multi_comment>\"\"\" { yylloc->step(); yy_pop_state(); }
-<multi_comment>\n     { yylloc->step(); yylloc->lines(yyleng); }
+<multi_comment>.     { }
+<multi_comment>\"\"\" { yy_pop_state(); }
+<multi_comment>\n     { yylloc->lines(yyleng); }
 
 \"\"\"      { yy_push_state(multi_comment); }
 "#"         { yy_push_state(simple_comment);}
@@ -131,9 +127,12 @@ int cur_indent = 0;
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
+,\n         { yylloc->lines(yyleng); return token::TOK_COMA; }
 ":"         { return token::TOK_COLON; }
-"("         { return token::TOK_RBRACKET; }
-")"         { return token::TOK_LBRACKET; }
+"("         { return token::TOK_RPAR; }
+")"         { return token::TOK_LPAR; }
+"["         { return token::TOK_RBRACKET; }
+"]"         { return token::TOK_LBRACKET; }
 "="         { return token::TOK_ASSIGN; }
 "+="        { return token::TOK_PLUS_ASSIGN; }
 "-="        { return token::TOK_MINUS_ASSIGN; }
@@ -173,6 +172,7 @@ int cur_indent = 0;
 "None"      { return token::TOK_NONE; }
 "True"      { return token::TOK_TRUE; }
 "and"       { return token::TOK_AND; }
+"as"        { return token::TOK_AS; }
 "assert"    { return token::TOK_ASSERT; }
 "break"     { return token::TOK_BREAK; }
 "class"     { return token::TOK_CLASS; }
@@ -202,11 +202,10 @@ int cur_indent = 0;
 "with"      { return token::TOK_WITH; }
 "yield"     { return token::TOK_YIELD; }
 
-[ \t]+          { yylloc->step(); }
+[ \t]+          { }
 \n              {
                     cur_indent = 0;
                     yylloc->lines(yyleng);
-                    yylloc->step();
                     yy_push_state(indent);
                     return token::TOK_NEWLINE;
                 }
