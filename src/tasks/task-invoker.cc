@@ -106,6 +106,7 @@ namespace tasks
                 }
             }
         }
+
         tasks_to_run_.push_back(task);
     }
 } // namespace tasks

@@ -28,6 +28,11 @@ namespace tasks
     BasicTask::~BasicTask()
     {}
 
+    const std::string& BasicTask::dep_get() const
+    {
+        return dep_;
+    }
+
     const std::string& BasicTask::description_get() const
     {
         return description_;
