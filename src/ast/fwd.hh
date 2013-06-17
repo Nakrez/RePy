@@ -8,6 +8,7 @@ namespace ast
 
     class PassStmt;
     class BreakStmt;
+    class ContinueStmt;
 
     template <class T>
     class AnyList;

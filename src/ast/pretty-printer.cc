@@ -40,4 +40,9 @@ namespace ast
     {
         o_ << "break";
     }
+
+    void PrettyPrinter::operator()(const ContinueStmt&)
+    {
+        o_ << "continue";
+    }
 } // namespace ast

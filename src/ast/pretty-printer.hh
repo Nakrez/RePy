@@ -20,6 +20,7 @@ namespace ast
 
             void operator()(const PassStmt& ast);
             void operator()(const BreakStmt& ast);
+            void operator()(const ContinueStmt& ast);
         private:
             std::ostream& o_;
     };

@@ -104,6 +104,7 @@ add_executable(typy
                src/ast/stmt.cc
                src/ast/pass-stmt.cc
                src/ast/break-stmt.cc
+               src/ast/continue-stmt.cc
                src/ast/pretty-printer.cc
                src/ast/tasks.cc
 

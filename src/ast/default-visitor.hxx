@@ -34,6 +34,11 @@ namespace ast
     void
     GenDefaultVisitor<Const>::operator()(typename Const<BreakStmt>::type&)
     {}
+
+    template <template <typename> class Const>
+    void
+    GenDefaultVisitor<Const>::operator()(typename Const<ContinueStmt>::type&)
+    {}
 } // namespace ast
 
 #endif /* !AST_DEFAULT_VISITOR_HXX */

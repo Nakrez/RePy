@@ -126,7 +126,7 @@
 %type<ast_val> stmt simple_stmt
 
 %type<stmt_list> small_stm_list
-%type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt
+%type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
 
 %%
 
@@ -312,7 +312,7 @@ flow_stmt: break_stmt { $$ = $1; }
 break_stmt: "break" { $$ = new ast::BreakStmt(@1); }
           ;
 
-continue_stmt: "continue"
+continue_stmt: "continue" { $$ = new ast::ContinueStmt(@1); }
              ;
 
 return_stmt: "return"
