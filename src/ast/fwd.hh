@@ -4,12 +4,14 @@
 namespace ast
 {
     class Ast;
-    class Stmt;
-    class Expr;
 
+    class Stmt;
     class PassStmt;
     class BreakStmt;
     class ContinueStmt;
+
+    class Expr;
+    class NumeralExpr;
 
     template <class T>
     class AnyList;

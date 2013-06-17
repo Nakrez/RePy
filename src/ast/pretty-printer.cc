@@ -45,4 +45,9 @@ namespace ast
     {
         o_ << "continue";
     }
+
+    void PrettyPrinter::operator()(const NumeralExpr& e)
+    {
+        o_ << e.value_get();
+    }
 } // namespace ast

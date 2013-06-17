@@ -26,6 +26,8 @@ namespace ast
             virtual void operator()(typename Const<PassStmt>::type& ast) = 0;
             virtual void operator()(typename Const<BreakStmt>::type& ast) = 0;
             virtual void operator()(typename Const<ContinueStmt>::type& ast) = 0;
+
+            virtual void operator()(typename Const<NumeralExpr>::type& ast) = 0;
     };
 
     typedef GenVisitor<misc::const_type> ConstVisitor;
