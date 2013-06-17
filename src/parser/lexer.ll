@@ -6,6 +6,7 @@
 std::stack<int> indent_levels;
 int cur_indent = 0;
 char string_start;
+bool empty = false;
 
 # undef yywrap
 # define yywrap() 1
@@ -34,6 +35,7 @@ char string_start;
 %}
 
 <indent>" "     {
+                    yylloc->step();
                     ++cur_indent;
                 }
 <indent>\t      {
@@ -41,7 +43,17 @@ char string_start;
                 }
 <indent>\n      {
                     cur_indent = 0;
-                    yylloc->lines(yyleng);
+                    yylloc->lines();
+                }
+<indent>#       {
+                    empty = true;
+                    cur_indent = 0;
+                    yy_pop_state();
+                    yy_push_state(simple_comment);
+                }
+<indent>\"\"\"  {
+                    cur_indent = 0;
+                    yy_push_state(multi_comment);
                 }
 <indent>.       {
                     if (cur_indent == indent_levels.top())
@@ -107,7 +119,7 @@ char string_start;
 <string>.       { }
 
 <escaped>\\    { yy_pop_state(); }
-<escaped>\n    { yylloc->lines(yyleng); yy_pop_state(); }
+<escaped>\n    { yylloc->lines(); yy_pop_state(); }
 <escaped>'     { yy_pop_state(); }
 <escaped>\"    { yy_pop_state(); }
 <escaped>a     { yy_pop_state(); }
@@ -126,28 +138,37 @@ char string_start;
         }
 
 <simple_comment>.    { }
-<simple_comment>"\n" {
+<simple_comment>\n   {
                         yy_pop_state();
-                        yylloc->lines(yyleng);
+                        yylloc->lines();
+                        yy_push_state(indent);
+                        if (!empty)
+                            return token::TOK_NEWLINE;
                      }
 
 <multi_comment>.     { }
 <multi_comment>\"\"\" { yy_pop_state(); }
-<multi_comment>\n     { yylloc->lines(yyleng); }
+<multi_comment>\n     { yylloc->lines(); }
 
 \"\"\"      { yy_push_state(multi_comment); }
-"#"         { yy_push_state(simple_comment);}
+"#"         {
+                cur_indent = 0;
+                yy_push_state(simple_comment);
+                empty = false;
+            }
 \"          { string_start = '"'; yy_push_state(string); }
 \'          { string_start = '\''; yy_push_state(string); }
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
-,\n         { yylloc->lines(yyleng); return token::TOK_COMA; }
+,\n         { yylloc->lines(); return token::TOK_COMA; }
 ":"         { return token::TOK_COLON; }
 "("         { return token::TOK_RPAR; }
 ")"         { return token::TOK_LPAR; }
 "["         { return token::TOK_RBRACKET; }
 "]"         { return token::TOK_LBRACKET; }
+"{"         { return token::TOK_RBRACE; }
+"}"         { return token::TOK_LBRACE; }
 "="         { return token::TOK_ASSIGN; }
 "+="        { return token::TOK_PLUS_ASSIGN; }
 "-="        { return token::TOK_MINUS_ASSIGN; }
@@ -187,6 +208,11 @@ char string_start;
 "None"      { return token::TOK_NONE; }
 "True"      { return token::TOK_TRUE; }
 "and"       { return token::TOK_AND; }
+-[ \t]*\n       { yylloc->lines(); return token::TOK_MINUS; }
+and[ \t]*\n       { yylloc->lines(); return token::TOK_AND; }
+or[ \t]*\n       { yylloc->lines(); return token::TOK_OR; }
+\n[ \t]*and       { yylloc->lines(); return token::TOK_AND; }
+\n[ \t]*or       { yylloc->lines(); return token::TOK_OR; }
 "as"        { return token::TOK_AS; }
 "assert"    { return token::TOK_ASSERT; }
 "break"     { return token::TOK_BREAK; }
@@ -220,11 +246,14 @@ char string_start;
 [ \t]+          { }
 \n              {
                     cur_indent = 0;
-                    yylloc->lines(yyleng);
+                    yylloc->lines();
                     yy_push_state(indent);
                     return token::TOK_NEWLINE;
                 }
 
+_[A-Za-z_][A-Za-z0-9_]* { return token::TOK_IDENTIFIER; }
+__[A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
+__[A-Za-z_][A-Za-z0-9_]*__  { return token::TOK_IDENTIFIER; }
 [A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
 [0-9]+                  { return token::TOK_NUMBER; }
 

@@ -77,6 +77,8 @@
         TOK_LPAR            ")"
         TOK_RBRACKET        "["
         TOK_LBRACKET        "]"
+        TOK_RBRACE          "{"
+        TOK_LBRACE          "}"
         TOK_ASSIGN          "="
         TOK_PLUS_ASSIGN     "+="
         TOK_MINUS_ASSIGN    "-="
@@ -570,9 +572,12 @@ trailer_list: trailer
             | trailer_list trailer
             ;
 
-atom: "(" yield_expr ")"
+atom: "(" ")"
+    | "(" yield_expr ")"
     | "(" testlist_comp ")"
+    | "[" "]"
     | "[" testlist_comp "]"
+    | "{" "}"
     | "{" dictorsetmaker "}"
     | "identifier"
     | "number"
@@ -591,10 +596,20 @@ testlist_comp: test_or_star comp_for_test_star
              ;
 
 comp_for_test_star: comp_for
-                  | comp_for ","
-                  | test_star_list
-                  | test_star_list ","
+                  | test_star_list_comp
                   ;
+
+test_star_list_comp:
+                   | ","
+                   | test_star_list_comp_internal
+                   | test_star_list_comp_internal ","
+                   ;
+
+test_star_list_comp_internal: "," test
+                            | "," star_expr
+                            | test_star_list "," test
+                            | test_star_list "," star_expr
+                            ;
 
 test_star_list: "," test
               | "," star_expr
@@ -617,9 +632,9 @@ trailer: "(" ")"
        ;
 
 subscriptlist: subscript
-             | subscript ";"
+             | subscript ","
              | "subscript" subscript_list
-             | "subscript" subscript_list ";"
+             | "subscript" subscript_list ","
              ;
 
 subscript_list: "," subscript
