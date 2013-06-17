@@ -21,7 +21,7 @@ int cur_indent = 0;
                         yy_push_state(indent);
 %}
 
-%x indent string escaped
+%x indent string escaped simple_comment multi_comment
 
 %%
 %{
@@ -114,6 +114,19 @@ int cur_indent = 0;
                                     << std::endl;
         }
 
+<simple_comment>.    { yylloc->step(); }
+<simple_comment>"\n" {
+                        yy_pop_state();
+                        yylloc->lines(yyleng);
+                        yylloc->step();
+                     }
+
+<multi_comment>.     { yylloc->step(); }
+<multi_comment>\"\"\" { yylloc->step(); yy_pop_state(); }
+<multi_comment>\n     { yylloc->step(); yylloc->lines(yyleng); }
+
+\"\"\"      { yy_push_state(multi_comment); }
+"#"         { yy_push_state(simple_comment);}
 \"          { yy_push_state(string); }
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
