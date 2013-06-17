@@ -95,7 +95,17 @@ namespace tasks
 
     void TaskInvoker::enable_task(BasicTask* task)
     {
-        // TODO resolve dependancies
+        if (task->dep_get() != "")
+        {
+            for (auto t : TaskRegister::instance().registered_tasks_get())
+            {
+                if (t->long_opt_get() == task->dep_get())
+                {
+                    enable_task(t);
+                    break;
+                }
+            }
+        }
         tasks_to_run_.push_back(task);
     }
 } // namespace tasks
