@@ -3,6 +3,7 @@
 namespace parser
 {
     Driver::Driver()
+        : ast_(nullptr)
     {}
 
     Driver::~Driver()
@@ -13,9 +14,10 @@ namespace parser
         return error_;
     }
 
-    void Driver::parse_file(const std::string& filename)
+    ast::Ast* Driver::parse_file(const std::string& filename)
     {
         std::string old_file = file_;
+        ast::Ast* old = ast_;
 
         file_ = filename;
 
@@ -25,6 +27,15 @@ namespace parser
         parser.parse();
         scan_end();
 
+        std::swap(ast_, old);
+
         file_ = old_file;
+
+        return old;
+    }
+
+    void Driver::ast_set(ast::Ast* ast)
+    {
+        ast_ = ast;
     }
 } // namespace parser

@@ -8,6 +8,8 @@
 
 # include <parser/parser.hh>
 
+# include <ast/fwd.hh>
+
 # define YY_DECL                                        \
     yy::tpy_parser::token_type yylex(                   \
             yy::tpy_parser::semantic_type* yylval,      \
@@ -28,7 +30,9 @@ namespace parser
 
             misc::Error& error_get();
 
-            void parse_file(const std::string& filename);
+            ast::Ast* parse_file(const std::string& filename);
+
+            void ast_set(ast::Ast* ast);
 
         private:
             void scan_begin();
@@ -38,6 +42,7 @@ namespace parser
             std::stack<yy_buffer_state*> states_;
             std::string file_;
             misc::Error error_;
+            ast::Ast* ast_;
     };
 }
 
