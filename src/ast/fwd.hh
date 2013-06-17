@@ -7,6 +7,7 @@ namespace ast
     class Stmt;
 
     class PassStmt;
+    class BreakStmt;
 
     template <class T>
     class AnyList;

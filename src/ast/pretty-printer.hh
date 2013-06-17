@@ -17,7 +17,9 @@ namespace ast
 
             void operator()(const AstList& ast);
             void operator()(const StmtList& ast);
+
             void operator()(const PassStmt& ast);
+            void operator()(const BreakStmt& ast);
         private:
             std::ostream& o_;
     };

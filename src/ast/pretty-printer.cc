@@ -35,4 +35,9 @@ namespace ast
     {
         o_ << "pass";
     }
+
+    void PrettyPrinter::operator()(const BreakStmt&)
+    {
+        o_ << "break";
+    }
 } // namespace ast

@@ -126,7 +126,7 @@
 %type<ast_val> stmt simple_stmt
 
 %type<stmt_list> small_stm_list
-%type<stmt_val> small_stmt pass_stmt
+%type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt
 
 %%
 
@@ -257,7 +257,7 @@ small_stm_list:
 small_stmt : expr_stmt
            | del_stmt
            | pass_stmt { $$ = $1; }
-           | flow_stmt
+           | flow_stmt { $$ = $1; }
            | import_stmt
            | global_stmt
            | nonlocal_stmt
@@ -302,14 +302,14 @@ del_stmt: "del" exprlist
 pass_stmt: "pass" { $$ = new ast::PassStmt(@1); }
          ;
 
-flow_stmt: break_stmt
+flow_stmt: break_stmt { $$ = $1; }
          | continue_stmt
          | return_stmt
          | raise_stmt
          | yield_stmt
          ;
 
-break_stmt: "break"
+break_stmt: "break" { $$ = new ast::BreakStmt(@1); }
           ;
 
 continue_stmt: "continue"
