@@ -5,6 +5,7 @@
 
 std::stack<int> indent_levels;
 int cur_indent = 0;
+char string_start;
 
 # undef yywrap
 # define yywrap() 1
@@ -88,7 +89,20 @@ int cur_indent = 0;
                     }
                 }
 
-<string>\"      { yy_pop_state(); return token::TOK_STRING; }
+<string>\"      {
+                    if (string_start == '"')
+                    {
+                        yy_pop_state();
+                        return token::TOK_STRING;
+                    }
+                }
+<string>'       {
+                    if (string_start == '\'')
+                    {
+                        yy_pop_state();
+                        return token::TOK_STRING;
+                    }
+                }
 <string>\\      { yy_push_state(escaped); }
 <string>.       { }
 
@@ -123,7 +137,8 @@ int cur_indent = 0;
 
 \"\"\"      { yy_push_state(multi_comment); }
 "#"         { yy_push_state(simple_comment);}
-\"          { yy_push_state(string); }
+\"          { string_start = '"'; yy_push_state(string); }
+\'          { string_start = '\''; yy_push_state(string); }
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
