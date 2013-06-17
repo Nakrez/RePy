@@ -15,6 +15,9 @@ namespace ast
             PrettyPrinter(std::ostream& o);
             virtual ~PrettyPrinter();
 
+            void operator()(const AstList& ast);
+            void operator()(const StmtList& ast);
+            void operator()(const PassStmt& ast);
         private:
             std::ostream& o_;
     };

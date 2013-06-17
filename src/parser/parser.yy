@@ -5,6 +5,7 @@
 {
 #include <string>
 #include <iostream>
+#include <ast/all.hh>
 
     namespace parser
     {
@@ -23,6 +24,15 @@
 %parse-param { parser::Driver& driver }
 %lex-param   { parser::Driver& driver }
 %pure-parser
+
+%union
+{
+    ast::Ast* ast_val;
+    ast::AstList* ast_list;
+
+    ast::Stmt* stmt_val;
+    ast::StmtList* stmt_list;
+}
 
 %code
 {
@@ -112,14 +122,28 @@
         TOK_LSHIFT          "<<"
         TOK_RSHIFT          ">>"
 
+%type<ast_list> input_file
+%type<ast_val> stmt simple_stmt
+
+%type<stmt_list> small_stm_list
+%type<stmt_val> small_stmt pass_stmt
+
 %%
 
 program:
-       | input_file
+       | input_file { driver.ast_set($1); }
        ;
 
 input_file: stmt
+          {
+            $$ = new ast::AstList(@1);
+            $$->push_back($1);
+          }
           | input_file stmt
+          {
+            $$ = $1;
+            $$->push_back($2);
+          }
           ;
 
 funcdef: "def" "identifier" parameters ":" suite
@@ -208,23 +232,31 @@ tfpdef: "identifier"
 vfpdef: "identifier"
       ;
 
-stmt: simple_stmt
+stmt: simple_stmt { $$ = $1; }
     | compound_stmt
     ;
 
 simple_stmt:
-          small_stm_list "newline"
-          | small_stm_list ";" "newline"
+          small_stm_list "newline" { $$ = $1; }
+          | small_stm_list ";" "newline" { $$ = $1; }
           ;
 
 small_stm_list:
           small_stmt
-          | simple_stmt ";" small_stmt
+          {
+            $$ = new ast::StmtList(@1);
+            $$->push_back($1);
+          }
+          | small_stm_list ";" small_stmt
+          {
+            $$ = $1;
+            $$->push_back($3);
+          }
           ;
 
 small_stmt : expr_stmt
            | del_stmt
-           | pass_stmt
+           | pass_stmt { $$ = $1; }
            | flow_stmt
            | import_stmt
            | global_stmt
@@ -267,7 +299,7 @@ augassign: "+="
 del_stmt: "del" exprlist
         ;
 
-pass_stmt: "pass"
+pass_stmt: "pass" { $$ = new ast::PassStmt(@1); }
          ;
 
 flow_stmt: break_stmt

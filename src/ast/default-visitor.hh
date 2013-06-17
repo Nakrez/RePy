@@ -13,6 +13,11 @@ namespace ast
 
             GenDefaultVisitor() = default;
             virtual ~GenDefaultVisitor();
+
+            virtual void operator()(typename Const<AstList>::type& ast);
+            virtual void operator()(typename Const<StmtList>::type& ast);
+
+            virtual void operator()(typename Const<PassStmt>::type& ast);
     };
 
     typedef GenDefaultVisitor<misc::const_type> DefaultConstVisitor;

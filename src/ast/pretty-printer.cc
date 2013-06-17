@@ -9,4 +9,30 @@ namespace ast
 
     PrettyPrinter::~PrettyPrinter()
     {}
+
+    void PrettyPrinter::operator()(const AstList& ast)
+    {
+        for (auto e : ast.list_get())
+        {
+            e->accept(*this);
+        }
+
+        o_ << std::endl;
+    }
+
+    void PrettyPrinter::operator()(const StmtList& ast)
+    {
+        for (auto e : ast.list_get())
+        {
+            e->accept(*this);
+            o_ << " ; ";
+        }
+
+        o_ << std::endl;
+    }
+
+    void PrettyPrinter::operator()(const PassStmt&)
+    {
+        o_ << "pass";
+    }
 } // namespace ast

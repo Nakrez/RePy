@@ -12,7 +12,7 @@ namespace ast
             virtual ~Stmt();
 
             virtual void accept(ConstVisitor& v) const = 0;
-            virtual void accept(Visitor& v) const = 0;
+            virtual void accept(Visitor& v) = 0;
     };
 } // namespace ast
 

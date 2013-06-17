@@ -40,6 +40,12 @@ namespace ast
     {
         return list_;
     }
+
+    template <class T>
+    void AnyList<T>::push_back(T* elem)
+    {
+        list_.push_back(elem);
+    }
 } // namespace ast
 
 #endif /* !ANY_LIST_HXX */

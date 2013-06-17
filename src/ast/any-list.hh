@@ -20,6 +20,8 @@ namespace ast
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
+            void push_back(T* elem);
+
         protected:
             std::list<T*> list_;
     };

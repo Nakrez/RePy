@@ -14,7 +14,7 @@ namespace ast
             virtual ~Ast();
 
             virtual void accept(ConstVisitor& v) const = 0;
-            virtual void accept(Visitor& v) const = 0;
+            virtual void accept(Visitor& v) = 0;
 
             const yy::location& location_get() const;
 
