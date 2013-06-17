@@ -101,7 +101,7 @@ def run(category, test_file):
             print_verbose("\033[33m[TESTME] " + stderr + " not present stderr ignored\033[0m")
 
     if testme_to_run[category]['check_code']:
-        ret_value &= testme_to_run[category]['error_code'] == command_exit
+        ret_value &= str(command_exit) in testme_to_run[category]['error_code']
 
     return ret_value
 
@@ -175,7 +175,7 @@ def default_category(cat_name):
             'stderr_ext' : 'err',
             'cmd_line' : '',
             'check_code' : 0,
-            'error_code' : 0,
+            'error_code' : ["0"],
             'display_ok_tests' : 1,
             'display_ko_tests' : 1,
             'display_summary' : 1}
@@ -232,10 +232,13 @@ def parse_config():
         get_string(config_file, testme_to_run, section, 'stderr_ext')
         get_string(config_file, testme_to_run, section, 'cmd_line')
         get_bool(config_file, testme_to_run, section, 'check_code')
-        get_int(config_file, testme_to_run, section, 'error_code')
+        get_string(config_file, testme_to_run, section, 'error_code')
         get_bool(config_file, testme_to_run, section, 'display_ok_tests')
         get_bool(config_file, testme_to_run, section, 'diplay_ko_tests')
         get_bool(config_file, testme_to_run, section, 'display_summary')
+
+        if testme_to_run[section]['error_code'] is str:
+            testme_to_run[section]['error_code'] = testme_to_run['error_code'].split("|")
 
 def parse_argv():
     global testme_running_dir, testme_verbose, testme_args
