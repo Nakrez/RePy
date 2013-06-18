@@ -36,6 +36,9 @@
     ast::StmtList* stmt_list;
 
     ast::Expr* expr_val;
+
+    ast::OpExpr* op_expr_val;
+    ast::OpExpr::Operator op_val;
 }
 
 %code
@@ -138,6 +141,9 @@
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
                 term factor power atom
+
+%type<op_expr_val> or_test_list and_test_list comparaison_list
+%type<op_val> comp_op
 
 %%
 
@@ -498,10 +504,26 @@ lambdef_nocond: "lambda" ":" test_nocond
 
 or_test: and_test { $$ = $1; }
        | and_test or_test_list
+       {
+        $$ = $2;
+        $2->set_left_expr($1);
+       }
        ;
 
 or_test_list: "or" and_test
+            {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::BOOL_OR,
+                                     $2);
+            }
             | or_test_list "or" and_test
+            {
+                $$ = new ast::OpExpr(@1,
+                                     $1,
+                                     ast::OpExpr::Operator::BOOL_OR,
+                                     $3);
+            }
             ;
 
 and_test: not_test { $$ = $1; }

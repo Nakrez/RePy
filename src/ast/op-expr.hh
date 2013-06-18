@@ -10,35 +10,36 @@ namespace ast
 {
     class OpExpr : public Expr
     {
-        enum Operator
-        {
-            PLUS,
-            MINUS,
-            MULT,
-            DIV,
-            FDIV,
-            MOD,
-            POW,
-            RSHIFT,
-            LSHIFT,
-            XOR,
-            BOOL_AND,
-            BOOL_OR,
-            BIT_AND,
-            BIT_OR,
-            EQ,
-            NEQ,
-            GT,
-            GE,
-            LT,
-            LE,
-            IN,
-            IS,
-            NOT_IN,
-            IS_NOT
-        };
-
         public:
+
+            enum Operator
+            {
+                PLUS,
+                MINUS,
+                MULT,
+                DIV,
+                FDIV,
+                MOD,
+                POW,
+                RSHIFT,
+                LSHIFT,
+                XOR,
+                BOOL_AND,
+                BOOL_OR,
+                BIT_AND,
+                BIT_OR,
+                EQ,
+                NEQ,
+                GT,
+                GE,
+                LT,
+                LE,
+                IN,
+                IS,
+                NOT_IN,
+                IS_NOT
+            };
+
             OpExpr(const yy::location& location,
                    Expr* lexpr,
                    OpExpr::Operator op,
