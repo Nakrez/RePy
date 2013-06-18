@@ -663,22 +663,78 @@ and_expr_list: "&" shift_expr
 
 shift_expr: arith_expr { $$ = $1; }
           | arith_expr shift_expr_list
+          {
+            $$ = $2;
+            $2->set_left_expr($1);
+          }
           ;
 
 shift_expr_list: "<<" arith_expr
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      nullptr,
+                                      ast::OpExpr::Operator::LSHIFT,
+                                      $2);
+               }
                | ">>" arith_expr
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      nullptr,
+                                      ast::OpExpr::Operator::RSHIFT,
+                                      $2);
+               }
                | shift_expr_list "<<" arith_expr
+               {
+                $$ = new ast::OpExpr(@1,
+                                     $1,
+                                     ast::OpExpr::Operator::LSHIFT,
+                                     $3);
+               }
                | shift_expr_list ">>" arith_expr
+               {
+                $$ = new ast::OpExpr(@1,
+                                     $1,
+                                     ast::OpExpr::Operator::RSHIFT,
+                                     $3);
+               }
                ;
 
 arith_expr: term { $$ = $1; }
           | term arith_expr_list
+          {
+            $$ = $2;
+            $2->set_left_expr($1);
+          }
           ;
 
 arith_expr_list: "+" term
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      nullptr,
+                                      ast::OpExpr::Operator::PLUS,
+                                      $2);
+               }
                | "-" term
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      nullptr,
+                                      ast::OpExpr::Operator::MINUS,
+                                      $2);
+               }
                | arith_expr_list "+" term
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      $1,
+                                      ast::OpExpr::Operator::PLUS,
+                                      $3);
+               }
                | arith_expr_list "-" term
+               {
+                 $$ = new ast::OpExpr(@1,
+                                      $1,
+                                      ast::OpExpr::Operator::MINUS,
+                                      $3);
+               }
                ;
 
 term: factor { $$ = $1; }
