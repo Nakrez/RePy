@@ -92,6 +92,17 @@ namespace ast
         return "";
     }
 
+    void OpExpr::set_left_expr(Expr* expr)
+    {
+        if (lexpr_ == nullptr)
+            lexpr_ = expr;
+
+        OpExpr* e = dynamic_cast<OpExpr*> (lexpr_);
+
+        if (e)
+            e->set_left_expr(expr);
+    }
+
     void OpExpr::accept(Visitor& v)
     {
         v(*this);

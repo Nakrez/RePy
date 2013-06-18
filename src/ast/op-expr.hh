@@ -50,6 +50,8 @@ namespace ast
             OpExpr::Operator op_get() const;
             std::string op_to_string() const;
 
+            void set_left_expr(Expr* expr);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
