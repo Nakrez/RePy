@@ -560,22 +560,27 @@ not_test: "not" not_test {
 
 comparaison: expr { $$ = $1; }
            | expr comparaison_list
+           {
+            $$ = $2;
+            $2->set_left_expr($1);
+           }
            ;
 
-comparaison_list: comp_op expr
+comparaison_list: comp_op expr { $$ = new ast::OpExpr(@1, nullptr, $1, $2); }
                 | comparaison_list comp_op expr
+                { $$ = new ast::OpExpr(@1, $1, $2, $3); }
                 ;
 
-comp_op: "<"
-       | ">"
-       | "=="
-       | ">="
-       | "<="
-       | "!="
-       | "in"
-       | "not" "in"
-       | "is"
-       | "is" "not"
+comp_op: "<" { $$ = ast::OpExpr::Operator::LT; }
+       | ">" { $$ = ast::OpExpr::Operator::GT; }
+       | "==" { $$ = ast::OpExpr::Operator::EQ; }
+       | ">=" { $$ = ast::OpExpr::Operator::GE; }
+       | "<=" { $$ = ast::OpExpr::Operator::LE; }
+       | "!=" { $$ = ast::OpExpr::Operator::NEQ; }
+       | "in" { $$ = ast::OpExpr::Operator::IN; }
+       | "not" "in" { $$ = ast::OpExpr::Operator::NOT_IN; }
+       | "is" { $$ = ast::OpExpr::Operator::IS; }
+       | "is" "not" { $$ = ast::OpExpr::Operator::IS_NOT; }
        ;
 
 star_expr: "*" expr
