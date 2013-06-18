@@ -791,6 +791,13 @@ factor: power { $$ = $1; }
 
 power: atom { $$ = $1; }
      | atom "**" factor
+     {
+        $$ = new ast::OpExpr(@1,
+                             $1,
+                             ast::OpExpr::Operator::POW,
+                             $3);
+     }
+
      | atom trailer_list
      | atom trailer_list "**" factor
      ;
