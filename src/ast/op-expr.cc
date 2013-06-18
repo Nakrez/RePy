@@ -87,6 +87,14 @@ namespace ast
                 return "<";
             case LE:
                 return "<=";
+            case IN:
+                return "in";
+            case IS:
+                return "is";
+            case NOT_IN:
+                return "not in";
+            case IS_NOT:
+                return "is not";
         }
 
         return "";

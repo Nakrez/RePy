@@ -528,10 +528,26 @@ or_test_list: "or" and_test
 
 and_test: not_test { $$ = $1; }
         | not_test and_test_list
+        {
+            $$ = $2;
+            $2->set_left_expr($1);
+        }
         ;
 
 and_test_list: "and" not_test
+             {
+                 $$ = new ast::OpExpr(@1,
+                                      nullptr,
+                                      ast::OpExpr::Operator::BOOL_AND,
+                                      $2);
+             }
              | and_test_list "and" not_test
+             {
+                 $$ = new ast::OpExpr(@1,
+                                      $1,
+                                      ast::OpExpr::Operator::BOOL_AND,
+                                      $3);
+             }
              ;
 
 not_test: "not" not_test {
