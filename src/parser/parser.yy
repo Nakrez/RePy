@@ -615,10 +615,26 @@ bor_list: "|" xor_expr
 
 xor_expr: and_expr { $$ = $1; }
         | and_expr xor_expr_list
+        {
+            $$ = $2;
+            $2->set_left_expr($1);
+        }
         ;
 
 xor_expr_list: "^" and_expr
+             {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::XOR,
+                                     $2);
+             }
              | xor_expr_list "^" and_expr
+             {
+                $$ = new ast::OpExpr(@1,
+                                     $1,
+                                     ast::OpExpr::Operator::XOR,
+                                     $3);
+             }
              ;
 
 and_expr: shift_expr { $$ = $1; }
