@@ -49,6 +49,14 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<OpExpr>::type& e)
+    {
+        e.left_expr_get()->accept(*this);
+        e.right_expr_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<UnaryExpr>::type& e)
     {
         e.expr_get()->accept(*this);

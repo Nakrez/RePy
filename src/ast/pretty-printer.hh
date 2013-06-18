@@ -24,6 +24,7 @@ namespace ast
             void operator()(const BreakStmt& ast);
             void operator()(const ContinueStmt& ast);
 
+            void operator()(const OpExpr& ast);
             void operator()(const UnaryExpr& ast);
             void operator()(const NumeralExpr& ast);
         private:

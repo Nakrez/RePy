@@ -12,6 +12,7 @@ namespace ast
     class ExprStmt;
 
     class Expr;
+    class OpExpr;
     class UnaryExpr;
     class NumeralExpr;
 
