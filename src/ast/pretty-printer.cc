@@ -46,6 +46,12 @@ namespace ast
         o_ << "continue";
     }
 
+    void PrettyPrinter::operator()(const UnaryExpr& e)
+    {
+        o_ << e.op_to_string() << " ";
+        e.expr_get()->accept(*this);
+    }
+
     void PrettyPrinter::operator()(const NumeralExpr& e)
     {
         o_ << e.value_get();

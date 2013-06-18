@@ -512,7 +512,11 @@ and_test_list: "and" not_test
              | and_test_list "and" not_test
              ;
 
-not_test: "not" not_test
+not_test: "not" not_test {
+                            $$ = new ast::UnaryExpr(@1,
+                                                    ast::UnaryExpr::UNARY_NOT,
+                                                    $2);
+                         }
         | comparaison { $$ = $1; }
         ;
 
@@ -598,9 +602,9 @@ term_list: term_content
          ;
 
 factor: power { $$ = $1; }
-      | "+" factor
-      | "-" factor
-      | "~" factor
+      | "+" factor { $$ = new ast::UnaryExpr(@1, ast::UnaryExpr::UNARY_PLUS, $2); }
+      | "-" factor { $$ = new ast::UnaryExpr(@1, ast::UnaryExpr::UNARY_MINUS, $2); }
+      | "~" factor { $$ = new ast::UnaryExpr(@1, ast::UnaryExpr::UNARY_COMPLEMENT, $2); }
       ;
 
 power: atom { $$ = $1; }

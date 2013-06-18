@@ -15,6 +15,7 @@
 
 // Expression
 # include <ast/expr.hh>
+# include <ast/unary-expr.hh>
 # include <ast/numeral-expr.hh>
 
 #endif /* !AST_ALL_HH */

@@ -12,6 +12,7 @@ namespace ast
     class ExprStmt;
 
     class Expr;
+    class UnaryExpr;
     class NumeralExpr;
 
     template <class T>

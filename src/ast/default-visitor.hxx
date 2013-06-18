@@ -49,6 +49,13 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<UnaryExpr>::type& e)
+    {
+        e.expr_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<NumeralExpr>::type&)
     {}
 } // namespace ast
