@@ -251,9 +251,9 @@ or[ \t]*\n       { yylloc->lines(); return token::TOK_OR; }
                     return token::TOK_NEWLINE;
                 }
 
-_[A-Za-z_][A-Za-z0-9_]* { return token::TOK_IDENTIFIER; }
 __[A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
 __[A-Za-z_][A-Za-z0-9_]*__  { return token::TOK_IDENTIFIER; }
+_[A-Za-z_][A-Za-z0-9_]* { return token::TOK_IDENTIFIER; }
 [A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
 [0-9]+                  {
                             yylval->num_val = atoi(yytext);

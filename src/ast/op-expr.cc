@@ -103,7 +103,10 @@ namespace ast
     void OpExpr::set_left_expr(Expr* expr)
     {
         if (lexpr_ == nullptr)
+        {
             lexpr_ = expr;
+            return;
+        }
 
         OpExpr* e = dynamic_cast<OpExpr*> (lexpr_);
 

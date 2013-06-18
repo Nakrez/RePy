@@ -144,7 +144,7 @@
 
 %type<op_expr_val>  or_test_list and_test_list comparaison_list bor_list
                     xor_expr_list and_expr_list shift_expr_list arith_expr_list
-                    term_list
+                    term_list term_content
 
 %type<op_val> comp_op
 
@@ -739,16 +739,48 @@ arith_expr_list: "+" term
 
 term: factor { $$ = $1; }
     | factor term_list
+    {
+        $$ = $2;
+        $2->set_left_expr($1);
+    }
     ;
 
 term_content: "*" factor
+            {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::MULT,
+                                     $2);
+            }
             | "/" factor
+            {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::DIV,
+                                     $2);
+            }
             | "%" factor
+            {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::MOD,
+                                     $2);
+            }
             | "//" factor
+            {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::FDIV,
+                                     $2);
+            }
             ;
 
-term_list: term_content
+term_list: term_content { $$ = $1; }
          | term_list term_content
+         {
+            $$ = $2;
+            $2->set_left_expr($1);
+         }
          ;
 
 factor: power { $$ = $1; }
