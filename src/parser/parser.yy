@@ -639,10 +639,26 @@ xor_expr_list: "^" and_expr
 
 and_expr: shift_expr { $$ = $1; }
         | shift_expr and_expr_list
+        {
+            $$ = $2;
+            $2->set_left_expr($1);
+        }
         ;
 
 and_expr_list: "&" shift_expr
+             {
+                $$ = new ast::OpExpr(@1,
+                                     nullptr,
+                                     ast::OpExpr::Operator::BIT_AND,
+                                     $2);
+             }
              | and_expr_list "&" shift_expr
+             {
+                $$ = new ast::OpExpr(@1,
+                                     $1,
+                                     ast::OpExpr::Operator::BIT_AND,
+                                     $3);
+             }
              ;
 
 shift_expr: arith_expr { $$ = $1; }

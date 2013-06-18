@@ -72,9 +72,9 @@ namespace ast
             case BOOL_OR:
                 return "or";
             case BIT_AND:
-                return "and";
+                return "&";
             case BIT_OR:
-                return "or";
+                return "|";
             case EQ:
                 return "==";
             case NEQ:
