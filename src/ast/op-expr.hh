@@ -31,7 +31,11 @@ namespace ast
             GT,
             GE,
             LT,
-            LE
+            LE,
+            IN,
+            IS,
+            NOT_IN,
+            IS_NOT
         };
 
         public:
