@@ -142,7 +142,10 @@
                 comparaison expr xor_expr and_expr shift_expr arith_expr
                 term factor power atom
 
-%type<op_expr_val> or_test_list and_test_list comparaison_list
+%type<op_expr_val>  or_test_list and_test_list comparaison_list bor_list
+                    xor_expr_list and_expr_list shift_expr_list arith_expr_list
+                    term_list
+
 %type<op_val> comp_op
 
 %%
@@ -588,10 +591,26 @@ star_expr: "*" expr
 
 expr: xor_expr { $$ = $1; }
     | xor_expr bor_list
+    {
+        $$ = $2;
+        $2->set_left_expr($1);
+    }
     ;
 
 bor_list: "|" xor_expr
+        {
+            $$ = new ast::OpExpr(@1,
+                                 nullptr,
+                                 ast::OpExpr::Operator::BIT_OR,
+                                 $2);
+        }
         | bor_list "|" xor_expr
+        {
+            $$ = new ast::OpExpr(@1,
+                                 $1,
+                                 ast::OpExpr::Operator::BIT_OR,
+                                 $3);
+        }
         ;
 
 xor_expr: and_expr { $$ = $1; }
