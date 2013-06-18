@@ -255,7 +255,10 @@ _[A-Za-z_][A-Za-z0-9_]* { return token::TOK_IDENTIFIER; }
 __[A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
 __[A-Za-z_][A-Za-z0-9_]*__  { return token::TOK_IDENTIFIER; }
 [A-Za-z_][A-Za-z0-9_]*  { return token::TOK_IDENTIFIER; }
-[0-9]+                  { return token::TOK_NUMBER; }
+[0-9]+                  {
+                            yylval->num_val = atoi(yytext);
+                            return token::TOK_NUMBER;
+                        }
 
 .       { driver.error_get() << misc::Error::SCAN
                              << *yylloc << ":" << "Unknown char : " << yytext

@@ -27,11 +27,15 @@
 
 %union
 {
+    double num_val;
+
     ast::Ast* ast_val;
     ast::AstList* ast_list;
 
     ast::Stmt* stmt_val;
     ast::StmtList* stmt_list;
+
+    ast::Expr* expr_val;
 }
 
 %code
@@ -77,7 +81,6 @@
         TOK_WITH            "with"
         TOK_YIELD           "yield"
         TOK_IDENTIFIER      "identifier"
-        TOK_NUMBER          "number"
         TOK_STRING          "string"
         TOK_DOT             "."
         TOK_SEMICOLON       ";"
@@ -106,7 +109,7 @@
         TOK_GT              ">"
         TOK_EQ              "=="
         TOK_GE              ">="
-        TOK_LE              "<="
+        TOK_LE              "<="a
         TOK_NE              "!="
         TOK_PLUS            "+"
         TOK_MINUS           "-"
@@ -122,11 +125,19 @@
         TOK_LSHIFT          "<<"
         TOK_RSHIFT          ">>"
 
+%token<num_val>
+        TOK_NUMBER          "number"
+
 %type<ast_list> input_file
 %type<ast_val> stmt simple_stmt
 
 %type<stmt_list> small_stm_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
+                expr_stmt
+
+%type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
+                comparaison expr xor_expr and_expr shift_expr arith_expr
+                term factor power atom
 
 %%
 
@@ -254,7 +265,7 @@ small_stm_list:
           }
           ;
 
-small_stmt : expr_stmt
+small_stmt : expr_stmt { $$ = $1; }
            | del_stmt
            | pass_stmt { $$ = $1; }
            | flow_stmt { $$ = $1; }
@@ -267,10 +278,10 @@ small_stmt : expr_stmt
 expr_stmt: testlist_star_expr augassign yield_expr
          | testlist_star_expr augassign testlist
          | testlist_star_expr expr_simple_assign
-         | testlist_star_expr
+         | testlist_star_expr { $$ = new ast::ExprStmt($1); }
          ;
 
-testlist_star_expr: test_or_star
+testlist_star_expr: test_or_star { $$ = $1; }
                   | test_or_star ","
                   | test_or_star test_star_list
                   | test_or_star test_star_list ","
@@ -468,7 +479,7 @@ testlist: testlist_list
         | testlist_list ","
         ;
 
-test: or_test
+test: or_test { $$ = $1; }
     | or_test "if" or_test "else" test
     | lambdef
     ;
@@ -485,7 +496,7 @@ lambdef_nocond: "lambda" ":" test_nocond
               | "lambda" varargslist ":" test_nocond
               ;
 
-or_test: and_test
+or_test: and_test { $$ = $1; }
        | and_test or_test_list
        ;
 
@@ -493,7 +504,7 @@ or_test_list: "or" and_test
             | or_test_list "or" and_test
             ;
 
-and_test: not_test
+and_test: not_test { $$ = $1; }
         | not_test and_test_list
         ;
 
@@ -502,10 +513,10 @@ and_test_list: "and" not_test
              ;
 
 not_test: "not" not_test
-        | comparaison
+        | comparaison { $$ = $1; }
         ;
 
-comparaison: expr
+comparaison: expr { $$ = $1; }
            | expr comparaison_list
            ;
 
@@ -528,7 +539,7 @@ comp_op: "<"
 star_expr: "*" expr
          ;
 
-expr: xor_expr
+expr: xor_expr { $$ = $1; }
     | xor_expr bor_list
     ;
 
@@ -536,7 +547,7 @@ bor_list: "|" xor_expr
         | bor_list "|" xor_expr
         ;
 
-xor_expr: and_expr
+xor_expr: and_expr { $$ = $1; }
         | and_expr xor_expr_list
         ;
 
@@ -544,7 +555,7 @@ xor_expr_list: "^" and_expr
              | xor_expr_list "^" and_expr
              ;
 
-and_expr: shift_expr
+and_expr: shift_expr { $$ = $1; }
         | shift_expr and_expr_list
         ;
 
@@ -552,7 +563,7 @@ and_expr_list: "&" shift_expr
              | and_expr_list "&" shift_expr
              ;
 
-shift_expr: arith_expr
+shift_expr: arith_expr { $$ = $1; }
           | arith_expr shift_expr_list
           ;
 
@@ -562,7 +573,7 @@ shift_expr_list: "<<" arith_expr
                | shift_expr_list ">>" arith_expr
                ;
 
-arith_expr: term
+arith_expr: term { $$ = $1; }
           | term arith_expr_list
           ;
 
@@ -572,7 +583,7 @@ arith_expr_list: "+" term
                | arith_expr_list "-" term
                ;
 
-term: factor
+term: factor { $$ = $1; }
     | factor term_list
     ;
 
@@ -586,13 +597,13 @@ term_list: term_content
          | term_list term_content
          ;
 
-factor: power
+factor: power { $$ = $1; }
       | "+" factor
       | "-" factor
       | "~" factor
       ;
 
-power: atom
+power: atom { $$ = $1; }
      | atom "**" factor
      | atom trailer_list
      | atom trailer_list "**" factor
@@ -610,7 +621,7 @@ atom: "(" ")"
     | "{" "}"
     | "{" dictorsetmaker "}"
     | "identifier"
-    | "number"
+    | "number" { $$ = new ast::NumeralExpr(@1, $1); }
     | string_list
     | "..."
     | "none"
@@ -647,7 +658,7 @@ test_star_list: "," test
               | test_star_list "," star_expr
               ;
 
-test_or_star: test
+test_or_star: test { $$ = $1; }
             | star_expr
             ;
 
