@@ -36,6 +36,8 @@
     ast::Stmt* stmt_val;
     ast::StmtList* stmt_list;
 
+    ast::IfStmt* if_val;
+
     ast::Expr* expr_val;
 
     ast::OpExpr* op_expr_val;
@@ -137,11 +139,12 @@
         TOK_NUMBER          "number"
 
 %type<ast_list> input_file
-%type<ast_val> stmt simple_stmt
 
-%type<stmt_list> small_stm_list
+%type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
-                expr_stmt
+                expr_stmt stmt simple_stmt suite compound_stmt if_stmt
+                else_stmt
+%type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
@@ -260,7 +263,7 @@ vfpdef: "identifier"
       ;
 
 stmt: simple_stmt { $$ = $1; }
-    | compound_stmt
+    | compound_stmt { $$ = $1; }
     ;
 
 simple_stmt:
@@ -415,7 +418,7 @@ assert_stmt: "assert" test
            | "assert" test "," test
            ;
 
-compound_stmt: if_stmt
+compound_stmt: if_stmt { $$ = $1; }
              | while_stmt
              | for_stmt
              | try_stmt
@@ -425,17 +428,25 @@ compound_stmt: if_stmt
              /*| decorated*/
              ;
 
-if_stmt: "if" test ":" suite
-       | "if" test ":" suite elif_list
-       | "if" test ":" suite else_stmt
+if_stmt: "if" test ":" suite { $$ = new ast::IfStmt(@1, $2, $4, nullptr); }
+       | "if" test ":" suite elif_list { $$ = new ast::IfStmt(@1, $2, $4, $5); }
+       | "if" test ":" suite else_stmt { $$ = new ast::IfStmt(@1, $2, $4, $5); }
        | "if" test ":" suite elif_list else_stmt
+       {
+        $$ = new ast::IfStmt(@1, $2, $4, $5);
+        $5->set_else_stmt($6);
+       }
        ;
 
-elif_list: "elif" test ":" suite
+elif_list: "elif" test ":" suite { $$ = new ast::IfStmt(@1, $2, $4, nullptr); }
          | elif_list "elif" test ":" suite
+         {
+            $$ = $1;
+            $1->set_else_stmt(new ast::IfStmt(@1, $3, $5, nullptr));
+         }
          ;
 
-else_stmt: "else" ":" suite
+else_stmt: "else" ":" suite { $$ = $3; }
          ;
 
 while_stmt: "while" test ":" suite
@@ -478,11 +489,34 @@ except_clause: "except"
              ;
 
 suite: simple_stmt
+     {
+        $$ = $1;
+     }
      | "newline" "indent" stmt_list "dedent"
+     {
+        $$ = $3;
+     }
      ;
 
 stmt_list: stmt
+         {
+            if (dynamic_cast<ast::StmtList*> ($1))
+                $$ = dynamic_cast<ast::StmtList*> ($1);
+            else
+            {
+                $$ = new ast::StmtList(@1);
+                $$->push_back($1);
+            }
+         }
          | stmt_list stmt
+         {
+            $$ = $1;
+
+            if (dynamic_cast<ast::StmtList*> ($2))
+                $1->splice(dynamic_cast<ast::StmtList*> ($2));
+            else
+                $1->push_back($2);
+         }
          ;
 
 dot_list: "."

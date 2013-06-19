@@ -104,6 +104,7 @@ add_executable(typy
                src/ast/ast.cc
                src/ast/stmt.cc
                src/ast/expr.cc
+               src/ast/if-stmt.cc
                src/ast/pass-stmt.cc
                src/ast/break-stmt.cc
                src/ast/continue-stmt.cc

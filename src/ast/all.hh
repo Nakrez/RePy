@@ -12,6 +12,7 @@
 # include <ast/break-stmt.hh>
 # include <ast/continue-stmt.hh>
 # include <ast/expr-stmt.hh>
+# include <ast/if-stmt.hh>
 
 // Expression
 # include <ast/expr.hh>

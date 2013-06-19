@@ -1,8 +1,10 @@
 #include <misc/indent.hh>
+#include <iostream>
+#include <iomanip>
 
 namespace misc
 {
-    static long int& indent_lvl(std::ostream& o)
+    static inline long int& indent_lvl(std::ostream& o)
     {
         static const long int lvl = std::ios::xalloc();
 
@@ -11,14 +13,14 @@ namespace misc
 
     std::ostream& indent(std::ostream& o)
     {
-        indent_lvl(o) += 2;
+        indent_lvl(o) += 4;
 
         return o;
     }
 
     std::ostream& dedent(std::ostream& o)
     {
-        indent_lvl(o) -= 2;
+        indent_lvl(o) -= 4;
 
         return o;
     }
@@ -27,27 +29,23 @@ namespace misc
     {
         o << std::endl;
 
-        long int i = indent_lvl(o);
+        char f = o.fill(' ');
 
-        o << std::setw(i) << "" << std::setfill(' ');
+        o << std::setw(indent_lvl(o)) << "" << std::setfill(f);
 
         return o;
     }
 
     std::ostream& indentendl(std::ostream& o)
     {
-        indent_lvl(o) += 2;
-
-        o << iendl;
+        o << indent << iendl;
 
         return o;
     }
 
     std::ostream& dedentendl(std::ostream& o)
     {
-        indent_lvl(o) -= 2;
-
-        o << iendl;
+        o << dedent << iendl;
 
         return o;
     }

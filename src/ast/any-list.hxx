@@ -7,14 +7,16 @@ namespace ast
 {
     template <class T>
     AnyList<T>::AnyList(const yy::location& location)
-        : Ast(location)
+        : T(location)
+        , delete_(true)
     {}
 
     template <class T>
     AnyList<T>::~AnyList()
     {
-        for (auto elem : list_)
-            delete elem;
+        if (delete_)
+            for (auto elem : list_)
+                delete elem;
     }
 
     template <class T>
@@ -42,9 +44,24 @@ namespace ast
     }
 
     template <class T>
+    void AnyList<T>::set_delete(bool d)
+    {
+        delete_ = d;
+    }
+    template <class T>
     void AnyList<T>::push_back(T* elem)
     {
         list_.push_back(elem);
+    }
+
+    template <class T>
+    void AnyList<T>::splice(AnyList<T>* list)
+    {
+        list->set_delete(false);
+
+        list_.splice(list_.end(), list->list_get());
+
+        delete list;
     }
 } // namespace ast
 

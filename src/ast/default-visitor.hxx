@@ -49,6 +49,17 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<IfStmt>::type& s)
+    {
+        s.cond_get()->accept(*this);
+        s.true_stmt_get()->accept(*this);
+
+        if (s.else_stmt_get())
+            s.else_stmt_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<OpExpr>::type& e)
     {
         e.left_expr_get()->accept(*this);

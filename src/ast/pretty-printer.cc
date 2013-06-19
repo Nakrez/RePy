@@ -17,18 +17,23 @@ namespace ast
             e->accept(*this);
         }
 
-        o_ << std::endl;
+        o_ << misc::iendl;
     }
 
     void PrettyPrinter::operator()(const StmtList& ast)
     {
-        for (auto e : ast.list_get())
+        auto beg = ast.list_get().begin();
+        auto end = ast.list_get().end();
+
+        for (auto it = beg; it != end; ++it)
         {
-            e->accept(*this);
-            o_ << " ; ";
+            if (it != beg)
+                o_ << " ; ";
+
+            (*it)->accept(*this);
         }
 
-        o_ << std::endl;
+        o_ << misc::iendl;
     }
 
     void PrettyPrinter::operator()(const PassStmt&)
@@ -44,6 +49,30 @@ namespace ast
     void PrettyPrinter::operator()(const ContinueStmt&)
     {
         o_ << "continue";
+    }
+
+    void PrettyPrinter::operator()(const IfStmt& ast)
+    {
+        o_ << "if ";
+
+        ast.cond_get()->accept(*this);
+
+        o_ << ":" << misc::indentendl;
+
+        ast.true_stmt_get()->accept(*this);
+
+        o_ << misc::dedentendl;
+
+        if (ast.else_stmt_get())
+        {
+            if (dynamic_cast<const ast::IfStmt*> (ast.else_stmt_get()))
+                o_ << "el";
+            else
+                o_ << "else:" << misc::indentendl;
+
+            ast.else_stmt_get()->accept(*this);
+            o_ << misc::dedent;
+        }
     }
 
     void PrettyPrinter::operator()(const OpExpr& e)

@@ -3,6 +3,8 @@
 
 # include <iostream>
 
+# include <misc/indent.hh>
+
 # include <ast/default-visitor.hh>
 
 namespace ast
@@ -23,6 +25,7 @@ namespace ast
             void operator()(const PassStmt& ast);
             void operator()(const BreakStmt& ast);
             void operator()(const ContinueStmt& ast);
+            void operator()(const IfStmt& ast);
 
             void operator()(const OpExpr& ast);
             void operator()(const UnaryExpr& ast);

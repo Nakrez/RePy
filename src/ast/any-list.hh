@@ -8,7 +8,7 @@
 namespace ast
 {
     template <class T>
-    class AnyList : public Ast
+    class AnyList : public T
     {
         public:
             AnyList(const yy::location& location);
@@ -20,10 +20,14 @@ namespace ast
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
+            void set_delete(bool d);
+
             void push_back(T* elem);
+            void splice(AnyList<T>* list);
 
         protected:
             std::list<T*> list_;
+            bool delete_;
     };
 } // namespace ast
 

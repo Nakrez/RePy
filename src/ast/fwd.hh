@@ -10,6 +10,7 @@ namespace ast
     class BreakStmt;
     class ContinueStmt;
     class ExprStmt;
+    class IfStmt;
 
     class Expr;
     class OpExpr;

@@ -1,8 +1,7 @@
 #ifndef MISC_INDENT_HH
 # define MISC_INDENT_HH
 
-# include <iostream>
-# include <iomanip>
+# include <iosfwd>
 
 namespace misc
 {

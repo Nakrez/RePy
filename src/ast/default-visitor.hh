@@ -21,6 +21,7 @@ namespace ast
             virtual void operator()(typename Const<BreakStmt>::type& ast);
             virtual void operator()(typename Const<ContinueStmt>::type& ast);
             virtual void operator()(typename Const<ExprStmt>::type& ast);
+            virtual void operator()(typename Const<IfStmt>::type& ast);
 
             virtual void operator()(typename Const<OpExpr>::type& ast);
             virtual void operator()(typename Const<UnaryExpr>::type& ast);
