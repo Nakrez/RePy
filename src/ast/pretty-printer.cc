@@ -28,7 +28,7 @@ namespace ast
         for (auto it = beg; it != end; ++it)
         {
             if (it != beg)
-                o_ << " ; ";
+                o_ << misc::iendl;
 
             (*it)->accept(*this);
         }
@@ -73,6 +73,19 @@ namespace ast
             ast.else_stmt_get()->accept(*this);
             o_ << misc::dedent;
         }
+    }
+
+    void PrettyPrinter::operator()(const WhileStmt& s)
+    {
+        o_ << "while ";
+
+        s.cond_get()->accept(*this);
+
+        o_ << ":" << misc::indentendl;
+
+        s.loop_get()->accept(*this);
+
+        o_ << misc::dedentendl;
     }
 
     void PrettyPrinter::operator()(const OpExpr& e)

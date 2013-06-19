@@ -60,6 +60,14 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<WhileStmt>::type& s)
+    {
+        s.cond_get()->accept(*this);
+        s.loop_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<OpExpr>::type& e)
     {
         e.left_expr_get()->accept(*this);

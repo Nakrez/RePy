@@ -143,7 +143,7 @@
 %type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
                 expr_stmt stmt simple_stmt suite compound_stmt if_stmt
-                else_stmt
+                else_stmt while_stmt
 %type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
@@ -419,7 +419,7 @@ assert_stmt: "assert" test
            ;
 
 compound_stmt: if_stmt { $$ = $1; }
-             | while_stmt
+             | while_stmt { $$ = $1; }
              | for_stmt
              | try_stmt
              | with_stmt
@@ -449,8 +449,11 @@ elif_list: "elif" test ":" suite { $$ = new ast::IfStmt(@1, $2, $4, nullptr); }
 else_stmt: "else" ":" suite { $$ = $3; }
          ;
 
-while_stmt: "while" test ":" suite
+while_stmt: "while" test ":" suite { $$ = new ast::WhileStmt(@1, $2, $4); }
           | "while" test ":" suite "else" ":" suite
+          {
+            $$ = new ast::IfStmt(@1, $2, new ast::WhileStmt(@1, $2, $4), $7);
+          }
           ;
 
 for_stmt: "for" exprlist "in" testlist ":" suite

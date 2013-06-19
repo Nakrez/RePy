@@ -11,6 +11,7 @@ namespace ast
     class ContinueStmt;
     class ExprStmt;
     class IfStmt;
+    class WhileStmt;
 
     class Expr;
     class OpExpr;
