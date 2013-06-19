@@ -25,6 +25,7 @@ namespace ast
             virtual void operator()(typename Const<OpExpr>::type& ast);
             virtual void operator()(typename Const<UnaryExpr>::type& ast);
             virtual void operator()(typename Const<NumeralExpr>::type& ast);
+            virtual void operator()(typename Const<StringExpr>::type& ast);
     };
 
     typedef GenDefaultVisitor<misc::const_type> DefaultConstVisitor;

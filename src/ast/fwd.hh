@@ -15,6 +15,7 @@ namespace ast
     class OpExpr;
     class UnaryExpr;
     class NumeralExpr;
+    class StringExpr;
 
     template <class T>
     class AnyList;

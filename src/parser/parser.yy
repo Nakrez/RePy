@@ -28,6 +28,7 @@
 %union
 {
     double num_val;
+    std::string* str_val;
 
     ast::Ast* ast_val;
     ast::AstList* ast_list;
@@ -39,6 +40,8 @@
 
     ast::OpExpr* op_expr_val;
     ast::OpExpr::Operator op_val;
+
+    ast::StringExpr* str_expr_val;
 }
 
 %code
@@ -84,7 +87,6 @@
         TOK_WITH            "with"
         TOK_YIELD           "yield"
         TOK_IDENTIFIER      "identifier"
-        TOK_STRING          "string"
         TOK_DOT             "."
         TOK_SEMICOLON       ";"
         TOK_COMA            ","
@@ -128,6 +130,9 @@
         TOK_LSHIFT          "<<"
         TOK_RSHIFT          ">>"
 
+%token<str_val>
+        TOK_STRING          "string"
+
 %token<num_val>
         TOK_NUMBER          "number"
 
@@ -141,6 +146,8 @@
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
                 term factor power atom
+
+%type<str_expr_val> string_list
 
 %type<op_expr_val>  or_test_list and_test_list comparaison_list bor_list
                     xor_expr_list and_expr_list shift_expr_list arith_expr_list
@@ -815,7 +822,7 @@ atom: "(" ")"
     | "{" dictorsetmaker "}"
     | "identifier"
     | "number" { $$ = new ast::NumeralExpr(@1, $1); }
-    | string_list
+    | string_list { $$ = $1; }
     | "..."
     | "none"
     | "true"
@@ -823,7 +830,16 @@ atom: "(" ")"
     ;
 
 string_list: "string"
+           {
+            $$ = new ast::StringExpr(@1, std::string(*$1));
+            delete $1;
+           }
            | string_list "string"
+           {
+            $$ = $1;
+            $1->append(std::string(*$2));
+            delete $2;
+           }
            ;
 
 testlist_comp: test_or_star comp_for_test_star

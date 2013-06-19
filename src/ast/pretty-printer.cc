@@ -63,4 +63,9 @@ namespace ast
     {
         o_ << e.value_get();
     }
+
+    void PrettyPrinter::operator()(const StringExpr& e)
+    {
+        o_ << "\"" << e.str_get() << "\"";
+    }
 } // namespace ast

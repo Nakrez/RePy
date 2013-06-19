@@ -27,6 +27,7 @@ namespace ast
             void operator()(const OpExpr& ast);
             void operator()(const UnaryExpr& ast);
             void operator()(const NumeralExpr& ast);
+            void operator()(const StringExpr& ast);
         private:
             std::ostream& o_;
     };

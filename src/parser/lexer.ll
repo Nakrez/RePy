@@ -1,12 +1,11 @@
 %{
-#include <stack>
 #include <parser/driver.hh>
-#include <parser/parser.hh>
 
-std::stack<int> indent_levels;
-int cur_indent = 0;
-char string_start;
-bool empty = false;
+static std::stack<int> indent_levels;
+static int cur_indent = 0;
+static char string_start;
+static bool empty = false;
+static std::string acu = "";
 
 # undef yywrap
 # define yywrap() 1
@@ -23,7 +22,7 @@ bool empty = false;
                         yy_push_state(indent);
 %}
 
-%x indent string escaped simple_comment multi_comment
+%x indent pystring escaped simple_comment multi_comment
 
 %%
 %{
@@ -101,36 +100,44 @@ bool empty = false;
                     }
                 }
 
-<string>\"      {
+<pystring>\"      {
                     if (string_start == '"')
                     {
                         yy_pop_state();
+                        yylval->str_val = new std::string(acu);
+                        acu = "";
                         return token::TOK_STRING;
                     }
+                    else
+                        acu += "\"";
                 }
-<string>'       {
+<pystring>'       {
                     if (string_start == '\'')
                     {
                         yy_pop_state();
+                        yylval->str_val = new std::string(acu);
+                        acu = "";
                         return token::TOK_STRING;
                     }
+                    else
+                        acu += "'";
                 }
-<string>\\      { yy_push_state(escaped); }
-<string>.       { }
+<pystring>\\      { acu += "\\"; yy_push_state(escaped); }
+<pystring>.       { acu += yytext; }
 
-<escaped>\\    { yy_pop_state(); }
+<escaped>\\    { acu += "\\"; yy_pop_state(); }
 <escaped>\n    { yylloc->lines(); yy_pop_state(); }
-<escaped>'     { yy_pop_state(); }
-<escaped>\"    { yy_pop_state(); }
-<escaped>a     { yy_pop_state(); }
-<escaped>b     { yy_pop_state(); }
-<escaped>f     { yy_pop_state(); }
-<escaped>n     { yy_pop_state(); }
-<escaped>r     { yy_pop_state(); }
-<escaped>t     { yy_pop_state(); }
-<escaped>v     { yy_pop_state(); }
-<escaped>[0-7]{3}      { yy_pop_state(); }
-<escaped>x[0-9A-F]{2}  { yy_pop_state(); }
+<escaped>'     { acu += "'"; yy_pop_state(); }
+<escaped>\"    { acu += "\""; yy_pop_state(); }
+<escaped>a     { acu += "a"; yy_pop_state(); }
+<escaped>b     { acu += "b"; yy_pop_state(); }
+<escaped>f     { acu += "f"; yy_pop_state(); }
+<escaped>n     { acu += "n"; yy_pop_state(); }
+<escaped>r     { acu += "r"; yy_pop_state(); }
+<escaped>t     { acu += "t"; yy_pop_state(); }
+<escaped>v     { acu += "v"; yy_pop_state(); }
+<escaped>[0-7]{3}      { acu += yytext; yy_pop_state(); }
+<escaped>x[0-9A-F]{2}  { acu += yytext; yy_pop_state(); }
 <escaped>.     { driver.error_get() << misc::Error::SCAN
                                     << *yylloc << ":"
                                     << "Unknown escaped : " << yytext
@@ -156,8 +163,8 @@ bool empty = false;
                 yy_push_state(simple_comment);
                 empty = false;
             }
-\"          { string_start = '"'; yy_push_state(string); }
-\'          { string_start = '\''; yy_push_state(string); }
+\"          { string_start = '"'; yy_push_state(pystring); }
+\'          { string_start = '\''; yy_push_state(pystring); }
 "."         { return token::TOK_DOT; }
 ";"         { return token::TOK_SEMICOLON; }
 ","         { return token::TOK_COMA; }
