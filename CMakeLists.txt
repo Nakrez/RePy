@@ -53,6 +53,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG}")
 
 ADD_LIBRARY(typy_lib STATIC
             lib/misc/error.cc
+            lib/misc/indent.cc
             )
 
 SET_TARGET_PROPERTIES(
