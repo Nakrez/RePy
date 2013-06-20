@@ -11,6 +11,8 @@ namespace ast
             Var(const yy::location& location);
             virtual ~Var();
 
+            virtual void add_component(Var* v) = 0;
+
             virtual void accept(Visitor& v) = 0;
             virtual void accept(ConstVisitor& v) const = 0;
     };

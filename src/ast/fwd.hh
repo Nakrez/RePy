@@ -22,12 +22,14 @@ namespace ast
 
     class Var;
     class IdVar;
+    class FunctionVar;
 
     template <class T>
     class AnyList;
 
     typedef AnyList<Ast> AstList;
     typedef AnyList<Stmt> StmtList;
+    typedef AnyList<Expr> ExprList;
 } // namespace ast
 
 #endif /* !AST_FWD_HH */

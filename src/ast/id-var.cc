@@ -1,4 +1,5 @@
 #include <ast/id-var.hh>
+#include <cassert>
 
 namespace ast
 {
@@ -18,6 +19,11 @@ namespace ast
     std::string& IdVar::id_get()
     {
         return id_;
+    }
+
+    void IdVar::add_component(Var*)
+    {
+        assert(false && "Internal compiler error : unreachable part");
     }
 
     void IdVar::accept(Visitor& v)

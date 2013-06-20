@@ -22,6 +22,7 @@ namespace ast
             virtual void operator()(typename Const<Ast>::type& ast);
             virtual void operator()(typename Const<AstList>::type& ast) = 0;
             virtual void operator()(typename Const<StmtList>::type& ast) = 0;
+            virtual void operator()(typename Const<ExprList>::type& ast) = 0;
 
             virtual void operator()(typename Const<PassStmt>::type& ast) = 0;
             virtual void operator()(typename Const<BreakStmt>::type& ast) = 0;
@@ -37,6 +38,7 @@ namespace ast
             virtual void operator()(typename Const<StringExpr>::type& ast) = 0;
 
             virtual void operator()(typename Const<IdVar>::type& ast) = 0;
+            virtual void operator()(typename Const<FunctionVar>::type& ast) = 0;
     };
 
     typedef GenVisitor<misc::const_type> ConstVisitor;

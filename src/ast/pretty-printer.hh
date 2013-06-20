@@ -21,6 +21,7 @@ namespace ast
 
             void operator()(const AstList& ast);
             void operator()(const StmtList& ast);
+            void operator()(const ExprList& ast);
 
             void operator()(const PassStmt& ast);
             void operator()(const BreakStmt& ast);
@@ -35,6 +36,7 @@ namespace ast
             void operator()(const StringExpr& ast);
 
             void operator()(const IdVar& ast);
+            void operator()(const FunctionVar& ast);
         private:
             std::ostream& o_;
     };

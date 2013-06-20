@@ -45,6 +45,8 @@
     ast::OpExpr::Operator op_val;
 
     ast::StringExpr* str_expr_val;
+
+    ast::Var* var_val;
 }
 
 %code
@@ -160,6 +162,9 @@
 %type<op_val> comp_op augassign
 
 %type<assexpr_val> expr_simple_assign
+
+%type<var_val> trailer trailer_list
+
 %%
 
 program:
@@ -851,11 +856,26 @@ power: atom { $$ = $1; }
      }
 
      | atom trailer_list
+     {
+        ast::Var* v = dynamic_cast<ast::Var*> ($1);
+
+        if (v)
+            $2->add_component(v);
+        else
+            driver.error_get() << misc::Error::PARSE
+                               << @1 << ": Syntax error" << std::endl;
+
+        $$ = $2;
+     }
      | atom trailer_list "**" factor
      ;
 
-trailer_list: trailer
+trailer_list: trailer { $$ = $1; }
             | trailer_list trailer
+            {
+                $$ = $2;
+                $$->add_component($1);
+            }
             ;
 
 atom: "(" ")"
@@ -921,6 +941,7 @@ testlist_list: test
              ;
 
 trailer: "(" ")"
+       { $$ = new ast::FunctionVar(@1, nullptr, nullptr); }
        | "(" arglist ")"
        | "[" subscriptlist "]"
        | "." "identifier"

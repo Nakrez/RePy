@@ -26,5 +26,6 @@
 // Var
 # include <ast/var.hh>
 # include <ast/id-var.hh>
+# include <ast/function-var.hh>
 
 #endif /* !AST_ALL_HH */

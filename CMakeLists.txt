@@ -117,6 +117,7 @@ add_executable(typy
                src/ast/string-expr.cc
                src/ast/var.cc
                src/ast/id-var.cc
+               src/ast/function-var.cc
                src/ast/pretty-printer.cc
                src/ast/tasks.cc
 

@@ -16,6 +16,7 @@ namespace ast
 
             virtual void operator()(typename Const<AstList>::type& ast);
             virtual void operator()(typename Const<StmtList>::type& ast);
+            virtual void operator()(typename Const<ExprList>::type& ast);
 
             virtual void operator()(typename Const<PassStmt>::type& ast);
             virtual void operator()(typename Const<BreakStmt>::type& ast);
@@ -31,6 +32,7 @@ namespace ast
             virtual void operator()(typename Const<StringExpr>::type& ast);
 
             virtual void operator()(typename Const<IdVar>::type& ast);
+            virtual void operator()(typename Const<FunctionVar>::type& ast);
     };
 
     typedef GenDefaultVisitor<misc::const_type> DefaultConstVisitor;

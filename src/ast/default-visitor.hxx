@@ -27,6 +27,14 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<ExprList>::type& ast)
+    {
+        for (auto e : ast.list_get())
+            e->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<PassStmt>::type&)
     {}
 
@@ -103,6 +111,16 @@ namespace ast
     void
     GenDefaultVisitor<Const>::operator()(typename Const<IdVar>::type&)
     {}
+
+    template <template <typename> class Const>
+    void
+    GenDefaultVisitor<Const>::operator()(typename Const<FunctionVar>::type& v)
+    {
+        v.var_get()->accept(*this);
+
+        if (v.params_get())
+            v.params_get()->accept(*this);
+    }
 } // namespace ast
 
 #endif /* !AST_DEFAULT_VISITOR_HXX */

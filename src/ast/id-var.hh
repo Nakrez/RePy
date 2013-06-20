@@ -17,6 +17,8 @@ namespace ast
             const std::string& id_get() const;
             std::string& id_get();
 
+            virtual void add_component(Var* v);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 

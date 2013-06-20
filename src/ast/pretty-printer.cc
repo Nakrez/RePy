@@ -1,5 +1,6 @@
 #include <ast/pretty-printer.hh>
 #include <ast/all.hh>
+#include <cassert>
 
 namespace ast
 {
@@ -34,6 +35,11 @@ namespace ast
         }
 
         o_ << misc::iendl;
+    }
+
+    void PrettyPrinter::operator()(const ExprList&)
+    {
+        assert(false && "Internal compiler error : must not be reached");
     }
 
     void PrettyPrinter::operator()(const PassStmt&)
@@ -121,5 +127,28 @@ namespace ast
     void PrettyPrinter::operator()(const IdVar& e)
     {
         o_ << e.id_get();
+    }
+
+    void PrettyPrinter::operator()(const FunctionVar& v)
+    {
+        v.var_get()->accept(*this);
+
+        o_ << "(";
+
+        if (v.params_get())
+        {
+            auto beg = v.params_get()->list_get().begin();
+            auto end = v.params_get()->list_get().end();
+
+            for (auto it = beg; beg != end; ++it)
+            {
+                if (it != beg)
+                    o_ << ",";
+
+                (*it)->accept(*this);
+            }
+        }
+
+        o_ << ")";
     }
 } // namespace ast
