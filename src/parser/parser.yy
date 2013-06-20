@@ -870,8 +870,8 @@ atom: "(" ")"
     | string_list { $$ = $1; }
     | "..."
     | "none"
-    | "true"
-    | "false"
+    | "true" { $$ = new ast::NumeralExpr(@1, 1); }
+    | "false" { $$ = new ast::NumeralExpr(@1, 0); }
     ;
 
 string_list: "string"

@@ -1,0 +1,13 @@
+### Pretty printing AST ###
+if 1:
+    x = 1
+    
+elif x == 7:
+    x = 0
+    
+elif x == 9:
+    x = 1
+    
+else:
+    x = 0
+    
