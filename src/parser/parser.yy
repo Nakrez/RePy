@@ -39,6 +39,7 @@
     ast::IfStmt* if_val;
 
     ast::Expr* expr_val;
+    ast::AssignExpr* assexpr_val;
 
     ast::OpExpr* op_expr_val;
     ast::OpExpr::Operator op_val;
@@ -88,7 +89,6 @@
         TOK_WHILE           "while"
         TOK_WITH            "with"
         TOK_YIELD           "yield"
-        TOK_IDENTIFIER      "identifier"
         TOK_DOT             "."
         TOK_SEMICOLON       ";"
         TOK_COMA            ","
@@ -134,6 +134,7 @@
 
 %token<str_val>
         TOK_STRING          "string"
+        TOK_IDENTIFIER      "identifier"
 
 %token<num_val>
         TOK_NUMBER          "number"
@@ -156,8 +157,9 @@
                     xor_expr_list and_expr_list shift_expr_list arith_expr_list
                     term_list term_content
 
-%type<op_val> comp_op
+%type<op_val> comp_op augassign
 
+%type<assexpr_val> expr_simple_assign
 %%
 
 program:
@@ -297,6 +299,10 @@ small_stmt : expr_stmt { $$ = $1; }
 expr_stmt: testlist_star_expr augassign yield_expr
          | testlist_star_expr augassign testlist
          | testlist_star_expr expr_simple_assign
+         {
+            $$ = new ast::ExprStmt($2);
+            $2->lvalue_set($1);
+         }
          | testlist_star_expr { $$ = new ast::ExprStmt($1); }
          ;
 
@@ -308,22 +314,24 @@ testlist_star_expr: test_or_star { $$ = $1; }
 
 expr_simple_assign: "=" yield_expr
                   | "=" testlist_star_expr
+                  { $$ = new ast::AssignExpr(@1, nullptr, $2); }
                   | expr_simple_assign "=" yield_expr
                   | expr_simple_assign "=" testlist_star_expr
+                  { $$ = new ast::AssignExpr(@1, $1, $3); }
                   ;
 
-augassign: "+="
-         | "-="
-         | "*="
-         | "/="
-         | "%="
-         | "&="
-         | "|="
-         | "^="
-         | "<<="
-         | ">>="
-         | "**="
-         | "//="
+augassign: "+=" { $$ = ast::OpExpr::PLUS; }
+         | "-=" { $$ = ast::OpExpr::MINUS; }
+         | "*=" { $$ = ast::OpExpr::MULT; }
+         | "/=" { $$ = ast::OpExpr::DIV; }
+         | "%=" { $$ = ast::OpExpr::MOD; }
+         | "&=" { $$ = ast::OpExpr::BIT_AND; }
+         | "|=" { $$ = ast::OpExpr::BIT_OR; }
+         | "^=" { $$ = ast::OpExpr::XOR; }
+         | "<<=" { $$ = ast::OpExpr::LSHIFT; }
+         | ">>=" { $$ = ast::OpExpr::RSHIFT; }
+         | "**=" { $$ = ast::OpExpr::POW; }
+         | "//=" { $$ = ast::OpExpr::FDIV; }
          ;
 
 del_stmt: "del" exprlist
@@ -857,7 +865,7 @@ atom: "(" ")"
     | "[" testlist_comp "]"
     | "{" "}"
     | "{" dictorsetmaker "}"
-    | "identifier"
+    | "identifier" { $$ = new ast::IdVar(@1, *$1); delete $1; }
     | "number" { $$ = new ast::NumeralExpr(@1, $1); }
     | string_list { $$ = $1; }
     | "..."

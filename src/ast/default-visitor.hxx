@@ -83,12 +83,25 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<AssignExpr>::type& e)
+    {
+        e.lvalue_get()->accept(*this);
+        e.rvalue_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<NumeralExpr>::type&)
     {}
 
     template <template <typename> class Const>
     void
     GenDefaultVisitor<Const>::operator()(typename Const<StringExpr>::type&)
+    {}
+
+    template <template <typename> class Const>
+    void
+    GenDefaultVisitor<Const>::operator()(typename Const<IdVar>::type&)
     {}
 } // namespace ast
 

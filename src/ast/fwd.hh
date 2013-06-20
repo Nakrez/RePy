@@ -16,8 +16,12 @@ namespace ast
     class Expr;
     class OpExpr;
     class UnaryExpr;
+    class AssignExpr;
     class NumeralExpr;
     class StringExpr;
+
+    class Var;
+    class IdVar;
 
     template <class T>
     class AnyList;

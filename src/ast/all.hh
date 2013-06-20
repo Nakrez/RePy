@@ -19,7 +19,12 @@
 # include <ast/expr.hh>
 # include <ast/unary-expr.hh>
 # include <ast/op-expr.hh>
+# include <ast/assign-expr.hh>
 # include <ast/numeral-expr.hh>
 # include <ast/string-expr.hh>
+
+// Var
+# include <ast/var.hh>
+# include <ast/id-var.hh>
 
 #endif /* !AST_ALL_HH */

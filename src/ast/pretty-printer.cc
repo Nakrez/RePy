@@ -101,6 +101,13 @@ namespace ast
         e.expr_get()->accept(*this);
     }
 
+    void PrettyPrinter::operator()(const AssignExpr& e)
+    {
+        e.lvalue_get()->accept(*this);
+        o_ << " = ";
+        e.rvalue_get()->accept(*this);
+    }
+
     void PrettyPrinter::operator()(const NumeralExpr& e)
     {
         o_ << e.value_get();
@@ -109,5 +116,10 @@ namespace ast
     void PrettyPrinter::operator()(const StringExpr& e)
     {
         o_ << "\"" << e.str_get() << "\"";
+    }
+
+    void PrettyPrinter::operator()(const IdVar& e)
+    {
+        o_ << e.id_get();
     }
 } // namespace ast
