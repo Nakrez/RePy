@@ -41,6 +41,8 @@
     ast::Expr* expr_val;
     ast::AssignExpr* assexpr_val;
 
+    ast::ExprList* expr_list_val;
+
     ast::OpExpr* op_expr_val;
     ast::OpExpr::Operator op_val;
 
@@ -151,7 +153,8 @@
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
-                term factor power atom
+                term factor power atom argument
+%type<expr_list_val> arglist argument_coma_last_list
 
 %type<str_expr_val> string_list
 
@@ -943,6 +946,7 @@ testlist_list: test
 trailer: "(" ")"
        { $$ = new ast::FunctionVar(@1, nullptr, nullptr); }
        | "(" arglist ")"
+       { $$ = new ast::FunctionVar(@1, nullptr, $2); }
        | "[" subscriptlist "]"
        | "." "identifier"
        ;
@@ -1014,10 +1018,25 @@ classdef: "class" "identifier" ":" suite
         ;
 
 arglist: argument
+       {
+        $$ = new ast::ExprList(@1);
+        $$->push_back($1);
+       }
        | argument ","
+       {
+        $$ = new ast::ExprList(@1);
+        $$->push_back($1);
+       }
        | argument_coma_last_list argument
+       {
+        $$ = $1;
+        $$->push_back($2);
+       }
        | argument_coma_last_list argument ","
-
+       {
+        $$ = $1;
+        $$->push_back($2);
+       }
        | "*" test
        | "*" test argument_coma_first_list
        | "*" test argument_coma_first_list "," "**" test
@@ -1032,16 +1051,24 @@ arglist: argument
        ;
 
 argument_coma_last_list: argument ","
+                       {
+                        $$ = new ast::ExprList(@1);
+                        $$->push_back($1);
+                       }
                        | argument_coma_last_list argument ","
+                       {
+                        $$ = $1;
+                        $$->push_back($2);
+                       }
                        ;
 
 argument_coma_first_list: "," argument
                         | argument_coma_first_list "," argument
                         ;
 
-argument: test
+argument: test { $$ = $1; }
         | test comp_for
-        | test "=" test
+        | test "=" test { $$ = new ast::AssignExpr(@1, $1, $3); }
         ;
 
 comp_iter: comp_for

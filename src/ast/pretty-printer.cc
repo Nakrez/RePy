@@ -140,7 +140,7 @@ namespace ast
             auto beg = v.params_get()->list_get().begin();
             auto end = v.params_get()->list_get().end();
 
-            for (auto it = beg; beg != end; ++it)
+            for (auto it = beg; it != end; ++it)
             {
                 if (it != beg)
                     o_ << ",";
