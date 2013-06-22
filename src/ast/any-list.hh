@@ -23,6 +23,7 @@ namespace ast
             void set_delete(bool d);
 
             void push_back(T* elem);
+            void push_front(T* elem);
             void splice(AnyList<T>* list);
 
         protected:

@@ -1,0 +1,6 @@
+### Pretty printing AST ###
+def foo(bar,a = 1,x = 1):
+    print(bar,a,x)
+    
+foo("Foo")
+

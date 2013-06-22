@@ -76,6 +76,15 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<FunctionDec>::type& s)
+    {
+        if (s.args_get())
+            s.args_get()->accept(*this);
+        s.body_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<OpExpr>::type& e)
     {
         e.left_expr_get()->accept(*this);

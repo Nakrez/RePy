@@ -48,6 +48,13 @@ namespace ast
     {
         delete_ = d;
     }
+
+    template <class T>
+    void AnyList<T>::push_front(T* elem)
+    {
+        list_.push_front(elem);
+    }
+
     template <class T>
     void AnyList<T>::push_back(T* elem)
     {

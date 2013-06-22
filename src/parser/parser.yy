@@ -148,13 +148,14 @@
 %type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
                 expr_stmt stmt simple_stmt suite compound_stmt if_stmt
-                else_stmt while_stmt
+                else_stmt while_stmt funcdef
 %type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
                 term factor power atom argument
-%type<expr_list_val> arglist argument_coma_last_list
+%type<expr_list_val> arglist argument_coma_last_list typedargslist
+                     tfpdef_test_list tfpdef_test_list_internal parameters
 
 %type<str_expr_val> string_list
 
@@ -166,7 +167,7 @@
 
 %type<assexpr_val> expr_simple_assign
 
-%type<var_val> trailer trailer_list
+%type<var_val> trailer trailer_list tfpdef
 
 %%
 
@@ -187,18 +188,36 @@ input_file: stmt
           ;
 
 funcdef: "def" "identifier" parameters ":" suite
-       | "def" "idenfifier" parameters ":" suite
+       {
+        $$ = new ast::FunctionDec(@1, *$2, $3, $5);
+        delete $2;
+       }
        ;
 
-parameters: "(" ")"
-          | "(" typedargslist ")"
+parameters: "(" ")" { $$ = nullptr; }
+          | "(" typedargslist ")" { $$ = $2; }
           ;
 
 typedargslist: tfpdef tfpdef_test_list
+             {
+                $$ = $2;
+                $$->push_front($1);
+             }
              | tfpdef "=" test tfpdef_test_list
+             {
+                $$ = $4;
+                $$->push_front(new ast::AssignExpr(@1, $1, $3));
+             }
              | tfpdef tfpdef_test_list ","
+             {
+                $$ = $2;
+                $$->push_front($1);
+             }
              | tfpdef "=" test tfpdef_test_list ","
-
+             {
+                $$ = $4;
+                $$->push_front(new ast::AssignExpr(@1, $1, $3));
+             }
              | tfpdef tfpdef_test_list "," "*" tfpdef_test_list
              | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list
              | tfpdef tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
@@ -219,14 +238,30 @@ typedargslist: tfpdef tfpdef_test_list
 
              | "**" tfpdef
 
-tfpdef_test_list:
-                | tfpdef_test_list_internal
+tfpdef_test_list: { $$ = new ast::ExprList(@$); }
+                | tfpdef_test_list_internal { $$ = $1; }
                 ;
 
 tfpdef_test_list_internal: "," tfpdef
+                         {
+                            $$ = new ast::ExprList(@1);
+                            $$->push_back($2);
+                         }
                          | "," tfpdef "=" test
+                         {
+                            $$ = new ast::ExprList(@1);
+                            $$->push_back(new ast::AssignExpr(@2, $2, $4));
+                         }
                          | tfpdef_test_list_internal "," tfpdef "=" test
+                         {
+                            $$ = $1;
+                            $$->push_back(new ast::AssignExpr(@3, $3, $5));
+                         }
                          | tfpdef_test_list_internal "," tfpdef
+                         {
+                            $$ = $1;
+                            $$->push_back($3);
+                         }
                          ;
 
 varargslist: vfpdef vfpdef_test_list
@@ -266,6 +301,10 @@ vfpdef_test_list_internal: "," vfpdef
                          ;
 
 tfpdef: "identifier"
+      {
+        $$ = new ast::IdVar(@1, *$1);
+        delete $1;
+      }
       | "identifier" ":" test
       ;
 
