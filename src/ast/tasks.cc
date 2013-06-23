@@ -20,5 +20,6 @@ namespace ast
     void delete_ast()
     {
         delete program_ast;
+        program_ast = nullptr;
     }
 }

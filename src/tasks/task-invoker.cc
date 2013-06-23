@@ -97,14 +97,23 @@ namespace tasks
     {
         if (task->dep_get() != "")
         {
-            for (auto t : TaskRegister::instance().registered_tasks_get())
+            std::istringstream stream(task->dep_get());
+
+            do
             {
-                if (t->long_opt_get() == task->dep_get())
+                std::string dep;
+                stream >> dep;
+
+                for (auto t : TaskRegister::instance().registered_tasks_get())
                 {
-                    enable_task(t);
-                    break;
+                    if (t->long_opt_get() == dep)
+                    {
+                        enable_task(t);
+                        break;
+                    }
                 }
             }
+            while (stream);
         }
 
         tasks_to_run_.push_back(task);
