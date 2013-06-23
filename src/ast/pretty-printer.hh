@@ -36,6 +36,7 @@ namespace ast
             void operator()(const AssignExpr& ast);
             void operator()(const NumeralExpr& ast);
             void operator()(const StringExpr& ast);
+            void operator()(const YieldExpr& ast);
 
             void operator()(const IdVar& ast);
             void operator()(const FunctionVar& ast);

@@ -110,6 +110,13 @@ namespace ast
             s.ret_value_get()->accept(*this);
     }
 
+    void PrettyPrinter::operator()(const YieldExpr& s)
+    {
+        o_ << "yield ";
+        if (s.ret_value_get())
+            s.ret_value_get()->accept(*this);
+    }
+
     void PrettyPrinter::operator()(const FunctionDec& d)
     {
         o_ << "def " << d.name_get() << "(";

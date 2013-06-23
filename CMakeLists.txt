@@ -117,6 +117,7 @@ add_executable(typy
                src/ast/op-expr.cc
                src/ast/numeral-expr.cc
                src/ast/string-expr.cc
+               src/ast/yield-expr.cc
                src/ast/var.cc
                src/ast/id-var.cc
                src/ast/function-var.cc

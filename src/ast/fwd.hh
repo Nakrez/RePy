@@ -21,6 +21,7 @@ namespace ast
     class AssignExpr;
     class NumeralExpr;
     class StringExpr;
+    class YieldExpr;
 
     class Var;
     class IdVar;

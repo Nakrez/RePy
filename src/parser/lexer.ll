@@ -123,6 +123,15 @@ static std::string acu = "";
                         acu += "'";
                 }
 <pystring>\\      { acu += "\\"; yy_push_state(escaped); }
+<pystring><<EOF>> { driver.error_get() << misc::Error::SCAN
+                                       << "Not ended string" << std::endl;
+                    yyterminate();
+                  }
+<pystring>\n      { driver.error_get() << misc::Error::SCAN
+                                       << *yylloc << ": Unexpected end of line"
+                                       << " while parsing string"
+                                       << std::endl;
+                  }
 <pystring>.       { acu += yytext; }
 
 <escaped>\\    { acu += "\\"; yy_pop_state(); }

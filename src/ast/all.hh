@@ -24,6 +24,7 @@
 # include <ast/assign-expr.hh>
 # include <ast/numeral-expr.hh>
 # include <ast/string-expr.hh>
+# include <ast/yield-expr.hh>
 
 // Var
 # include <ast/var.hh>

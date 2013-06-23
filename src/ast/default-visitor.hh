@@ -32,6 +32,7 @@ namespace ast
             virtual void operator()(typename Const<AssignExpr>::type& ast);
             virtual void operator()(typename Const<NumeralExpr>::type& ast);
             virtual void operator()(typename Const<StringExpr>::type& ast);
+            virtual void operator()(typename Const<YieldExpr>::type& ast);
 
             virtual void operator()(typename Const<IdVar>::type& ast);
             virtual void operator()(typename Const<FunctionVar>::type& ast);

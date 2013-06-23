@@ -148,12 +148,12 @@
 %type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
                 expr_stmt stmt simple_stmt suite compound_stmt if_stmt
-                else_stmt while_stmt funcdef return_stmt
+                else_stmt while_stmt funcdef return_stmt yield_stmt
 %type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
                 comparaison expr xor_expr and_expr shift_expr arith_expr
-                term factor power atom argument
+                term factor power atom argument yield_expr yield_arg
 %type<expr_list_val> arglist argument_coma_last_list typedargslist
                      tfpdef_test_list tfpdef_test_list_internal parameters
                      testlist testlist_list
@@ -392,7 +392,7 @@ flow_stmt: break_stmt { $$ = $1; }
          | continue_stmt { $$ = $1; }
          | return_stmt { $$ = $1; }
          | raise_stmt
-         | yield_stmt
+         | yield_stmt { $$ = $1; }
          ;
 
 break_stmt: "break" { $$ = new ast::BreakStmt(@1); }
@@ -405,7 +405,7 @@ return_stmt: "return" { $$ = new ast::ReturnStmt(@1, nullptr); }
            | "return" testlist { $$ = new ast::ReturnStmt(@1, $2); }
            ;
 
-yield_stmt: yield_expr
+yield_stmt: yield_expr { $$ = new ast::ExprStmt($1); }
           ;
 
 raise_stmt: "raise"
@@ -1131,12 +1131,12 @@ comp_if: "if" test_nocond
        | "if" test_nocond comp_iter
        ;
 
-yield_expr: "yield"
-          | "yield" yield_arg
+yield_expr: "yield" { $$ = new ast::YieldExpr(@1, nullptr); }
+          | "yield" yield_arg { $$ = new ast::YieldExpr(@1, $2); }
           ;
 
 yield_arg: "from" test
-         | testlist
+         | testlist { $$ = $1; }
          ;
 %%
 
