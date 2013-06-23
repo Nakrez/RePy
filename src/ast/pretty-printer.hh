@@ -28,6 +28,7 @@ namespace ast
             void operator()(const ContinueStmt& ast);
             void operator()(const IfStmt& ast);
             void operator()(const WhileStmt& ast);
+            void operator()(const ReturnStmt& ast);
             void operator()(const FunctionDec& ast);
 
             void operator()(const OpExpr& ast);

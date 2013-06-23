@@ -30,6 +30,7 @@ namespace ast
             virtual void operator()(typename Const<ExprStmt>::type& ast) = 0;
             virtual void operator()(typename Const<IfStmt>::type& ast) = 0;
             virtual void operator()(typename Const<WhileStmt>::type& ast) = 0;
+            virtual void operator()(typename Const<ReturnStmt>::type& ast) = 0;
             virtual void operator()(typename Const<FunctionDec>::type& ast) = 0;
 
             virtual void operator()(typename Const<OpExpr>::type& ast) = 0;

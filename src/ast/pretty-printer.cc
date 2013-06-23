@@ -37,9 +37,18 @@ namespace ast
         o_ << misc::iendl;
     }
 
-    void PrettyPrinter::operator()(const ExprList&)
+    void PrettyPrinter::operator()(const ExprList& e)
     {
-        assert(false && "Internal compiler error : must not be reached");
+        auto beg = e.list_get().begin();
+        auto end = e.list_get().end();
+
+        for (auto it = beg; it != end; ++it)
+        {
+            if (it != beg)
+                o_ << ",";
+
+            (*it)->accept(*this);
+        }
     }
 
     void PrettyPrinter::operator()(const PassStmt&)
@@ -92,6 +101,13 @@ namespace ast
         s.loop_get()->accept(*this);
 
         o_ << misc::dedentendl;
+    }
+
+    void PrettyPrinter::operator()(const ReturnStmt& s)
+    {
+        o_ << "return ";
+        if (s.ret_value_get())
+            s.ret_value_get()->accept(*this);
     }
 
     void PrettyPrinter::operator()(const FunctionDec& d)

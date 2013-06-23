@@ -14,6 +14,7 @@
 # include <ast/expr-stmt.hh>
 # include <ast/if-stmt.hh>
 # include <ast/while-stmt.hh>
+# include <ast/return-stmt.hh>
 # include <ast/function-dec.hh>
 
 // Expression

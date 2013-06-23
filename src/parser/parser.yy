@@ -148,7 +148,7 @@
 %type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
                 expr_stmt stmt simple_stmt suite compound_stmt if_stmt
-                else_stmt while_stmt funcdef
+                else_stmt while_stmt funcdef return_stmt
 %type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
@@ -156,6 +156,7 @@
                 term factor power atom argument
 %type<expr_list_val> arglist argument_coma_last_list typedargslist
                      tfpdef_test_list tfpdef_test_list_internal parameters
+                     testlist testlist_list
 
 %type<str_expr_val> string_list
 
@@ -389,7 +390,7 @@ pass_stmt: "pass" { $$ = new ast::PassStmt(@1); }
 
 flow_stmt: break_stmt { $$ = $1; }
          | continue_stmt { $$ = $1; }
-         | return_stmt
+         | return_stmt { $$ = $1; }
          | raise_stmt
          | yield_stmt
          ;
@@ -400,8 +401,8 @@ break_stmt: "break" { $$ = new ast::BreakStmt(@1); }
 continue_stmt: "continue" { $$ = new ast::ContinueStmt(@1); }
              ;
 
-return_stmt: "return"
-           | "return" testlist
+return_stmt: "return" { $$ = new ast::ReturnStmt(@1, nullptr); }
+           | "return" testlist { $$ = new ast::ReturnStmt(@1, $2); }
            ;
 
 yield_stmt: yield_expr
@@ -583,8 +584,8 @@ dot_list: "."
         | dot_list "..."
         ;
 
-testlist: testlist_list
-        | testlist_list ","
+testlist: testlist_list { $$ = $1; }
+        | testlist_list "," { $$ = $1; }
         ;
 
 test: or_test { $$ = $1; }
@@ -979,7 +980,15 @@ test_or_star: test { $$ = $1; }
             ;
 
 testlist_list: test
+             {
+                $$ = new ast::ExprList(@1);
+                $$->push_back($1);
+             }
              | testlist_list "," test
+             {
+                $$ = $1;
+                $1->push_back($3);
+             }
              ;
 
 trailer: "(" ")"

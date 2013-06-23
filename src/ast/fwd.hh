@@ -12,6 +12,7 @@ namespace ast
     class ExprStmt;
     class IfStmt;
     class WhileStmt;
+    class ReturnStmt;
     class FunctionDec;
 
     class Expr;
