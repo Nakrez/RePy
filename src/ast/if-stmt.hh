@@ -25,7 +25,7 @@ namespace ast
             Stmt* true_stmt_get();
 
             const Stmt* else_stmt_get() const;
-            Stmt* else_stmt();
+            Stmt* else_stmt_get();
 
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;

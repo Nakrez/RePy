@@ -59,7 +59,7 @@ namespace ast
         return else_;
     }
 
-    Stmt* IfStmt::else_stmt()
+    Stmt* IfStmt::else_stmt_get()
     {
         return else_;
     }

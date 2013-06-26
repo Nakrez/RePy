@@ -125,6 +125,7 @@ add_executable(typy
                src/ast/tasks.cc
 
                src/bind/tasks.cc
+               src/bind/binder.cc
 
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
