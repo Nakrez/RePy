@@ -149,6 +149,17 @@ namespace ast
                 if (it != beg)
                     &o_ << ",";
 
+                if (bind::print_bind)
+                {
+                    const ast::IdVar* var = nullptr;
+
+                    var = dynamic_cast<const ast::IdVar*> (*it);
+
+                    if (var)
+                        bind_ << "# " << var->id_get() << " @ " << var
+                              << misc::iendl;
+                }
+
                 (*it)->accept(*this);
             }
         }
@@ -202,6 +213,16 @@ namespace ast
         misc::MutableRef<std::ostream> ref(assign);
 
         std::swap(ref, o_);
+
+        if (bind::print_bind)
+        {
+            const ast::IdVar* var = nullptr;
+
+            var = dynamic_cast<const ast::IdVar*> (e.lvalue_get());
+
+            if (var)
+                &o_ << "# " << var->id_get() << " @ " << &e << misc::iendl;
+        }
 
         e.lvalue_get()->accept(*this);
         &o_ << " = ";

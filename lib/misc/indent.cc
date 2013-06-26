@@ -4,7 +4,7 @@
 
 namespace misc
 {
-    static inline long int& indent_lvl(std::ostream& o)
+    long int& indent_lvl(std::ostream& o)
     {
         static const long int lvl = std::ios::xalloc();
 

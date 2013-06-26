@@ -5,6 +5,7 @@
 
 namespace misc
 {
+    long int& indent_lvl(std::ostream& o);
     std::ostream& indent(std::ostream& o);
     std::ostream& dedent(std::ostream& o);
     std::ostream& indentendl(std::ostream& o);
