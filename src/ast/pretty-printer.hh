@@ -2,10 +2,12 @@
 # define AST_PRETTY_PRINTER_HH
 
 # include <iostream>
+# include <sstream>
 
 # include <typy.hh>
 
 # include <misc/indent.hh>
+# include <misc/mutable-ref.hh>
 
 # include <ast/default-visitor.hh>
 
@@ -42,8 +44,10 @@ namespace ast
 
             void operator()(const IdVar& ast);
             void operator()(const FunctionVar& ast);
+
         private:
-            std::ostream& o_;
+            misc::MutableRef<std::ostream> o_;
+            std::stringstream bind_;
     };
 } // namespace ast
 
