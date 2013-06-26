@@ -56,8 +56,10 @@ namespace ast
         o_ << "pass";
     }
 
-    void PrettyPrinter::operator()(const BreakStmt&)
+    void PrettyPrinter::operator()(const BreakStmt& s)
     {
+        if (bind::print_bind)
+            o_ << "# break link to loop : " << s.in_loop_get() << misc::iendl;
         o_ << "break";
     }
 

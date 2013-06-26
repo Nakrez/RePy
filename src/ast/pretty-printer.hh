@@ -3,6 +3,8 @@
 
 # include <iostream>
 
+# include <typy.hh>
+
 # include <misc/indent.hh>
 
 # include <ast/default-visitor.hh>
