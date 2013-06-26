@@ -6,6 +6,7 @@ namespace ast
     IdVar::IdVar(const yy::location& location, const std::string& id)
         : Var(location)
         , id_(id)
+        , def_(nullptr)
     {}
 
     IdVar::~IdVar()
@@ -19,6 +20,21 @@ namespace ast
     std::string& IdVar::id_get()
     {
         return id_;
+    }
+
+    const Stmt* IdVar::def_get() const
+    {
+        return def_;
+    }
+
+    Stmt* IdVar::def_get()
+    {
+        return def_;
+    }
+
+    void IdVar::def_set(Stmt* s)
+    {
+        def_ = s;
     }
 
     void IdVar::add_component(Var*)

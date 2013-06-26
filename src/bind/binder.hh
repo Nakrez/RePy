@@ -28,8 +28,8 @@ namespace bind
             // void operator()(ReturnStmt& ast);
             // void operator()(OpExpr& ast);
             // void operator()(UnaryExpr& ast);
-            // void operator()(AssignExpr& ast);
             // void operator()(YieldExpr& ast);
+            // void operator()(ast::FunctionVar& ast);
 
             Binder();
             virtual ~Binder();
@@ -42,8 +42,8 @@ namespace bind
 
             void operator()(ast::FunctionDec& ast);
 
+            void operator()(ast::AssignExpr& ast);
             void operator()(ast::IdVar& ast);
-            void operator()(ast::FunctionVar& ast);
 
         private:
             misc::ScopedMap<std::string, ast::Stmt*> scope_map_;
