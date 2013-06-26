@@ -13,4 +13,9 @@ namespace ast
     extern Ast* program_ast;
 } // namespace ast
 
+namespace bind
+{
+    extern bool print_bind;
+} // namespace bind
+
 #endif /* !TYPY_HH */

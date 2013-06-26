@@ -124,10 +124,13 @@ add_executable(typy
                src/ast/pretty-printer.cc
                src/ast/tasks.cc
 
+               src/bind/tasks.cc
+
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
                src/tasks/basic-task.cc
                src/tasks/callback-task.cc
+               src/tasks/boolean-task.cc
 
                src/typy.cc)
 
