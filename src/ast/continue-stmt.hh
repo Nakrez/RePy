@@ -12,8 +12,16 @@ namespace ast
             ContinueStmt(const yy::location& location);
             virtual ~ContinueStmt();
 
+            const Stmt* in_loop_get() const;
+            Stmt* in_loop_get();
+
+            void in_loop_set(Stmt* l);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
+
+        private:
+            Stmt* in_loop_;
     };
 } // namespace ast
 

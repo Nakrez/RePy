@@ -36,7 +36,14 @@ namespace bind
     }
 
     void Binder::operator()(ast::ContinueStmt& ast)
-    {}
+    {
+        if (loop_stack_.empty())
+            error_ << misc::Error::BIND
+                   << ast.location_get() << ": continue outside any loop"
+                   << std::endl;
+        else
+            ast.in_loop_set(loop_stack_.top());
+    }
 
     void Binder::operator()(ast::FunctionDec& ast)
     {}
