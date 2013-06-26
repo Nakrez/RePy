@@ -94,6 +94,8 @@ namespace ast
 
     void PrettyPrinter::operator()(const WhileStmt& s)
     {
+        if (bind::print_bind)
+            o_ << "# while @ : " << &s << misc::iendl;
         o_ << "while ";
 
         s.cond_get()->accept(*this);
