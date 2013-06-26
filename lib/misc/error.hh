@@ -13,7 +13,8 @@ namespace misc
             {
                 NONE = 0,
                 SCAN = 2,
-                PARSE
+                PARSE,
+                BIND
             };
 
             Error();

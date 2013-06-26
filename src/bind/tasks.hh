@@ -1,9 +1,13 @@
 #ifndef BIND_TASKS_HH
 # define BIND_TASKS_HH
 
+# include <cassert>
+
 # include <typy.hh>
 
 # include <tasks/libtasks.hh>
+
+# include <bind/binder.hh>
 
 namespace bind
 {
