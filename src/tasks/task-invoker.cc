@@ -93,6 +93,17 @@ namespace tasks
             it->run();
     }
 
+    bool TaskInvoker::is_enable(const std::string& s)
+    {
+        for (auto t : tasks_to_run_)
+        {
+            if (t->long_opt_get() == s)
+                return true;
+        }
+
+        return false;
+    }
+
     void TaskInvoker::enable_task(BasicTask* task)
     {
         if (task->dep_get() != "")
@@ -104,12 +115,15 @@ namespace tasks
                 std::string dep;
                 stream >> dep;
 
-                for (auto t : TaskRegister::instance().registered_tasks_get())
+                if (!is_enable(dep))
                 {
-                    if (t->long_opt_get() == dep)
+                    for (auto t : TaskRegister::instance().registered_tasks_get())
                     {
-                        enable_task(t);
-                        break;
+                        if (t->long_opt_get() == dep)
+                        {
+                            enable_task(t);
+                            break;
+                        }
                     }
                 }
             }

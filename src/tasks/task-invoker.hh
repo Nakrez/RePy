@@ -27,6 +27,8 @@ namespace tasks
             TaskInvoker();
             ~TaskInvoker();
 
+            bool is_enable(const std::string& s);
+
         private:
             std::list<BasicTask*> tasks_to_run_;
     };
