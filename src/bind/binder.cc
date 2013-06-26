@@ -3,7 +3,7 @@
 namespace bind
 {
     Binder::Binder()
-        : scope_map_(misc::ScopedMap<std::string, ast::Stmt*>(nullptr))
+        : scope_map_(misc::ScopedMap<std::string, ast::Ast*>(nullptr))
     {}
 
     Binder::~Binder()
@@ -56,15 +56,40 @@ namespace bind
         scope_map_.scope_begin();
 
         if (s.args_get())
-            s.args_get()->accept(*this);
+        {
+            for (auto arg : s.args_get()->list_get())
+            {
+                ast::IdVar* var = dynamic_cast<ast::IdVar*> (arg);
+
+                if (var)
+                    scope_map_.add(var->id_get(), var);
+                else
+                    arg->accept(*this);
+            }
+        }
 
         s.body_get()->accept(*this);
 
         scope_map_.scope_end();
     }
 
-    void Binder::operator()(ast::AssignExpr& ast)
-    {}
+    void Binder::operator()(ast::AssignExpr& e)
+    {
+        e.rvalue_get()->accept(*this);
+
+        ast::IdVar* var = dynamic_cast<ast::IdVar*> (e.lvalue_get());
+
+        if (!var)
+            error_ << misc::Error::BIND
+                   << e.location_get() << ": assignation error" << std::endl;
+        else
+        {
+            if (!scope_map_.get(var->id_get()))
+                scope_map_.add(var->id_get(), &e);
+            else
+                var->def_set(scope_map_.get(var->id_get()));
+        }
+    }
 
     void Binder::operator()(ast::IdVar& ast)
     {

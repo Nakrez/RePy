@@ -46,7 +46,7 @@ namespace bind
             void operator()(ast::IdVar& ast);
 
         private:
-            misc::ScopedMap<std::string, ast::Stmt*> scope_map_;
+            misc::ScopedMap<std::string, ast::Ast*> scope_map_;
             std::stack<ast::Stmt*> loop_stack_;
             misc::Error error_;
     };

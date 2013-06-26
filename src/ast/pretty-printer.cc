@@ -128,6 +128,12 @@ namespace ast
 
     void PrettyPrinter::operator()(const FunctionDec& d)
     {
+        misc::MutableRef<std::ostream> temp(&o_);
+        std::stringstream assign;
+        misc::MutableRef<std::ostream> ref(assign);
+
+        std::swap(ref, o_);
+
         if (bind::print_bind)
             &o_ << "# Function @ : " << &d << misc::iendl;
 
@@ -149,9 +155,31 @@ namespace ast
 
         &o_ << "):" << misc::indentendl;
 
+        if (bind::print_bind)
+        {
+            &temp << bind_.str();
+            bind_.str("");
+            bind_.clear();
+        }
+
+        &temp << assign.str();
+
+        assign.str("");
+        assign.clear();
+
         d.body_get()->accept(*this);
 
         &o_ << misc::dedentendl;
+
+        if (bind::print_bind)
+        {
+            &temp << bind_.str();
+            bind_.str("");
+            bind_.clear();
+        }
+
+        &temp << assign.str();
+        std::swap(o_, temp);
     }
 
     void PrettyPrinter::operator()(const OpExpr& e)
@@ -169,9 +197,25 @@ namespace ast
 
     void PrettyPrinter::operator()(const AssignExpr& e)
     {
+        misc::MutableRef<std::ostream> temp(&o_);
+        std::stringstream assign;
+        misc::MutableRef<std::ostream> ref(assign);
+
+        std::swap(ref, o_);
+
         e.lvalue_get()->accept(*this);
         &o_ << " = ";
         e.rvalue_get()->accept(*this);
+
+        if (bind::print_bind)
+        {
+            &temp << bind_.str();
+            bind_.str("");
+            bind_.clear();
+        }
+
+        &temp << assign.str();
+        std::swap(o_, temp);
     }
 
     void PrettyPrinter::operator()(const NumeralExpr& e)
@@ -186,8 +230,8 @@ namespace ast
 
     void PrettyPrinter::operator()(const IdVar& e)
     {
-        if (bind::print_bind)
-            bind_ << e.id_get() << " @ " << e.def_get() << misc::iendl;
+        if (bind::print_bind && e.def_get())
+            bind_ << "# " << e.id_get() << " @ " << e.def_get() << misc::iendl;
 
         &o_ << e.id_get();
     }
@@ -222,7 +266,7 @@ namespace ast
 
         if (bind::print_bind)
         {
-            &temp << "# " << bind_.str();
+            &temp << bind_.str();
             bind_.str("");
             bind_.clear();
         }

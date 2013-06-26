@@ -22,17 +22,17 @@ namespace ast
         return id_;
     }
 
-    const Stmt* IdVar::def_get() const
+    const Ast* IdVar::def_get() const
     {
         return def_;
     }
 
-    Stmt* IdVar::def_get()
+    Ast* IdVar::def_get()
     {
         return def_;
     }
 
-    void IdVar::def_set(Stmt* s)
+    void IdVar::def_set(Ast* s)
     {
         def_ = s;
     }

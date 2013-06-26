@@ -17,10 +17,10 @@ namespace ast
             const std::string& id_get() const;
             std::string& id_get();
 
-            const Stmt* def_get() const;
-            Stmt* def_get();
+            const Ast* def_get() const;
+            Ast* def_get();
 
-            void def_set(Stmt* s);
+            void def_set(Ast* s);
 
             virtual void add_component(Var* v);
 
@@ -29,7 +29,7 @@ namespace ast
 
         protected:
             std::string id_;
-            Stmt* def_;
+            Ast* def_;
     };
 } // namespace ast
 
