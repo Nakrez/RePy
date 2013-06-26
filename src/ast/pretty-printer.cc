@@ -132,7 +132,9 @@ namespace ast
         o_ << "def " << d.name_get();
 
         if (bind::print_bind)
-            o_ << " \"\"\"" << &d << "\"\"\" " << "(";
+            o_ << " \"\"\"" << &d << "\"\"\" ";
+
+        o_ << "(";
 
         if (d.args_get())
         {
