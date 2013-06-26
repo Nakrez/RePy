@@ -6,6 +6,7 @@ namespace ast
 {
     PrettyPrinter::PrettyPrinter(std::ostream& o)
         : o_(o)
+        , running_(nullptr)
     {}
 
     PrettyPrinter::~PrettyPrinter()
@@ -18,7 +19,7 @@ namespace ast
             e->accept(*this);
         }
 
-        &o_ << misc::iendl;
+        o_ << misc::iendl;
     }
 
     void PrettyPrinter::operator()(const StmtList& ast)
@@ -29,12 +30,12 @@ namespace ast
         for (auto it = beg; it != end; ++it)
         {
             if (it != beg)
-                &o_ << misc::iendl;
+                o_ << misc::iendl;
 
             (*it)->accept(*this);
         }
 
-        &o_ << misc::iendl;
+        o_ << misc::iendl;
     }
 
     void PrettyPrinter::operator()(const ExprList& e)
@@ -45,7 +46,7 @@ namespace ast
         for (auto it = beg; it != end; ++it)
         {
             if (it != beg)
-                &o_ << ",";
+                o_ << ",";
 
             (*it)->accept(*this);
         }
@@ -53,91 +54,85 @@ namespace ast
 
     void PrettyPrinter::operator()(const PassStmt&)
     {
-        &o_ << "pass";
+        o_ << "pass";
     }
 
     void PrettyPrinter::operator()(const BreakStmt& s)
     {
-        if (bind::print_bind)
-            &o_ << "# break link to loop : " << s.in_loop_get() << misc::iendl;
+        o_ << "break";
 
-        &o_ << "break";
+        if (bind::print_bind)
+            o_ << " \"\"\"" << s.in_loop_get() << "\"\"\" ";
     }
 
     void PrettyPrinter::operator()(const ContinueStmt& s)
     {
-        if (bind::print_bind)
-            &o_ << "# continue link to loop : " << s.in_loop_get()
-               << misc::iendl;
+        o_ << "continue";
 
-        &o_ << "continue";
+        if (bind::print_bind)
+            o_ << " \"\"\"" << s.in_loop_get() << "\"\"\" ";
     }
 
     void PrettyPrinter::operator()(const IfStmt& ast)
     {
-        &o_ << "if ";
+        o_ << "if ";
 
         ast.cond_get()->accept(*this);
 
-        &o_ << ":" << misc::indentendl;
+        o_ << ":" << misc::indentendl;
 
         ast.true_stmt_get()->accept(*this);
 
-        &o_ << misc::dedentendl;
+        o_ << misc::dedentendl;
 
         if (ast.else_stmt_get())
         {
             if (dynamic_cast<const ast::IfStmt*> (ast.else_stmt_get()))
-                &o_ << "el";
+                o_ << "el";
             else
-                &o_ << "else:" << misc::indentendl;
+                o_ << "else:" << misc::indentendl;
 
             ast.else_stmt_get()->accept(*this);
-            &o_ << misc::dedent;
+            o_ << misc::dedent;
         }
     }
 
     void PrettyPrinter::operator()(const WhileStmt& s)
     {
+        o_ << "while ";
+
         if (bind::print_bind)
-            &o_ << "# while @ : " << &s << misc::iendl;
-        &o_ << "while ";
+            o_ << "\"\"\"" << &s << "\"\"\" ";
 
         s.cond_get()->accept(*this);
 
-        &o_ << ":" << misc::indentendl;
+        o_ << ":" << misc::indentendl;
 
         s.loop_get()->accept(*this);
 
-        &o_ << misc::dedentendl;
+        o_ << misc::dedentendl;
     }
 
     void PrettyPrinter::operator()(const ReturnStmt& s)
     {
-        &o_ << "return ";
+        o_ << "return ";
         if (s.ret_value_get())
             s.ret_value_get()->accept(*this);
     }
 
     void PrettyPrinter::operator()(const YieldExpr& s)
     {
-        &o_ << "yield ";
+        o_ << "yield ";
         if (s.ret_value_get())
             s.ret_value_get()->accept(*this);
     }
 
     void PrettyPrinter::operator()(const FunctionDec& d)
     {
-        misc::MutableRef<std::ostream> temp(&o_);
-        std::stringstream assign;
-        misc::MutableRef<std::ostream> ref(assign);
-
-        std::swap(ref, o_);
+        o_ << "def " << d.name_get();
 
         if (bind::print_bind)
-            &o_ << "# Function @ : " << &d << misc::iendl;
-
-        &o_ << "def " << d.name_get() << "(";
+            o_ << " \"\"\"" << &d << "\"\"\" " << "(";
 
         if (d.args_get())
         {
@@ -147,127 +142,73 @@ namespace ast
             for (auto it = beg; it != end; ++it)
             {
                 if (it != beg)
-                    &o_ << ",";
-
-                if (bind::print_bind)
-                {
-                    const ast::IdVar* var = nullptr;
-
-                    var = dynamic_cast<const ast::IdVar*> (*it);
-
-                    if (var)
-                        bind_ << "# " << var->id_get() << " @ " << var
-                              << misc::iendl;
-                }
+                    o_ << ",";
 
                 (*it)->accept(*this);
             }
         }
 
-        &o_ << "):" << misc::indentendl;
-
-        if (bind::print_bind)
-        {
-            &temp << bind_.str();
-            bind_.str("");
-            bind_.clear();
-        }
-
-        &temp << assign.str();
-
-        assign.str("");
-        assign.clear();
+        o_ << "):" << misc::indentendl;
 
         d.body_get()->accept(*this);
 
-        &o_ << misc::dedentendl;
-
-        if (bind::print_bind)
-        {
-            &temp << bind_.str();
-            bind_.str("");
-            bind_.clear();
-        }
-
-        &temp << assign.str();
-        std::swap(o_, temp);
+        o_ << misc::dedentendl;
     }
 
     void PrettyPrinter::operator()(const OpExpr& e)
     {
         e.left_expr_get()->accept(*this);
-        &o_ << " " << e.op_to_string() << " ";
+        o_ << " " << e.op_to_string() << " ";
         e.right_expr_get()->accept(*this);
     }
 
     void PrettyPrinter::operator()(const UnaryExpr& e)
     {
-        &o_ << e.op_to_string() << " ";
+        o_ << e.op_to_string() << " ";
         e.expr_get()->accept(*this);
     }
 
     void PrettyPrinter::operator()(const AssignExpr& e)
     {
-        misc::MutableRef<std::ostream> temp(&o_);
-        std::stringstream assign;
-        misc::MutableRef<std::ostream> ref(assign);
-
-        std::swap(ref, o_);
-
-        if (bind::print_bind)
-        {
-            const ast::IdVar* var = nullptr;
-
-            var = dynamic_cast<const ast::IdVar*> (e.lvalue_get());
-
-            if (var)
-                &o_ << "# " << var->id_get() << " @ " << &e << misc::iendl;
-        }
+        running_ = &e;
 
         e.lvalue_get()->accept(*this);
-        &o_ << " = ";
+        o_ << " = ";
         e.rvalue_get()->accept(*this);
 
-        if (bind::print_bind)
-        {
-            &temp << bind_.str();
-            bind_.str("");
-            bind_.clear();
-        }
-
-        &temp << assign.str();
-        std::swap(o_, temp);
+        running_ = nullptr;
     }
 
     void PrettyPrinter::operator()(const NumeralExpr& e)
     {
-        &o_ << e.value_get();
+        o_ << e.value_get();
     }
 
     void PrettyPrinter::operator()(const StringExpr& e)
     {
-        &o_ << "\"" << e.str_get() << "\"";
+        o_ << "\"" << e.str_get() << "\"";
     }
 
     void PrettyPrinter::operator()(const IdVar& e)
     {
-        if (bind::print_bind && e.def_get())
-            bind_ << "# " << e.id_get() << " @ " << e.def_get() << misc::iendl;
+        o_ << e.id_get();
 
-        &o_ << e.id_get();
+        if (bind::print_bind)
+        {
+            if (e.def_get())
+                o_ << " \"\"\"" << e.def_get() << "\"\"\" ";
+            else if (running_)
+                o_ << " \"\"\"" << running_ << "\"\"\" ";
+            else
+                o_ << " \"\"\"" << &e << "\"\"\" ";
+        }
     }
 
     void PrettyPrinter::operator()(const FunctionVar& v)
     {
-        misc::MutableRef<std::ostream> temp(&o_);
-        std::stringstream fun;
-        misc::MutableRef<std::ostream> ref(fun);
-
-        std::swap(ref, o_);
-
         v.var_get()->accept(*this);
 
-        &o_ << "(";
+        o_ << "(";
 
         if (v.params_get())
         {
@@ -277,22 +218,12 @@ namespace ast
             for (auto it = beg; it != end; ++it)
             {
                 if (it != beg)
-                    &o_ << ",";
+                    o_ << ",";
 
                 (*it)->accept(*this);
             }
         }
 
-        &o_ << ")";
-
-        if (bind::print_bind)
-        {
-            &temp << bind_.str();
-            bind_.str("");
-            bind_.clear();
-        }
-
-        &temp << fun.str();
-        std::swap(o_, temp);
+        o_ << ")";
     }
 } // namespace ast

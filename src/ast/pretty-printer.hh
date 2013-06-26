@@ -46,8 +46,8 @@ namespace ast
             void operator()(const FunctionVar& ast);
 
         private:
-            misc::MutableRef<std::ostream> o_;
-            std::stringstream bind_;
+            std::ostream& o_;
+            const ast::Ast* running_;
     };
 } // namespace ast
 
