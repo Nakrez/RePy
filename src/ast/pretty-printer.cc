@@ -186,6 +186,9 @@ namespace ast
 
     void PrettyPrinter::operator()(const IdVar& e)
     {
+        if (bind::print_bind)
+            bind_ << e.id_get() << " @ " << e.def_get() << misc::iendl;
+
         &o_ << e.id_get();
     }
 
@@ -219,7 +222,7 @@ namespace ast
 
         if (bind::print_bind)
         {
-            &temp << bind_.str() << misc::iendl;
+            &temp << "# " << bind_.str();
             bind_.str("");
             bind_.clear();
         }
