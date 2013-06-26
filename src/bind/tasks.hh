@@ -11,7 +11,7 @@
 
 namespace bind
 {
-    bool print_bind = true;
+    bool print_bind = false;
 
     REGULAR_TASK("b|compute-binding", "Compute bind on ast", "parse",
                  compute_bind);
