@@ -2,11 +2,12 @@
 # define AST_EXPR_HH
 
 # include <ast/ast.hh>
+# include <ast/typed.hh>
 # include <ast/visitor.hh>
 
 namespace ast
 {
-    class Expr : public Ast
+    class Expr : public Ast, public Typed
     {
         public:
             Expr(const yy::location& location);

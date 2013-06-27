@@ -122,6 +122,7 @@ add_executable(typy
                src/ast/id-var.cc
                src/ast/function-var.cc
                src/ast/pretty-printer.cc
+               src/ast/typed.cc
                src/ast/tasks.cc
 
                src/bind/tasks.cc
