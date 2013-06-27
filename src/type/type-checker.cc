@@ -74,4 +74,9 @@ namespace type
     {
         ast.type_set(&Int::instance());
     }
+
+    void TypeChecker::operator()(ast::StringExpr& ast)
+    {
+        ast.type_set(&String::instance());
+    }
 } // namespace type

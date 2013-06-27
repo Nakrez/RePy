@@ -8,6 +8,7 @@
 # include <ast/default-visitor.hh>
 
 # include <type/int.hh>
+# include <type/string.hh>
 
 namespace type
 {
@@ -28,6 +29,7 @@ namespace type
             void operator()(ast::AssignExpr& ast);
             void operator()(ast::OpExpr& ast);
             void operator()(ast::IdVar& ast);
+            void operator()(ast::StringExpr& ast);
             void operator()(ast::NumeralExpr& ast);
 
         private:
