@@ -15,8 +15,10 @@ namespace type
             virtual bool compatible_with(const Type& t) = 0;
 
             /// @brief print a type onto a stream
-            virtual std::ostream& dump(std::ostream& o) = 0;
+            virtual std::ostream& dump(std::ostream& o) const = 0;
     };
+
+    std::ostream& operator<<(std::ostream& o, const type::Type& type);
 } // namespace type
 
 #endif /* !TYPE_TYPE_HH */

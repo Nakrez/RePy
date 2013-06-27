@@ -3,6 +3,7 @@
 namespace ast
 {
     Typed::Typed()
+        : type_(nullptr)
     {}
 
     Typed::~Typed()
@@ -18,8 +19,8 @@ namespace ast
         return type_;
     }
 
-    void Typed::type_set(type::Type& type)
+    void Typed::type_set(type::Type* type)
     {
-        type_ = &type;
+        type_ = type;
     }
 } // namespace ast

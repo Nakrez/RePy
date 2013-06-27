@@ -14,7 +14,7 @@ namespace type
         return this == &t;
     }
 
-    std::ostream& Int::dump(std::ostream& o)
+    std::ostream& Int::dump(std::ostream& o) const
     {
         o << "int";
 

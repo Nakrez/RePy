@@ -14,7 +14,7 @@ namespace type
             static Type& instance();
 
             virtual bool compatible_with(const Type& t);
-            virtual std::ostream& dump(std::ostream& o);
+            virtual std::ostream& dump(std::ostream& o) const;
 
         private:
             Int() = default;

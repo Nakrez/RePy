@@ -14,7 +14,7 @@ namespace ast
             const type::Type* type_get() const;
             type::Type* type_get();
 
-            void type_set(type::Type& type);
+            void type_set(type::Type* type);
 
         protected:
             type::Type* type_;
