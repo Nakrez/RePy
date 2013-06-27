@@ -15,7 +15,7 @@ namespace type
             virtual bool compatible_with(const Type& t) = 0;
 
             /// @brief print a type onto a stream
-            virtual bool dump(std::ostream& o) = 0;
+            virtual std::ostream& dump(std::ostream& o) = 0;
     };
 } // namespace type
 

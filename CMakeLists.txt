@@ -129,6 +129,7 @@ add_executable(typy
 
                src/type/tasks.cc
                src/type/type.cc
+               src/type/int.cc
                src/type/type-checker.cc
 
                src/tasks/task-invoker.cc
