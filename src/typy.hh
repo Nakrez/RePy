@@ -18,4 +18,9 @@ namespace bind
     extern bool print_bind;
 } // namespace bind
 
+namespace type
+{
+    extern bool print_type;
+} // namespace type
+
 #endif /* !TYPY_HH */

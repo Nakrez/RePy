@@ -14,7 +14,8 @@ namespace misc
                 NONE = 0,
                 SCAN = 2,
                 PARSE,
-                BIND
+                BIND,
+                TYPE
             };
 
             Error();

@@ -127,6 +127,10 @@ add_executable(typy
                src/bind/tasks.cc
                src/bind/binder.cc
 
+               src/type/tasks.cc
+               src/type/type.cc
+               src/type/type-checker.cc
+
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
                src/tasks/basic-task.cc
