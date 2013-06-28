@@ -33,7 +33,63 @@ namespace type
         e1->type_set(e2->type_get());
     }
 
-    void TypeChecker::operator()(ast::FunctionDec&)
+    void TypeChecker::operator()(ast::ReturnStmt& ast)
+    {
+        type::Type* ret_type = &Void::instance();
+        ast::FunctionDec* to_type = in_declaration_.top();
+        type::Type* fun_type = to_type->type_get()->return_type_get();
+
+        if (ast.ret_value_get())
+        {
+            ast.ret_value_get()->accept(*this);
+            ret_type = ast.ret_value_get()->type_get();
+        }
+
+        if (fun_type)
+        {
+            if (!fun_type->compatible_with(*ret_type))
+            {
+                error_ << misc::Error::TYPE
+                       << ast.location_get() << ": Type error, function has "
+                       << "deduced type " << *fun_type << ", but return is "
+                       << *ret_type << std::endl;
+            }
+        }
+        else
+        {
+            to_type->type_get()->return_type_set(ret_type);
+        }
+    }
+
+    void TypeChecker::operator()(ast::FunctionDec& s)
+    {
+        s.type_set(new Function());
+
+        if (s.args_get())
+        {
+            for (auto arg : s.args_get()->list_get())
+            {
+                ast::IdVar* var = dynamic_cast<ast::IdVar*> (arg);
+
+                if (var)
+                {
+                    var->type_set(&Polymorphic::instance());
+                    s.type_get()->args_type_add(&Polymorphic::instance());
+                }
+                else
+                {
+                    arg->accept(*this);
+                    s.type_get()->args_type_add(arg->type_get());
+                }
+            }
+        }
+
+        in_declaration_.push(&s);
+        s.body_get()->accept(*this);
+        in_declaration_.pop();
+    }
+
+    void TypeChecker::operator()(ast::FunctionVar&)
     {
 
     }
