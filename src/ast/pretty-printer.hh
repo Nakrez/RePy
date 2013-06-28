@@ -49,6 +49,8 @@ namespace ast
             std::ostream& o_;
             const ast::Ast* running_;
     };
+
+    std::ostream& operator<<(std::ostream& o, const Ast& ast);
 } // namespace ast
 
 #endif /* !AST_PRETTY_PRINTER_HH */

@@ -95,6 +95,9 @@ namespace bind
         else
             assert(false
                    && "Function call from function result not yet supported");
+
+        if (ast.params_get())
+            ast.params_get()->accept(*this);
     }
 
     void Binder::operator()(ast::AssignExpr& e)

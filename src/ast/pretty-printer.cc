@@ -12,6 +12,15 @@ namespace ast
     PrettyPrinter::~PrettyPrinter()
     {}
 
+    std::ostream& operator<<(std::ostream& o, const Ast& ast)
+    {
+        PrettyPrinter printer(o);
+
+        ast.accept(printer);
+
+        return o;
+    }
+
     void PrettyPrinter::operator()(const AstList& ast)
     {
         for (auto e : ast.list_get())
@@ -208,7 +217,15 @@ namespace ast
 
     void PrettyPrinter::operator()(const FunctionVar& v)
     {
+        // FIXME : dirty fix
+        bool temp = bind::print_bind;
+
+        bind::print_bind = false;
         v.var_get()->accept(*this);
+        bind::print_bind = temp;
+
+        if (bind::print_bind)
+            o_ << " \"\"\"" << v.def_get() << "\"\"\" ";
 
         o_ << "(";
 
