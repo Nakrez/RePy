@@ -87,6 +87,9 @@ namespace type
         in_declaration_.push(&s);
         s.body_get()->accept(*this);
         in_declaration_.pop();
+
+        if (!s.type_get()->return_type_get())
+            s.type_get()->return_type_set(&Void::instance());
     }
 
     void TypeChecker::operator()(ast::FunctionVar&)
