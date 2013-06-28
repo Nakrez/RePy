@@ -20,6 +20,10 @@ namespace ast
             const Expr* rvalue_get() const;
             Expr* rvalue_get();
 
+            const Ast* def_get() const;
+            Ast* def_get();
+
+            void def_set(Ast* a);
             void lvalue_set(Expr* e);
 
             void accept(Visitor& v);
@@ -28,6 +32,7 @@ namespace ast
         protected:
             Expr* lvalue_;
             Expr* rvalue_;
+            Ast* def_;
     };
 } // namespace ast
 

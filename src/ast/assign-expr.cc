@@ -8,6 +8,7 @@ namespace ast
         : Expr(location)
         , lvalue_(lvalue)
         , rvalue_(rvalue)
+        , def_(nullptr)
     {}
 
     AssignExpr::~AssignExpr()
@@ -48,6 +49,21 @@ namespace ast
 
         if (l)
             l->lvalue_set(e);
+    }
+
+    const Ast* AssignExpr::def_get() const
+    {
+        return def_;
+    }
+
+    Ast* AssignExpr::def_get()
+    {
+        return def_;
+    }
+
+    void AssignExpr::def_set(Ast* a)
+    {
+        def_ = a;
     }
 
     void AssignExpr::accept(Visitor& v)

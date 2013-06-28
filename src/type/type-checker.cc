@@ -33,6 +33,39 @@ namespace type
         e1->type_set(e2->type_get());
     }
 
+    Type* TypeChecker::type_call(ast::FunctionDec* d, Function* type)
+    {
+        // Look if prototype has already been checked
+
+        for (auto proto : d->to_generate_get())
+        {
+            if (proto->compatible_with(*type))
+                return proto->return_type_get();
+        }
+
+        // Else check this prototype
+        Function* temp = d->type_get();
+
+        // Set the prototype to function prototype
+        d->type_set(type);
+
+        // Check the body
+        in_declaration_.push(d);
+        d->body_get()->accept(*this);
+        in_declaration_.pop();
+
+        if (!d->type_get()->return_type_get())
+            d->type_get()->return_type_set(&Void::instance());
+
+        // Add the prototype to be generated later (and for same check later)
+        d->to_generate_add(type);
+
+        // Restore function original prototype
+        d->type_set(temp);
+
+        return type->return_type_get();
+    }
+
     void TypeChecker::operator()(ast::ReturnStmt& ast)
     {
         type::Type* ret_type = &Void::instance();
@@ -48,22 +81,20 @@ namespace type
         if (fun_type)
         {
             if (!fun_type->compatible_with(*ret_type))
-            {
                 error_ << misc::Error::TYPE
                        << ast.location_get() << ": Type error, function has "
                        << "deduced type " << *fun_type << ", but return is "
                        << *ret_type << std::endl;
-            }
         }
         else
-        {
             to_type->type_get()->return_type_set(ret_type);
-        }
     }
 
     void TypeChecker::operator()(ast::FunctionDec& s)
     {
-        s.type_set(new Function());
+        Function* f_type = new Function();
+
+        s.type_set(f_type);
 
         if (s.args_get())
         {
@@ -73,13 +104,18 @@ namespace type
 
                 if (var)
                 {
+                    // If it is a var type it as polymorphic type
+                    // for the correctness check (better check will be
+                    // performed when type checking function call)
+                    // -> see operator()(ast::FunctionVar&)
                     var->type_set(&Polymorphic::instance());
-                    s.type_get()->args_type_add(&Polymorphic::instance());
+                    f_type->args_type_add(&Polymorphic::instance());
                 }
                 else
                 {
+                    // If it is an assignement type it as it must be
                     arg->accept(*this);
-                    s.type_get()->args_type_add(arg->type_get());
+                    f_type->args_type_add(arg->type_get());
                 }
             }
         }
@@ -88,8 +124,8 @@ namespace type
         s.body_get()->accept(*this);
         in_declaration_.pop();
 
-        if (!s.type_get()->return_type_get())
-            s.type_get()->return_type_set(&Void::instance());
+        if (!f_type->return_type_get())
+            f_type->return_type_set(&Void::instance());
     }
 
     void TypeChecker::operator()(ast::FunctionVar& e)
@@ -113,6 +149,8 @@ namespace type
                    << e.def_get()->type_get()->args_get().size()
                    << " parameter(s), call made with "
                    << prototype->args_get().size() << std::endl;
+        else
+            e.type_set(type_call(e.def_get(), prototype));
     }
 
     void TypeChecker::operator()(ast::OpExpr& ast)
@@ -145,6 +183,10 @@ namespace type
 
         type_set(e.lvalue_get(), e.rvalue_get());
         type_set(&e, e.rvalue_get());
+
+        // FIXME avoid dirty (and unsafe) thing
+        if (e.def_get())
+            type_set(dynamic_cast<ast::Expr*> (e.def_get()), e.rvalue_get());
     }
 
     void TypeChecker::operator()(ast::NumeralExpr& ast)

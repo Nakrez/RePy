@@ -28,6 +28,7 @@ namespace type
 
             void type_check(ast::Expr* e1, ast::Expr* e2);
             void type_set(ast::Expr* e1, ast::Expr* e2);
+            Type* type_call(ast::FunctionDec* d, Function* type);
 
             void operator()(ast::ReturnStmt& ast);
             void operator()(ast::FunctionDec& ast);

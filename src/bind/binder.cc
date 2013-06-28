@@ -111,7 +111,10 @@ namespace bind
             if (!scope_map_.get(var->id_get()))
                 scope_map_.add(var->id_get(), &e);
             else
+            {
                 var->def_set(scope_map_.get(var->id_get()));
+                e.def_set(scope_map_.get(var->id_get()));
+            }
         }
     }
 

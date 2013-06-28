@@ -62,6 +62,17 @@ namespace ast
     void FunctionDec::type_set(type::Function* t)
     {
         type_ = t;
+
+        if (args_ && t->args_get().size())
+        {
+            auto it = t->args_get().begin();
+
+            for (auto params : args_->list_get())
+            {
+                params->type_set(*it);
+                ++it;
+            }
+        }
     }
 
     const std::list<type::Function*>& FunctionDec::to_generate_get() const
