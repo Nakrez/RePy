@@ -39,6 +39,26 @@ namespace type
         args_type_.push_back(t);
     }
 
+    bool Function::compatible_with(const Type& t)
+    {
+        const Function* f = dynamic_cast<const Function*> (&t);
+
+        if (!f)
+            return false;
+
+        auto it = args_type_.begin();
+
+        for (auto arg : f->args_get())
+        {
+            if (!arg->compatible_with(**it))
+                return false;
+
+            ++it;
+        }
+
+        return true;
+    }
+
     std::ostream& Function::dump(std::ostream& o) const
     {
         o << "(";

@@ -22,6 +22,7 @@ namespace type
             void return_type_set(Type* t);
             void args_type_add(Type* t);
 
+            virtual bool compatible_with(const Type& t);
             virtual std::ostream& dump(std::ostream& o) const;
 
         protected:
