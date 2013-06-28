@@ -402,7 +402,8 @@ continue_stmt: "continue" { $$ = new ast::ContinueStmt(@1); }
              ;
 
 return_stmt: "return" { $$ = new ast::ReturnStmt(@1, nullptr); }
-           | "return" testlist { $$ = new ast::ReturnStmt(@1, $2); }
+           /*| "return" testlist { $$ = new ast::ReturnStmt(@1, $2); }*/
+           | "return" test { $$ = new ast::ReturnStmt(@1, $2); }
            ;
 
 yield_stmt: yield_expr { $$ = new ast::ExprStmt($1); }
