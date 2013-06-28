@@ -9,7 +9,7 @@ namespace type
         return p;
     }
 
-    bool Polymorphic::compatible_with(const Type& t)
+    bool Polymorphic::compatible_with(const Type&)
     {
         return true;
     }

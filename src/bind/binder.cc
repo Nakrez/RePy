@@ -73,6 +73,30 @@ namespace bind
         scope_map_.scope_end();
     }
 
+    void Binder::operator()(ast::FunctionVar& ast)
+    {
+        ast::IdVar* v = dynamic_cast<ast::IdVar*> (ast.var_get());
+
+        if (v)
+        {
+            ast::FunctionDec* d = nullptr;
+
+            d = dynamic_cast<ast::FunctionDec*> (scope_map_.get(v->id_get()));
+
+            if (d)
+                ast.def_set(d);
+            else
+            {
+                error_ << misc::Error::BIND
+                       << ast.location_get() << ": undeclared function "
+                       << v->id_get() << std::endl;
+            }
+        }
+        else
+            assert(false
+                   && "Function call from function result not yet supported");
+    }
+
     void Binder::operator()(ast::AssignExpr& e)
     {
         e.rvalue_get()->accept(*this);

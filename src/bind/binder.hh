@@ -3,6 +3,7 @@
 
 # include <string>
 # include <stack>
+# include <cassert>
 
 # include <misc/error.hh>
 # include <misc/scoped-map.hh>
@@ -29,7 +30,6 @@ namespace bind
             // void operator()(OpExpr& ast);
             // void operator()(UnaryExpr& ast);
             // void operator()(YieldExpr& ast);
-            // void operator()(ast::FunctionVar& ast);
 
             Binder();
             virtual ~Binder();
@@ -41,6 +41,7 @@ namespace bind
             void operator()(ast::ContinueStmt& ast);
 
             void operator()(ast::FunctionDec& ast);
+            void operator()(ast::FunctionVar& ast);
 
             void operator()(ast::AssignExpr& ast);
             void operator()(ast::IdVar& ast);

@@ -92,9 +92,23 @@ namespace type
             s.type_get()->return_type_set(&Void::instance());
     }
 
-    void TypeChecker::operator()(ast::FunctionVar&)
+    void TypeChecker::operator()(ast::FunctionVar& e)
     {
+        Function* prototype = new Function();
 
+        if (e.params_get())
+        {
+            for (auto p : e.params_get()->list_get())
+            {
+                p->accept(*this);
+                prototype->args_type_add(p->type_get());
+            }
+
+            if (prototype->args_get().size() != e.def_get()->type_get()->args_get().size())
+            {
+
+            }
+        }
     }
 
     void TypeChecker::operator()(ast::OpExpr& ast)
