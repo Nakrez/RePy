@@ -20,6 +20,11 @@ namespace ast
             const ExprList* params_get() const;
             ExprList* params_get();
 
+            const FunctionDec* def_get() const;
+            FunctionDec* def_get();
+
+            void def_set(FunctionDec* d);
+
             virtual void add_component(Var* v);
 
             virtual void accept(Visitor& v);
@@ -28,6 +33,7 @@ namespace ast
         protected:
             Var* var_;
             ExprList* params_;
+            FunctionDec* def_;
     };
 } // namespace ast
 

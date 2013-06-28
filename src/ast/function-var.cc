@@ -37,6 +37,21 @@ namespace ast
         return params_;
     }
 
+    const FunctionDec* FunctionVar::def_get() const
+    {
+        return def_;
+    }
+
+    FunctionDec* FunctionVar::def_get()
+    {
+        return def_;
+    }
+
+    void FunctionVar::def_set(FunctionDec* d)
+    {
+        def_ = d;
+    }
+
     void FunctionVar::add_component(Var* v)
     {
         if (var_ == nullptr)
