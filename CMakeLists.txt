@@ -130,6 +130,7 @@ add_executable(typy
 
                src/type/tasks.cc
                src/type/type.cc
+               src/type/void.cc
                src/type/int.cc
                src/type/string.cc
                src/type/function.cc
