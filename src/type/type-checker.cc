@@ -103,12 +103,16 @@ namespace type
                 p->accept(*this);
                 prototype->args_type_add(p->type_get());
             }
-
-            if (prototype->args_get().size() != e.def_get()->type_get()->args_get().size())
-            {
-
-            }
         }
+
+        if (prototype->args_get().size()
+                != e.def_get()->type_get()->args_get().size())
+            error_ << misc::Error::TYPE
+                   << e.location_get() << ": Function "
+                   << e.def_get()->name_get() << " takes "
+                   << e.def_get()->type_get()->args_get().size()
+                   << " parameter(s), call made with "
+                   << prototype->args_get().size() << std::endl;
     }
 
     void TypeChecker::operator()(ast::OpExpr& ast)
