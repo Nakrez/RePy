@@ -2,6 +2,7 @@
 # define AST_FUNCTION_DEC_HH
 
 # include <string>
+# include <list>
 
 # include <ast/fwd.hh>
 # include <ast/typed.hh>
@@ -33,6 +34,11 @@ namespace ast
 
             void type_set(type::Function* t);
 
+            const std::list<type::Function*>& to_generate_get() const;
+            std::list<type::Function*>& to_generate_get();
+
+            void to_generate_add(type::Function* f);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
@@ -41,6 +47,7 @@ namespace ast
             ExprList* args_;
             Stmt* body_;
             type::Function* type_;
+            std::list<type::Function*> to_generate_;
     };
 } // namespace ast
 

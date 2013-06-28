@@ -64,6 +64,21 @@ namespace ast
         type_ = t;
     }
 
+    const std::list<type::Function*>& FunctionDec::to_generate_get() const
+    {
+        return to_generate_;
+    }
+
+    std::list<type::Function*>& FunctionDec::to_generate_get()
+    {
+        return to_generate_;
+    }
+
+    void FunctionDec::to_generate_add(type::Function* f)
+    {
+        to_generate_.push_back(f);
+    }
+
     void FunctionDec::accept(Visitor& v)
     {
         v(*this);
