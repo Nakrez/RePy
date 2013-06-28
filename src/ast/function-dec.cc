@@ -10,6 +10,7 @@ namespace ast
         , name_(name)
         , args_(args)
         , body_(body)
+        , type_(nullptr)
     {}
 
     FunctionDec::~FunctionDec()
@@ -46,6 +47,21 @@ namespace ast
     Stmt* FunctionDec::body_get()
     {
         return body_;
+    }
+
+    const type::Function* FunctionDec::type_get() const
+    {
+        return type_;
+    }
+
+    type::Function* FunctionDec::type_get()
+    {
+        return type_;
+    }
+
+    void FunctionDec::type_set(type::Function* t)
+    {
+        type_ = t;
     }
 
     void FunctionDec::accept(Visitor& v)

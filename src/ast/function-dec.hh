@@ -4,6 +4,9 @@
 # include <string>
 
 # include <ast/fwd.hh>
+# include <ast/typed.hh>
+
+# include <type/function.hh>
 
 namespace ast
 {
@@ -25,6 +28,11 @@ namespace ast
             const Stmt* body_get() const;
             Stmt* body_get();
 
+            const type::Function* type_get() const;
+            type::Function* type_get();
+
+            void type_set(type::Function* t);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
@@ -32,6 +40,7 @@ namespace ast
             std::string name_;
             ExprList* args_;
             Stmt* body_;
+            type::Function* type_;
     };
 } // namespace ast
 

@@ -132,6 +132,7 @@ add_executable(typy
                src/type/type.cc
                src/type/int.cc
                src/type/string.cc
+               src/type/function.cc
                src/type/polymorphic.cc
                src/type/type-checker.cc
 
