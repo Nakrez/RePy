@@ -5,6 +5,7 @@ namespace ast
     StarExpr::StarExpr(const yy::location& location, Expr* e)
         : Expr(location)
         , expr_(e)
+        , def_(nullptr)
     {}
 
     StarExpr::~StarExpr()
@@ -20,6 +21,21 @@ namespace ast
     Expr* StarExpr::expr_get()
     {
         return expr_;
+    }
+
+    const Ast* StarExpr::def_get() const
+    {
+        return def_;
+    }
+
+    Ast* StarExpr::def_get()
+    {
+        return def_;
+    }
+
+    void StarExpr::def_set(Ast* e)
+    {
+        def_ = e;
     }
 
     void StarExpr::accept(Visitor& v)

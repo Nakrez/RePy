@@ -43,6 +43,9 @@ namespace bind
             void operator()(ast::FunctionDec& ast);
             void operator()(ast::FunctionVar& ast);
 
+            void operator()(ast::StarExpr& ast);
+            void operator()(ast::DoubleStarExpr& ast);
+
             void operator()(ast::AssignExpr& ast);
             void operator()(ast::IdVar& ast);
 
@@ -50,6 +53,7 @@ namespace bind
             misc::ScopedMap<std::string, ast::Ast*> scope_map_;
             std::stack<ast::Stmt*> loop_stack_;
             misc::Error error_;
+            bool declaration_;
     };
 } // namespace bind
 

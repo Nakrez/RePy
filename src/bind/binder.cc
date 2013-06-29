@@ -4,6 +4,7 @@ namespace bind
 {
     Binder::Binder()
         : scope_map_(misc::ScopedMap<std::string, ast::Ast*>(nullptr))
+        , declaration_(false)
     {}
 
     Binder::~Binder()
@@ -64,7 +65,11 @@ namespace bind
                 if (var)
                     scope_map_.add(var->id_get(), var);
                 else
+                {
+                    declaration_ = true;
                     arg->accept(*this);
+                    declaration_ = false;
+                }
             }
         }
 
@@ -98,6 +103,48 @@ namespace bind
 
         if (ast.params_get())
             ast.params_get()->accept(*this);
+    }
+
+    void Binder::operator()(ast::StarExpr& ast)
+    {
+        ast::IdVar* var = dynamic_cast<ast::IdVar*> (ast.expr_get());
+
+        if (!var)
+            error_ << misc::Error::BIND
+                   << ast.location_get() << ": Invalid double star expr "
+                   << var->id_get() << std::endl;
+        else if (declaration_)
+            scope_map_.add(var->id_get(), &ast);
+        else if (!scope_map_.get(var->id_get()))
+            error_ << misc::Error::BIND
+                   << ast.location_get() << ": unknown identifier "
+                   << var->id_get() << std::endl;
+        else
+        {
+            ast.def_set(scope_map_.get(var->id_get()));
+            var->def_set(scope_map_.get(var->id_get()));
+        }
+    }
+
+    void Binder::operator()(ast::DoubleStarExpr& ast)
+    {
+        ast::IdVar* var = dynamic_cast<ast::IdVar*> (ast.expr_get());
+
+        if (!var)
+            error_ << misc::Error::BIND
+                   << ast.location_get() << ": Invalid double star expr "
+                   << var->id_get() << std::endl;
+        else if (declaration_)
+            scope_map_.add(var->id_get(), &ast);
+        else if (!scope_map_.get(var->id_get()))
+            error_ << misc::Error::BIND
+                   << ast.location_get() << ": unknown identifier "
+                   << var->id_get() << std::endl;
+        else
+        {
+            ast.def_set(scope_map_.get(var->id_get()));
+            var->def_set(scope_map_.get(var->id_get()));
+        }
     }
 
     void Binder::operator()(ast::AssignExpr& e)

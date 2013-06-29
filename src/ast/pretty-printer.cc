@@ -138,16 +138,20 @@ namespace ast
 
     void PrettyPrinter::operator()(const StarExpr& expr)
     {
+        running_ = &expr;
         o_ << "*";
 
         expr.expr_get()->accept(*this);
+        running_ = nullptr;
     }
 
     void PrettyPrinter::operator()(const DoubleStarExpr& expr)
     {
+        running_ = &expr;
         o_ << "**";
 
         expr.expr_get()->accept(*this);
+        running_ = nullptr;
     }
 
     void PrettyPrinter::operator()(const FunctionDec& d)

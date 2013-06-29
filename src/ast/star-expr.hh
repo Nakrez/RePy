@@ -14,11 +14,17 @@ namespace ast
             const Expr* expr_get() const;
             Expr* expr_get();
 
+            const Ast* def_get() const;
+            Ast* def_get();
+
+            void def_set(Ast* e);
+
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
 
         protected:
             Expr* expr_;
+            Ast* def_;
     };
 } // namespace ast
 
