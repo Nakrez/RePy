@@ -221,17 +221,50 @@ typedargslist: tfpdef tfpdef_test_list
              }
              | tfpdef tfpdef_test_list "," "*" tfpdef_test_list
              | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             {
+                $$ = $2;
+                $$->push_front($1);
+                $$->push_back(new ast::StarExpr(@4, $5));
+                $$->splice($6);
+             }
              | tfpdef tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
              | tfpdef tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
-
+             {
+                $$ = $2;
+                $$->push_front($1);
+                $$->push_back(new ast::StarExpr(@4, $5));
+                $$->splice($6);
+                $$->push_back(new ast::DoubleStarExpr(@8, $9));
+             }
              | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list
              | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list
+             {
+                $$ = $4;
+                $$->push_front(new ast::AssignExpr(@1, $1, $3));
+                $$->push_back(new ast::StarExpr(@6, $7));
+                $$->splice($8);
+             }
              | tfpdef "=" test tfpdef_test_list "," "*" tfpdef_test_list "," "**" tfpdef
              | tfpdef "=" test tfpdef_test_list "," "*" tfpdef tfpdef_test_list "," "**" tfpdef
-
+             {
+                $$ = $4;
+                $$->push_front(new ast::AssignExpr(@1, $1, $3));
+                $$->push_back(new ast::StarExpr(@6, $7));
+                $$->splice($8);
+                $$->push_back(new ast::DoubleStarExpr(@10, $11));
+             }
              | tfpdef tfpdef_test_list "," "**" tfpdef
+             {
+                $$ = $2;
+                $$->push_front($1);
+                $$->push_back(new ast::DoubleStarExpr(@4, $5));
+             }
              | tfpdef "=" test tfpdef_test_list "," "**" tfpdef
-
+             {
+                $$ = $4;
+                $$->push_front(new ast::AssignExpr(@1, $1, $3));
+                $$->push_back(new ast::DoubleStarExpr(@6, $7));
+             }
              | "*" tfpdef_test_list
              | "*" tfpdef tfpdef_test_list
              {
@@ -240,8 +273,16 @@ typedargslist: tfpdef tfpdef_test_list
              }
              | "*" tfpdef_test_list "," "**" tfpdef
              | "*" tfpdef tfpdef_test_list "," "**" tfpdef
-
+             {
+                $$ = $3;
+                $$->push_front(new ast::StarExpr(@1, $2));
+                $$->push_back(new ast::DoubleStarExpr(@5, $6));
+             }
              | "**" tfpdef
+             {
+                $$ = new ast::ExprList(@$);
+                $$->push_front(new ast::DoubleStarExpr(@1, $2));
+             }
 
 tfpdef_test_list: { $$ = new ast::ExprList(@$); }
                 | tfpdef_test_list_internal { $$ = $1; }
