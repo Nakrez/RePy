@@ -36,7 +36,6 @@ namespace type
     Type* TypeChecker::type_call(ast::FunctionDec* d, Function* type)
     {
         // Look if prototype has already been checked
-
         for (auto proto : d->to_generate_get())
         {
             if (proto->compatible_with(*type))
@@ -49,6 +48,9 @@ namespace type
         // Set the prototype to function prototype
         d->type_set(type);
 
+        // Add the prototype to be generated later (and for same check later)
+        d->to_generate_add(type);
+
         // Check the body
         in_declaration_.push(d);
         d->body_get()->accept(*this);
@@ -56,9 +58,6 @@ namespace type
 
         if (!d->type_get()->return_type_get())
             d->type_get()->return_type_set(&Void::instance());
-
-        // Add the prototype to be generated later (and for same check later)
-        d->to_generate_add(type);
 
         // Restore function original prototype
         d->type_set(temp);
@@ -80,7 +79,9 @@ namespace type
 
         if (fun_type)
         {
-            if (!fun_type->compatible_with(*ret_type))
+            if (fun_type == &Polymorphic::instance())
+                to_type->type_get()->return_type_set(ret_type);
+            else if (!fun_type->compatible_with(*ret_type))
                 error_ << misc::Error::TYPE
                        << ast.location_get() << ": Type error, function has "
                        << "deduced type " << *fun_type << ", but return is "
@@ -130,6 +131,10 @@ namespace type
 
     void TypeChecker::operator()(ast::FunctionVar& e)
     {
+        // FIXME : Dirty fix supposed to be set when an ambiguous call is made
+        // This ambiguous call must only be made when checking function
+        // declaration. Else it is a bug or something I did not think of.
+        bool ambigous = false;
         Function* prototype = new Function();
 
         if (e.params_get())
@@ -137,6 +142,10 @@ namespace type
             for (auto p : e.params_get()->list_get())
             {
                 p->accept(*this);
+
+                if (p->type_get() == &Polymorphic::instance())
+                    ambigous = true;
+
                 prototype->args_type_add(p->type_get());
             }
         }
@@ -149,8 +158,26 @@ namespace type
                    << e.def_get()->type_get()->args_get().size()
                    << " parameter(s), call made with "
                    << prototype->args_get().size() << std::endl;
-        else
+        else if (!ambigous)
+        {
             e.type_set(type_call(e.def_get(), prototype));
+
+            // If the result of the process is Polymorphic type then the code
+            // is invalid or contains a part of unsupported stuff.
+            // If you fine any example that is valid and fully supported
+            // I would be glad to see it and review my algorithm
+            if (e.type_get() == &Polymorphic::instance())
+                error_ << misc::Error::TYPE
+                       << e.location_get() << ": Function return type "
+                       << "ambiguous or contains unsupported stuff."
+                       << " If you believe your code works and is supported "
+                       << "please report it as BUG. Thanks !"
+                       << std::endl;
+            else if (!e.type_get())
+                e.type_set(&Polymorphic::instance());
+        }
+        else
+            e.type_set(&Polymorphic::instance());
     }
 
     void TypeChecker::operator()(ast::OpExpr& ast)
@@ -162,8 +189,11 @@ namespace type
 
         // So far if there is no error it does not really matter if the opexpr
         // has right expr of left expr type since they are the same due to
-        // strong type of python
-        type_set(&ast, ast.left_expr_get());
+        // strong type of python just check if one of them is non polymorphic
+        if (ast.left_expr_get()->type_get() == &Polymorphic::instance())
+            type_set(&ast, ast.right_expr_get());
+        else
+            type_set(&ast, ast.left_expr_get());
     }
 
     void TypeChecker::operator()(ast::IdVar& ast)

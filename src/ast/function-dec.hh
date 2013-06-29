@@ -8,6 +8,7 @@
 # include <ast/typed.hh>
 
 # include <type/function.hh>
+# include <type/polymorphic.hh>
 
 namespace ast
 {

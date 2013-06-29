@@ -87,6 +87,14 @@ namespace ast
 
     void FunctionDec::to_generate_add(type::Function* f)
     {
+        // Don't accept polymorphic generation
+        if (f->return_type_get() == &type::Polymorphic::instance())
+            return;
+
+        for (auto arg : f->args_get())
+            if (arg == &type::Polymorphic::instance())
+                return;
+
         to_generate_.push_back(f);
     }
 

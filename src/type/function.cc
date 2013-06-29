@@ -1,9 +1,10 @@
 #include <type/function.hh>
+#include <type/polymorphic.hh>
 
 namespace type
 {
     Function::Function()
-        : return_type_()
+        : return_type_(nullptr)
     {}
 
     Function::~Function()
