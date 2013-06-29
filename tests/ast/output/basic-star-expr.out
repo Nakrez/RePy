@@ -1,0 +1,5 @@
+### Pretty printing AST ###
+def fun(*args):
+    return 1
+    
+

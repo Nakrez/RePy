@@ -234,6 +234,10 @@ typedargslist: tfpdef tfpdef_test_list
 
              | "*" tfpdef_test_list
              | "*" tfpdef tfpdef_test_list
+             {
+                $$ = $3;
+                $$->push_front(new ast::StarExpr(@1, $2));
+             }
              | "*" tfpdef_test_list "," "**" tfpdef
              | "*" tfpdef tfpdef_test_list "," "**" tfpdef
 

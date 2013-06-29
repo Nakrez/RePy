@@ -136,6 +136,13 @@ namespace ast
             s.ret_value_get()->accept(*this);
     }
 
+    void PrettyPrinter::operator()(const StarExpr& expr)
+    {
+        o_ << "*";
+
+        expr.expr_get()->accept(*this);
+    }
+
     void PrettyPrinter::operator()(const FunctionDec& d)
     {
         o_ << "def " << d.name_get();
