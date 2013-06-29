@@ -23,6 +23,7 @@ namespace ast
     class StringExpr;
     class YieldExpr;
     class StarExpr;
+    class DoubleStarExpr;
 
     class Var;
     class IdVar;

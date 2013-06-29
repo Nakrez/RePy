@@ -34,6 +34,7 @@ namespace ast
             virtual void operator()(typename Const<StringExpr>::type& ast);
             virtual void operator()(typename Const<YieldExpr>::type& ast);
             virtual void operator()(typename Const<StarExpr>::type& ast);
+            virtual void operator()(typename Const<DoubleStarExpr>::type& ast);
 
             virtual void operator()(typename Const<IdVar>::type& ast);
             virtual void operator()(typename Const<FunctionVar>::type& ast);

@@ -42,6 +42,7 @@ namespace ast
             void operator()(const StringExpr& ast);
             void operator()(const YieldExpr& ast);
             void operator()(const StarExpr& ast);
+            void operator()(const DoubleStarExpr& ast);
 
             void operator()(const IdVar& ast);
             void operator()(const FunctionVar& ast);

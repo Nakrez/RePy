@@ -141,6 +141,13 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<DoubleStarExpr>::type& s)
+    {
+        s.expr_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<IdVar>::type&)
     {}
 

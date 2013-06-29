@@ -8,7 +8,9 @@ namespace ast
     {}
 
     StarExpr::~StarExpr()
-    {}
+    {
+        delete expr_;
+    }
 
     const Expr* StarExpr::expr_get() const
     {

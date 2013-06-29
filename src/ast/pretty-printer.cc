@@ -143,6 +143,13 @@ namespace ast
         expr.expr_get()->accept(*this);
     }
 
+    void PrettyPrinter::operator()(const DoubleStarExpr& expr)
+    {
+        o_ << "**";
+
+        expr.expr_get()->accept(*this);
+    }
+
     void PrettyPrinter::operator()(const FunctionDec& d)
     {
         o_ << "def " << d.name_get();

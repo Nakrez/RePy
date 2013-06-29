@@ -26,6 +26,7 @@
 # include <ast/string-expr.hh>
 # include <ast/yield-expr.hh>
 # include <ast/star-expr.hh>
+# include <ast/double-star-expr.hh>
 
 // Var
 # include <ast/var.hh>
