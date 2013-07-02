@@ -9,10 +9,10 @@
 
 namespace cloner
 {
-    class AstCloner : public ast::DefaultConstVisitor
+    class AstCloner : public ast::DefaultVisitor
     {
         public:
-            using ast::DefaultConstVisitor::operator();
+            using ast::DefaultVisitor::operator();
 
             AstCloner();
             virtual ~AstCloner();
@@ -20,38 +20,38 @@ namespace cloner
             ast::Ast* cloned_ast_get();
 
             template <typename T>
-            T* clone(const T* const t);
+            T* clone(T* t);
 
             template <typename T>
-            T* clone(const T& t);
+            T* clone(T& t);
 
             template <typename T>
-            ast::AnyList<T>* clone_list(const ast::AnyList<T>& l);
+            ast::AnyList<T>* clone_list(ast::AnyList<T>& l);
 
-            virtual void operator()(const ast::AstList& ast);
-            virtual void operator()(const ast::StmtList& ast);
-            virtual void operator()(const ast::ExprList& ast);
+            virtual void operator()(ast::AstList& ast);
+            virtual void operator()(ast::StmtList& ast);
+            virtual void operator()(ast::ExprList& ast);
 
-            virtual void operator()(const ast::PassStmt& ast);
-            virtual void operator()(const ast::BreakStmt& ast);
-            virtual void operator()(const ast::ContinueStmt& ast);
-            virtual void operator()(const ast::ExprStmt& ast);
-            virtual void operator()(const ast::IfStmt& ast);
-            virtual void operator()(const ast::WhileStmt& ast);
-            virtual void operator()(const ast::ReturnStmt& ast);
-            virtual void operator()(const ast::FunctionDec& ast);
+            virtual void operator()(ast::PassStmt& ast);
+            virtual void operator()(ast::BreakStmt& ast);
+            virtual void operator()(ast::ContinueStmt& ast);
+            virtual void operator()(ast::ExprStmt& ast);
+            virtual void operator()(ast::IfStmt& ast);
+            virtual void operator()(ast::WhileStmt& ast);
+            virtual void operator()(ast::ReturnStmt& ast);
+            virtual void operator()(ast::FunctionDec& ast);
 
-            virtual void operator()(const ast::OpExpr& ast);
-            virtual void operator()(const ast::UnaryExpr& ast);
-            virtual void operator()(const ast::AssignExpr& ast);
-            virtual void operator()(const ast::NumeralExpr& ast);
-            virtual void operator()(const ast::StringExpr& ast);
-            virtual void operator()(const ast::YieldExpr& ast);
-            virtual void operator()(const ast::StarExpr& ast);
-            virtual void operator()(const ast::DoubleStarExpr& ast);
+            virtual void operator()(ast::OpExpr& ast);
+            virtual void operator()(ast::UnaryExpr& ast);
+            virtual void operator()(ast::AssignExpr& ast);
+            virtual void operator()(ast::NumeralExpr& ast);
+            virtual void operator()(ast::StringExpr& ast);
+            virtual void operator()(ast::YieldExpr& ast);
+            virtual void operator()(ast::StarExpr& ast);
+            virtual void operator()(ast::DoubleStarExpr& ast);
 
-            virtual void operator()(const ast::IdVar& ast);
-            virtual void operator()(const ast::FunctionVar& ast);
+            virtual void operator()(ast::IdVar& ast);
+            virtual void operator()(ast::FunctionVar& ast);
 
         protected:
             ast::Ast* cloned_ast_;

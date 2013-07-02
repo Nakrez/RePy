@@ -12,7 +12,7 @@
 namespace cloner
 {
     REGULAR_TASK("clone", "Clone the ast (used for debug purpose)",
-                 "compute-binding", clone_ast);
+                 "parse", clone_ast);
 } // namespace cloner
 
 #endif /* !CLONER_TASKS_HH */

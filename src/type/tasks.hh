@@ -14,7 +14,7 @@ namespace type
     bool print_type = false;
 
     REGULAR_TASK("t|type-check", "Compute type checking on ast",
-                 "function-call-desugar", type_check);
+                 "function-dec-desugar", type_check);
 
     BOOLEAN_TASK("T|print-type-infos", "Print related type infos",
                  "type-check", print_type);

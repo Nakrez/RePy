@@ -6,7 +6,7 @@
 namespace cloner
 {
     template <typename T>
-    T* AstCloner::clone(const T* const t)
+    T* AstCloner::clone(T* t)
     {
         if (t)
         {
@@ -22,7 +22,7 @@ namespace cloner
     }
 
     template <typename T>
-    T* AstCloner::clone(const T& t)
+    T* AstCloner::clone(T& t)
     {
         t.accept(*this);
 
@@ -34,7 +34,7 @@ namespace cloner
     }
 
     template <typename T>
-    ast::AnyList<T>* AstCloner::clone_list(const ast::AnyList<T>& l)
+    ast::AnyList<T>* AstCloner::clone_list(ast::AnyList<T>& l)
     {
         ast::AnyList<T>* ret = new ast::AnyList<T>(l.location_get());
 

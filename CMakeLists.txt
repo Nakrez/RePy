@@ -144,6 +144,8 @@ add_executable(typy
                src/cloner/ast-cloner.cc
 
                src/desugar/tasks.cc
+               src/desugar/function-call-desugar.cc
+               src/desugar/function-dec-desugar.cc
 
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc

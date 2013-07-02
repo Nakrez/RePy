@@ -39,6 +39,7 @@ namespace ast
             std::list<type::Function*>& to_generate_get();
 
             void to_generate_add(type::Function* f);
+            void to_generate_set(const std::list<type::Function*>& l);
 
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
