@@ -140,6 +140,8 @@ add_executable(typy
                src/type/tuple.cc
                src/type/type-checker.cc
 
+               src/desugar/tasks.cc
+
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
                src/tasks/basic-task.cc

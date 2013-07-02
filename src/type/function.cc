@@ -42,11 +42,14 @@ namespace type
 
     bool Function::compatible_with(const Type& t)
     {
+        // This function must be called from the definition of the function
+        // to match a call prototype. Otherwise it wont work
         const Function* f = dynamic_cast<const Function*> (&t);
 
         if (!f)
             return false;
 
+        // TODO Handle unpack
         auto it = args_type_.begin();
 
         for (auto arg : f->args_get())
