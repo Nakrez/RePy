@@ -1,1 +1,2 @@
-continue
+while 1:
+    continue
