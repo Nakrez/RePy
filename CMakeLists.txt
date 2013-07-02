@@ -137,6 +137,7 @@ add_executable(typy
                src/type/string.cc
                src/type/function.cc
                src/type/polymorphic.cc
+               src/type/tuple.cc
                src/type/type-checker.cc
 
                src/tasks/task-invoker.cc

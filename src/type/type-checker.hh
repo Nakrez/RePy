@@ -15,6 +15,7 @@
 # include <type/polymorphic.hh>
 
 # include <ast/pretty-printer.hh>
+
 namespace type
 {
     class TypeChecker : public ast::DefaultVisitor

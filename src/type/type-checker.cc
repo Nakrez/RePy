@@ -150,6 +150,9 @@ namespace type
             }
         }
 
+        // FIXME : The number of parameters does not really matter.
+        // Need to look about the compatibility between the prototype and the
+        // call
         if (prototype->args_get().size()
                 != e.def_get()->type_get()->args_get().size())
             error_ << misc::Error::TYPE
