@@ -150,18 +150,7 @@ namespace type
             }
         }
 
-        // FIXME : The number of parameters does not really matter.
-        // Need to look about the compatibility between the prototype and the
-        // call
-        if (prototype->args_get().size()
-                != e.def_get()->type_get()->args_get().size())
-            error_ << misc::Error::TYPE
-                   << e.location_get() << ": Function "
-                   << e.def_get()->name_get() << " takes "
-                   << e.def_get()->type_get()->args_get().size()
-                   << " parameter(s), call made with "
-                   << prototype->args_get().size() << std::endl;
-        else if (!ambigous)
+        if (!ambigous)
         {
             e.type_set(type_call(e.def_get(), prototype));
 

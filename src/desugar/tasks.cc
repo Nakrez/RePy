@@ -4,17 +4,20 @@ namespace desugar
 {
     void fun_call_desugar()
     {
+        // Compute binding after this desugar is not needed since we are going
+        // to execute after it, function dec desugar, that does not need
+        // binding computeD
+
         assert(ast::program_ast && "No ast to desugar (function call)");
 
-        FunctionDecDesugar desugar;
+        FunctionCallDesugar desugar;
         desugar.visit(ast::program_ast);
+
+        desugar.error_get().throw_if_needed();
 
         ast::Ast* old = ast::program_ast;
 
         ast::program_ast = desugar.cloned_ast_get();
-
-        bind::Binder bind;
-        bind.visit(ast::program_ast);
 
         delete old;
     }

@@ -1,0 +1,6 @@
+### Pretty printing AST ###
+def fun(d = 1):
+    return 1
+    
+fun(1)
+
