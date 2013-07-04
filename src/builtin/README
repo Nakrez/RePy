@@ -1,0 +1,11 @@
+This is the most elegant way I found to support built-in functions.
+The BuiltinLibrary contains all built-in prototypes, types (if they are some),
+and all rules that needs to be checked by the type checker or the binder.
+
+Some built-in functions contains a custom type (like print). This has been made
+to keep compatibility and check for the various number of parameters that is
+not supported yet by the compiler. This may be changed later when * and **
+syntax will be fully supported.
+
+Other functions just has there prototype and type informations to keep things
+working (for example abs function need only int parameter).
