@@ -5,8 +5,8 @@ namespace desugar
     void fun_call_desugar()
     {
         // Compute binding after this desugar is not needed since we are going
-        // to execute after it, function dec desugar, that does not need
-        // binding computeD
+        // to execute function dec desugar after it. It does not need
+        // binding computed
 
         assert(ast::program_ast && "No ast to desugar (function call)");
 

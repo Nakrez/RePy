@@ -78,7 +78,7 @@ namespace desugar
                        << std::endl;
 
         ast::FunctionVar* v = new ast::FunctionVar(ast.location_get(), var,
-                params);
+                                                   params);
 
         v->type_set(ast.type_get());
 

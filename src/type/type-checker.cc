@@ -134,6 +134,7 @@ namespace type
         // FIXME : Dirty fix supposed to be set when an ambiguous call is made
         // This ambiguous call must only be made when checking function
         // declaration. Else it is a bug or something I did not think of.
+
         bool ambigous = false;
         Function* prototype = new Function();
 
