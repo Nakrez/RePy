@@ -140,6 +140,8 @@ add_executable(typy
                src/type/tuple.cc
                src/type/type-checker.cc
 
+               src/builtin/builtin-library.cc
+
                src/cloner/tasks.cc
                src/cloner/ast-cloner.cc
 
