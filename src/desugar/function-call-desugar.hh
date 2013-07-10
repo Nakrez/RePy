@@ -7,6 +7,8 @@
 
 # include <cloner/ast-cloner.hh>
 
+# include <builtin/builtin-library.hh>
+
 namespace desugar
 {
     class FunctionCallDesugar : public cloner::AstCloner

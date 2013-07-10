@@ -21,7 +21,12 @@ namespace desugar
     // place)
     void FunctionCallDesugar::operator()(ast::FunctionVar& ast)
     {
-        const ast::ExprList* dec_get = ast.def_get()->args_get();
+        const ast::ExprList* dec_get;
+
+        if (!ast.def_get())
+            dec_get = builtin::BuiltinLibrary::instance().args_get(ast);
+        else
+            dec_get = ast.def_get()->args_get();
 
         // Map all args with it expression, bool are to keep track of double
         // assignement of the same parameter which is wrong
