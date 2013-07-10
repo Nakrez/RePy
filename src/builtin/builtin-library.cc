@@ -1,4 +1,5 @@
 #include <builtin/builtin-library.hh>
+#include <type/type-checker.hh>
 
 namespace builtin
 {
@@ -23,9 +24,30 @@ namespace builtin
         return lib;
     }
 
-    void BuiltinLibrary::type_check(ast::FunctionVar& v, misc::Error& error)
+    void BuiltinLibrary::type_check(ast::FunctionVar& v, misc::Error& error,
+                                    type::TypeChecker& typec)
     {
+        const ast::IdVar* var = dynamic_cast<const ast::IdVar*> (v.var_get());
+        type::Function prototype;
 
+        assert(var && "Internal compiler error");
+
+        if (v.params_get())
+        {
+            for (auto p : v.params_get()->list_get())
+            {
+                p->accept(typec);
+
+                prototype.args_type_add(p->type_get());
+            }
+        }
+
+        if (!builtin_.at(var->id_get()).second->compatible_with(prototype))
+            error << misc::Error::TYPE
+                  << v.location_get() << ": builtin \"" << var->id_get()
+                  << "\" type mismatch" << std::endl;
+
+        v.type_set(builtin_.at(var->id_get()).second->return_type_get());
     }
 
     const ast::ExprList*
