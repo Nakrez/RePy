@@ -3,6 +3,9 @@
 
 # include <map>
 # include <string>
+# include <cassert>
+
+# include <misc/error.hh>
 
 # include <ast/all.hh>
 
@@ -23,6 +26,8 @@ namespace builtin
             static BuiltinLibrary& instance();
 
             bool is_builtin(const std::string& s) const;
+            void type_check(ast::FunctionVar& v, misc::Error& error);
+            const ast::ExprList* args_get(const ast::FunctionVar& v) const;
 
         protected:
             std::map<std::string, Builtin> builtin_;
