@@ -11,6 +11,8 @@
 # include <ast/default-visitor.hh>
 # include <ast/all.hh>
 
+# include <builtin/builtin-library.hh>
+
 namespace bind
 {
     class Binder : public ast::DefaultVisitor

@@ -90,7 +90,7 @@ namespace bind
 
             if (d)
                 ast.def_set(d);
-            else
+            else if (!builtin::BuiltinLibrary::instance().is_builtin(v->id_get()))
             {
                 error_ << misc::Error::BIND
                        << ast.location_get() << ": undeclared function "
