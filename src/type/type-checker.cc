@@ -135,6 +135,13 @@ namespace type
         // This ambiguous call must only be made when checking function
         // declaration. Else it is a bug or something I did not think of.
 
+        // If def get is null it is a builtin function (or a bug)
+        if (!e.def_get())
+        {
+            builtin::BuiltinLibrary::instance().type_check(e, error_);
+            return;
+        }
+
         bool ambigous = false;
         Function* prototype = new Function();
 

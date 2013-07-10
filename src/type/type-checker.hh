@@ -7,6 +7,7 @@
 # include <misc/error.hh>
 
 # include <ast/default-visitor.hh>
+# include <ast/pretty-printer.hh>
 
 # include <type/void.hh>
 # include <type/int.hh>
@@ -14,7 +15,7 @@
 # include <type/function.hh>
 # include <type/polymorphic.hh>
 
-# include <ast/pretty-printer.hh>
+# include <builtin/builtin-library.hh>
 
 namespace type
 {
