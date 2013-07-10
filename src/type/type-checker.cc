@@ -138,7 +138,7 @@ namespace type
         // If def get is null it is a builtin function (or a bug)
         if (!e.def_get())
         {
-            builtin::BuiltinLibrary::instance().type_check(e, error_);
+            builtin::BuiltinLibrary::instance().type_check(e, error_, *this);
             return;
         }
 

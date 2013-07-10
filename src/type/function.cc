@@ -49,7 +49,6 @@ namespace type
         if (!f)
             return false;
 
-        // TODO Handle unpack
         auto it = args_type_.begin();
 
         for (auto arg : f->args_get())
