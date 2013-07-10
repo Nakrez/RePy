@@ -3,7 +3,9 @@
 namespace builtin
 {
     BuiltinLibrary::BuiltinLibrary()
-    {}
+    {
+        init();
+    }
 
     BuiltinLibrary::~BuiltinLibrary()
     {
@@ -19,5 +21,12 @@ namespace builtin
         static BuiltinLibrary lib;
 
         return lib;
+    }
+
+    void BuiltinLibrary::init()
+    {
+        builtin_["str"] = Builtin(create_args("str"),
+                                  create_types(&type::String::instance(),
+                                               &type::Polymorphic::instance()));
     }
 } // namespace builtin

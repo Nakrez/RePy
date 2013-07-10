@@ -7,6 +7,8 @@
 # include <ast/all.hh>
 
 # include <type/function.hh>
+# include <type/string.hh>
+# include <type/polymorphic.hh>
 
 namespace builtin
 {
@@ -28,6 +30,14 @@ namespace builtin
         private:
             BuiltinLibrary();
             ~BuiltinLibrary();
+
+            void init();
+
+            template<class... Args>
+            ast::ExprList* create_args(Args... args);
+
+            template<class... Args>
+            type::Function* create_types(type::Type* ret, Args... args);
     };
 } // namespace builtin
 
