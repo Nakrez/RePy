@@ -8,7 +8,9 @@ namespace ast
     {}
 
     ReturnStmt::~ReturnStmt()
-    {}
+    {
+        delete ret_value_;
+    }
 
     const Expr* ReturnStmt::ret_value_get() const
     {

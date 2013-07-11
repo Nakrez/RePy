@@ -974,7 +974,7 @@ atom: "(" ")"
     | "[" testlist_comp "]"
     | "{" "}"
     | "{" dictorsetmaker "}"
-    | "identifier" { $$ = new ast::IdVar(@1, *$1); delete $1; }
+    | "identifier" { $$ = new ast::IdVar(@1, std::string(*$1)); delete $1; }
     | "number" { $$ = new ast::NumeralExpr(@1, $1); }
     | string_list { $$ = $1; }
     | "..."
