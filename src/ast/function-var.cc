@@ -9,6 +9,7 @@ namespace ast
         : Var(location)
         , var_(var)
         , params_(params)
+        , def_(nullptr)
     {}
 
     FunctionVar::~FunctionVar()
