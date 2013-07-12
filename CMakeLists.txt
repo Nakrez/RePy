@@ -149,6 +149,7 @@ add_executable(typy
                src/desugar/tasks.cc
                src/desugar/function-call-desugar.cc
                src/desugar/function-dec-desugar.cc
+               src/desugar/global-desugar.cc
 
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc

@@ -38,4 +38,21 @@ namespace desugar
 
         delete old;
     }
+
+    void global_desugar()
+    {
+        // So far, we don't need bindings to be computed after this desugar
+        // so no call to a binder is made.
+
+        assert(ast::program_ast && "No ast to desugar (global)");
+
+        GlobalDesugar desugar;
+        desugar.visit(ast::program_ast);
+
+        ast::Ast* old = ast::program_ast;
+
+        ast::program_ast = desugar.cloned_ast_get();
+
+        delete old;
+    }
 } // namespace desugar
