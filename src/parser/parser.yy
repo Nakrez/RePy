@@ -173,7 +173,10 @@
 %%
 
 program:
-       | input_file { driver.ast_set($1); }
+       | input_file
+       {
+        driver.ast_set(new ast::ModuleStmt(@1, driver.file_get(), $1));
+       }
        ;
 
 input_file: stmt

@@ -33,6 +33,7 @@ namespace parser
             ast::Ast* parse_file(const std::string& filename);
 
             void ast_set(ast::Ast* ast);
+            const std::string& file_get() const;
 
         private:
             void scan_begin();

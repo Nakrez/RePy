@@ -84,6 +84,13 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<ModuleStmt>::type& s)
+    {
+        s.content_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<FunctionDec>::type& s)
     {
         if (s.args_get())

@@ -14,6 +14,7 @@ namespace ast
     class WhileStmt;
     class ReturnStmt;
     class FunctionDec;
+    class ModuleStmt;
 
     class Expr;
     class OpExpr;

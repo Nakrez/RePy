@@ -38,4 +38,9 @@ namespace parser
     {
         ast_ = ast;
     }
+
+    const std::string& Driver::file_get() const
+    {
+        return file_;
+    }
 } // namespace parser

@@ -111,6 +111,7 @@ add_executable(typy
                src/ast/continue-stmt.cc
                src/ast/expr-stmt.cc
                src/ast/return-stmt.cc
+               src/ast/module-stmt.cc
                src/ast/function-dec.cc
                src/ast/assign-expr.cc
                src/ast/unary-expr.cc
