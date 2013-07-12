@@ -151,6 +151,9 @@ add_executable(typy
                src/desugar/function-dec-desugar.cc
                src/desugar/global-desugar.cc
 
+               src/cpp/tasks.cc
+               src/cpp/generator.cc
+
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
                src/tasks/basic-task.cc
