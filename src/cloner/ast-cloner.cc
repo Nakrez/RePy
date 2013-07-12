@@ -92,6 +92,14 @@ namespace cloner
         cloned_ast_ = f;
     }
 
+    void AstCloner::operator()(ast::ModuleStmt& ast)
+    {
+        ast::AstList* content = clone(ast.content_get());
+
+        cloned_ast_ = new ast::ModuleStmt(ast.location_get(), ast.name_get(),
+                                          content);
+    }
+
     void AstCloner::operator()(ast::OpExpr& ast)
     {
         ast::Expr* lexpr = clone(ast.left_expr_get());

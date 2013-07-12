@@ -40,6 +40,7 @@ namespace cloner
             virtual void operator()(ast::WhileStmt& ast);
             virtual void operator()(ast::ReturnStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
+            virtual void operator()(ast::ModuleStmt& ast);
 
             virtual void operator()(ast::OpExpr& ast);
             virtual void operator()(ast::UnaryExpr& ast);
