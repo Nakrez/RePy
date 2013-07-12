@@ -76,7 +76,7 @@ namespace desugar
                                        order_insertion);
             }
         }
-        else if (ast.params_get()->list_get().size() > 0)
+        else if (ast.params_get() && ast.params_get()->list_get().size() > 0)
                 error_ << misc::Error::TYPE
                        << ast.params_get()->location_get()
                        << ": Too much parameters specified"
