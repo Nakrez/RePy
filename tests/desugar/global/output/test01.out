@@ -1,0 +1,9 @@
+### Pretty printing AST ###
+def e():
+    lol = "1" + "2"
+    
+
+def __init():
+    e()
+    
+

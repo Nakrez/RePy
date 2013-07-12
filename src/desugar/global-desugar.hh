@@ -13,11 +13,31 @@ namespace desugar
     {
         public:
             using cloner::AstCloner::operator();
+            // Imported operators
+
+            // void operator()(ast::PassStmt& ast);
+            // void operator()(ast::BreakStmt& ast);
+            // void operator()(ast::ContinueStmt& ast);
+
+            // void operator()(ast::YieldExpr& ast);
+            // void operator()(ast::StarExpr& ast);
+            // void operator()(ast::DoubleStarExpr& ast);
+
+
 
             GlobalDesugar();
             virtual ~GlobalDesugar();
 
+            virtual void operator()(ast::IfStmt& ast);
+            virtual void operator()(ast::WhileStmt& ast);
+            virtual void operator()(ast::ExprStmt& ast);
+            virtual void operator()(ast::ReturnStmt& ast);
+            virtual void operator()(ast::FunctionDec& ast);
             virtual void operator()(ast::ModuleStmt& ast);
+
+        protected:
+            template <class T>
+            void global_treatment(T& ast);
 
         protected:
             bool global_space_;
@@ -25,5 +45,7 @@ namespace desugar
             ast::StmtList* init_body_;
     };
 } // namespace desugar
+
+# include <desugar/global-desugar.hxx>
 
 #endif /* !DESUGAR_GLOBAL_DESUGAR_HH */
