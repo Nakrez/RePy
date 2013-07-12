@@ -42,11 +42,14 @@ namespace cloner
         {
             elem->accept(*this);
 
-            T* res = dynamic_cast<T*> (cloned_ast_);
+            if (cloned_ast_)
+            {
+                T* res = dynamic_cast<T*> (cloned_ast_);
 
-            assert(res && "Internal compiler error");
+                assert(res && "Internal compiler error");
 
-            ret->push_back(res);
+                ret->push_back(res);
+            }
         }
 
         return ret;
