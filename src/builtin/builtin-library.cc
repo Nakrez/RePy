@@ -65,5 +65,8 @@ namespace builtin
         builtin_["str"] = Builtin(create_args("object"),
                                   create_types(&type::String::instance(),
                                                &type::Polymorphic::instance()));
+        builtin_["input"] = Builtin(create_args("prompt"),
+                                  create_types(&type::String::instance(),
+                                               &type::String::instance()));
     }
 } // namespace builtin
