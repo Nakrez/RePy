@@ -24,7 +24,15 @@ namespace desugar
         const ast::ExprList* dec_get;
 
         if (!ast.def_get())
+        {
             dec_get = builtin::BuiltinLibrary::instance().args_get(ast);
+
+            if (!dec_get)
+            {
+                cloner::AstCloner::operator()(ast);
+                return;
+            }
+        }
         else
             dec_get = ast.def_get()->args_get();
 
