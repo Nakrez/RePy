@@ -32,6 +32,13 @@ namespace builtin
 
         assert(var && "Internal compiler error");
 
+        // FIXME : DIRTY
+        if (var->id_get() == "print")
+        {
+            v.type_set(&type::Void::instance());
+            return;
+        }
+
         if (v.params_get())
         {
             for (auto p : v.params_get()->list_get())
@@ -64,10 +71,11 @@ namespace builtin
     {
         builtin_["float"] = Builtin(create_args("x"),
                                     create_types(&type::Int::instance(),
-                                               &type::Polymorphic::instance()));
+                                                 &type::Polymorphic::instance()));
         builtin_["input"] = Builtin(create_args("prompt"),
                                     create_types(&type::String::instance(),
-                                               &type::String::instance()));
+                                                 &type::String::instance()));
+        builtin_["print"] = Builtin(nullptr, nullptr);
         builtin_["str"] = Builtin(create_args("object"),
                                   create_types(&type::String::instance(),
                                                &type::Polymorphic::instance()));
