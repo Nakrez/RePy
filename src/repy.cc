@@ -1,13 +1,13 @@
 #include <misc/error.hh>
 
 #include <tasks/task-invoker.hh>
-#include <typy.hh>
+#include <repy.hh>
 
-char* typy::input_name = nullptr;
+char* repy::input_name = nullptr;
 
 int main(int argc, char *argv[])
 {
-    typy::input_name = tasks::TaskInvoker::instance().parse_argv(argc, argv);
+    repy::input_name = tasks::TaskInvoker::instance().parse_argv(argc, argv);
 
     try {
         tasks::TaskInvoker::instance().run();

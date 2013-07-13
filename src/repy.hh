@@ -1,10 +1,10 @@
-#ifndef TYPY_HH
-# define TYPY_HH
+#ifndef REPY_HH
+# define REPY_HH
 
-namespace typy
+namespace repy
 {
     extern char* input_name;
-} // namespace typy
+} // namespace repy
 
 namespace ast
 {

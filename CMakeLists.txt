@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(TyPy CXX)
+project(RePy CXX)
 
 FIND_PROGRAM(BISON_EXECUTABLE NAMES bison bison.exe )
 
@@ -51,16 +51,16 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -std=c++11 -I${CMAKE_CURRENT_SOURCE_DIR
 set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wextra -std=c++11 -I${CMAKE_CURRENT_SOURCE_DIR}/src -I${CMAKE_CURRENT_SOURCE_DIR}/lib -O2 -s -DNDEBUG")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG}")
 
-ADD_LIBRARY(typy_lib STATIC
+ADD_LIBRARY(repy_lib STATIC
             lib/misc/error.cc
             lib/misc/indent.cc
             )
 
 SET_TARGET_PROPERTIES(
-    typy_lib
+    repy_lib
     PROPERTIES
     VERSION 0.0.1
-    OUTPUT_NAME typy
+    OUTPUT_NAME repy
 )
 
 ##########################
@@ -77,7 +77,7 @@ ADD_CUSTOM_COMMAND(
         ${BISON_EXECUTABLE} -o${dst_parser} ${src_parser}
         )
 
-add_custom_target(typy_grammar DEPENDS "${dst_parser}")
+add_custom_target(repy_grammar DEPENDS "${dst_parser}")
 
 ##########################
 #          FLEX          #
@@ -93,9 +93,9 @@ ADD_CUSTOM_COMMAND(
         ${FLEX_EXECUTABLE} -o${dst_lexer} ${src_lexer}
         )
 
-add_custom_target(typy_lexer DEPENDS "${dst_lexer}")
+add_custom_target(repy_lexer DEPENDS "${dst_lexer}")
 
-add_executable(typy
+add_executable(repy
                src/parser/parser.cc
                src/parser/lexer.cc
                src/parser/driver.cc
@@ -160,12 +160,12 @@ add_executable(typy
                src/tasks/callback-task.cc
                src/tasks/boolean-task.cc
 
-               src/typy.cc)
+               src/repy.cc)
 
-target_link_libraries(typy typy_lib)
+target_link_libraries(repy repy_lib)
 
-add_dependencies(typy typy_grammar)
-add_dependencies(typy typy_lexer)
+add_dependencies(repy repy_grammar)
+add_dependencies(repy repy_lexer)
 
 LIST(APPEND extra_clean_files
      src/parser/parser.hh
