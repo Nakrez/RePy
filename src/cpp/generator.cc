@@ -20,4 +20,18 @@ namespace cpp
         o_ << misc::dedentendl;
         o_ << "}" << misc::iendl;
     }
+
+    void Generator::operator()(ast::FunctionDec& ast)
+    {
+        // Generating all functions prototypes
+        for (auto proto : ast.to_generate_get())
+        {
+            ast.type_set(proto);
+
+            if (ast.args_get())
+                ast.args_get()->accept(*this);
+
+            ast.body_get()->accept(*this);
+        }
+    }
 } // namespace cpp

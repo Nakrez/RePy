@@ -17,6 +17,8 @@ namespace cpp
 
             virtual void operator()(ast::ModuleStmt& ast);
 
+            virtual void operator()(ast::FunctionDec& ast);
+
         protected:
             std::ostream& o_;
     };
