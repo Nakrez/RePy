@@ -1,5 +1,5 @@
-#ifndef CPP_GENERATOR_HH
-# define CPP_GENERATOR_HH
+#ifndef CPP_HEADER_GENERATOR_HH
+# define CPP_HEADER_GENERATOR_HH
 
 # include <misc/indent.hh>
 
@@ -7,13 +7,13 @@
 
 namespace cpp
 {
-    class Generator : public ast::DefaultVisitor
+    class HeaderGenerator : public ast::DefaultVisitor
     {
         public:
             using ast::DefaultVisitor::operator();
 
-            Generator(std::ostream& o);
-            virtual ~Generator();
+            HeaderGenerator(std::ostream& o);
+            virtual ~HeaderGenerator();
 
             virtual void operator()(ast::ModuleStmt& ast);
 
@@ -24,4 +24,4 @@ namespace cpp
     };
 } // namespace cpp
 
-#endif /* !CPP_GENERATOR_HH */
+#endif /* !CPP_HEADER_GENERATOR_HH */

@@ -7,7 +7,8 @@
 
 # include <tasks/libtasks.hh>
 
-# include <cpp/generator.hh>
+# include <cpp/code-generator.hh>
+# include <cpp/header-generator.hh>
 
 namespace cpp
 {

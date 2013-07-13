@@ -1,16 +1,16 @@
-#include <cpp/generator.hh>
+#include <cpp/header-generator.hh>
 #include <ast/all.hh>
 
 namespace cpp
 {
-    Generator::Generator(std::ostream& o)
+    HeaderGenerator::HeaderGenerator(std::ostream& o)
         : o_(o)
     {}
 
-    Generator::~Generator()
+    HeaderGenerator::~HeaderGenerator()
     {}
 
-    void Generator::operator()(ast::ModuleStmt& ast)
+    void HeaderGenerator::operator()(ast::ModuleStmt& ast)
     {
         o_ << "namespace __" << ast.name_get() << "__" << misc::iendl;
         o_ << "{" << misc::indentendl;
@@ -21,7 +21,7 @@ namespace cpp
         o_ << "}" << misc::iendl;
     }
 
-    void Generator::operator()(ast::FunctionDec& ast)
+    void HeaderGenerator::operator()(ast::FunctionDec& ast)
     {
         // Generating all functions prototypes
         for (auto proto : ast.to_generate_get())

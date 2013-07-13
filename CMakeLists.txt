@@ -152,7 +152,8 @@ add_executable(repy
                src/desugar/global-desugar.cc
 
                src/cpp/tasks.cc
-               src/cpp/generator.cc
+               src/cpp/code-generator.cc
+               src/cpp/header-generator.cc
 
                src/tasks/task-invoker.cc
                src/tasks/task-register.cc
