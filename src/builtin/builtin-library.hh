@@ -11,6 +11,7 @@
 
 # include <type/function.hh>
 # include <type/string.hh>
+# include <type/int.hh>
 # include <type/polymorphic.hh>
 
 namespace type
