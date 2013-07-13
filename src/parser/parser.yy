@@ -175,7 +175,10 @@
 program:
        | input_file
        {
-        driver.ast_set(new ast::ModuleStmt(@1, driver.file_get(), $1));
+        driver.ast_set(new ast::ModuleStmt(@1,
+                                           driver.file_get().substr(0,
+                                                                    driver.file_get().size() - 3),
+                                           $1));
        }
        ;
 
