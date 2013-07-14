@@ -197,6 +197,7 @@ namespace cloner
         ast::IdVar* v = new ast::IdVar(ast.location_get(), ast.id_get());
 
         v->type_set(ast.type_get());
+        v->global_set(ast.global_get());
 
         cloned_ast_ = v;
     }
