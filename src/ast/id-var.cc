@@ -7,6 +7,7 @@ namespace ast
         : Var(location)
         , id_(id)
         , def_(nullptr)
+        , global_(false)
     {}
 
     IdVar::~IdVar()
@@ -50,5 +51,15 @@ namespace ast
     void IdVar::accept(ConstVisitor& v) const
     {
         v(*this);
+    }
+
+    bool IdVar::global_get() const
+    {
+        return global_;
+    }
+
+    void IdVar::global_set(bool g)
+    {
+        global_ = g;
     }
 } // namespace ast

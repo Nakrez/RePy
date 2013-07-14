@@ -22,6 +22,9 @@ namespace ast
 
             void def_set(Ast* s);
 
+            bool global_get() const;
+            void global_set(bool g);
+
             virtual void add_component(Var* v);
 
             virtual void accept(Visitor& v);
@@ -30,6 +33,7 @@ namespace ast
         protected:
             std::string id_;
             Ast* def_;
+            bool global_;
     };
 } // namespace ast
 
