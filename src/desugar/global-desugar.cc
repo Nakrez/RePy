@@ -59,4 +59,12 @@ namespace desugar
         cloner::AstCloner::operator()(ast);
         global_space_ = temp;
     }
+
+    void GlobalDesugar::operator()(ast::IdVar& ast)
+    {
+        if (!ast.def_get() && global_space_)
+            ast.global_set(true);
+
+        cloner::AstCloner::operator()(ast);
+    }
 } // namespace desugar

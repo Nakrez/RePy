@@ -34,6 +34,7 @@ namespace desugar
             virtual void operator()(ast::ReturnStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
             virtual void operator()(ast::ModuleStmt& ast);
+            virtual void operator()(ast::IdVar& ast);
 
         protected:
             template <class T>
