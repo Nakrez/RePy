@@ -1,9 +1,6 @@
 #ifndef LIB_REPY_HH
 # define LIB_REPY_HH
 
-namespace repy
-{
-
-} // namespace repy
+# include <repy/builtin.hh>
 
 #endif /* !LIB_REPY_HH */
