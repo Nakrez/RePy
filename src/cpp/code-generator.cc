@@ -43,10 +43,13 @@ namespace cpp
 
         for (auto it = beg; it != end; ++it)
         {
-            if (it != beg && !dynamic_cast<ast::FunctionDec*> (*it))
-                code_ << ";" << misc::iendl;
+            if (it != beg)
+                code_ << misc::iendl;
 
             (*it)->accept(*this);
+
+            if (!dynamic_cast<ast::FunctionDec*> (*it))
+                code_ << ";";
         }
     }
 
