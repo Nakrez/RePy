@@ -1,6 +1,7 @@
 #ifndef BUILTIN_BUILTIN_LIBRARY_HH
 # define BUILTIN_BUILTIN_LIBRARY_HH
 
+# include <tuple>
 # include <map>
 # include <string>
 # include <cassert>
@@ -27,7 +28,8 @@ namespace builtin
         BuiltinLibrary& operator=(const BuiltinLibrary&) = delete;
 
         public:
-            typedef std::pair<ast::ExprList*, type::Function*> Builtin;
+            typedef std::tuple<ast::ExprList*, type::Function*,
+                               std::string> Builtin;
 
             static BuiltinLibrary& instance();
 

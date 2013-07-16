@@ -12,8 +12,8 @@ namespace builtin
     {
         for (auto b : builtin_)
         {
-            delete b.second.first;
-            delete b.second.second;
+            delete std::get<0>(b.second);
+            delete std::get<1>(b.second);
         }
     }
 
@@ -49,12 +49,12 @@ namespace builtin
             return;
         }
 
-        if (!builtin_.at(var->id_get()).second->compatible_with(prototype))
+        if (std::get<1>(builtin_.at(var->id_get()))->compatible_with(prototype))
             error << misc::Error::TYPE
                   << v.location_get() << ": builtin \"" << var->id_get()
                   << "\" type mismatch" << std::endl;
 
-        v.type_set(builtin_.at(var->id_get()).second->return_type_get());
+        v.type_set(std::get<1>(builtin_.at(var->id_get()))->return_type_get());
     }
 
     const ast::ExprList*
@@ -64,20 +64,23 @@ namespace builtin
 
         assert(var && "Internal compiler error");
 
-        return builtin_.at(var->id_get()).first;
+        return std::get<0>(builtin_.at(var->id_get()));
     }
 
     void BuiltinLibrary::init()
     {
         builtin_["float"] = Builtin(create_args("x"),
                                     create_types(&type::Int::instance(),
-                                                 &type::Polymorphic::instance()));
+                                                 &type::Polymorphic::instance()),
+                                    "repy::__builtin_float");
         builtin_["input"] = Builtin(create_args("prompt"),
                                     create_types(&type::String::instance(),
-                                                 &type::String::instance()));
-        builtin_["print"] = Builtin(nullptr, nullptr);
+                                                 &type::String::instance()),
+                                    "repy::__builtin_input");
+        builtin_["print"] = Builtin(nullptr, nullptr, "repy::__builtin_print");
         builtin_["str"] = Builtin(create_args("object"),
                                   create_types(&type::String::instance(),
-                                               &type::Polymorphic::instance()));
+                                               &type::Polymorphic::instance()),
+                                  "repy::__builtin_str");
     }
 } // namespace builtin
