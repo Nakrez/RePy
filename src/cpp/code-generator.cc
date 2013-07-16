@@ -119,7 +119,10 @@ namespace cpp
         if (params_)
             code_ << ast.type_get()->cpp_type() << " ";
 
-        code_ << ast.id_get();
+        if (builtin::BuiltinLibrary::instance().is_builtin(ast.id_get()))
+            code_ << builtin::BuiltinLibrary::instance().cpp_builtin(ast.id_get());
+        else
+            code_ << ast.id_get();
     }
 
     void CodeGenerator::operator()(ast::OpExpr& ast)

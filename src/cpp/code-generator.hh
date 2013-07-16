@@ -7,6 +7,7 @@
 # include <misc/indent.hh>
 
 # include <ast/default-visitor.hh>
+# include <builtin/builtin-library.hh>
 
 namespace cpp
 {
