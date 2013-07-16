@@ -98,6 +98,25 @@ namespace cpp
         code_ << ast.id_get();
     }
 
+    void CodeGenerator::operator()(ast::AssignExpr& ast)
+    {
+        ast.lvalue_get()->accept(*this);
+
+        code_ << " = ";
+
+        ast.rvalue_get()->accept(*this);
+    }
+
+    void CodeGenerator::operator()(ast::StringExpr& ast)
+    {
+        code_ << "new __repy_string(\"" << ast.str_get() << "\")";
+    }
+
+    void CodeGenerator::operator()(ast::NumeralExpr& ast)
+    {
+        code_ << ast.value_get();
+    }
+
     void CodeGenerator::operator()(ast::FunctionVar& ast)
     {
         ast.var_get()->accept(*this);

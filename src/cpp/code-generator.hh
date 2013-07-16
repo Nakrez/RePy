@@ -26,6 +26,9 @@ namespace cpp
             virtual void operator()(ast::ModuleStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
 
+            virtual void operator()(ast::AssignExpr& ast);
+            virtual void operator()(ast::NumeralExpr& ast);
+            virtual void operator()(ast::StringExpr& ast);
             virtual void operator()(ast::IdVar& ast);
             virtual void operator()(ast::FunctionVar& ast);
 
