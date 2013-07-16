@@ -122,6 +122,19 @@ namespace cpp
         code_ << ast.id_get();
     }
 
+    void CodeGenerator::operator()(ast::OpExpr& ast)
+    {
+        code_ << ast.to_cpp() << "(";
+
+        ast.left_expr_get()->accept(*this);
+
+        code_ << ", ";
+
+        ast.right_expr_get()->accept(*this);
+
+        code_ << ")";
+    }
+
     void CodeGenerator::operator()(ast::AssignExpr& ast)
     {
         if (!ast.def_get())
