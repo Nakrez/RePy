@@ -105,41 +105,41 @@ namespace ast
         switch (op_)
         {
             case PLUS:
-                return "__repy::__add__";
+                return "repy::__add__";
             case MINUS:
-                return "__repy::__sub__";
+                return "repy::__sub__";
             case MULT:
-                return "__repy::__mul__";
+                return "repy::__mul__";
             case DIV:
-                return "__repy::__divmod__";
+                return "repy::__divmod__";
             case FDIV:
-                return "__repy::__floordiv__";
+                return "repy::__floordiv__";
             case MOD:
-                return "__repy::__mod__";
+                return "repy::__mod__";
             case POW:
-                return "__repy::__pow__";
+                return "repy::__pow__";
             case RSHIFT:
-                return "__repy::__lshift__";
+                return "repy::__lshift__";
             case LSHIFT:
-                return "__repy::__rshift__";
+                return "repy::__rshift__";
             case XOR:
-                return "__repy::__xor__";
+                return "repy::__xor__";
             case BIT_AND:
-                return "__repy::__and__";
+                return "repy::__and__";
             case BIT_OR:
-                return "__repy::__or__";
+                return "repy::__or__";
             case EQ:
-                return "__repy::__eq__";
+                return "repy::__eq__";
             case NEQ:
-                return "__repy::__ne__";
+                return "repy::__ne__";
             case GT:
-                return "__repy::__gt__";
+                return "repy::__gt__";
             case GE:
-                return "__repy::__ge__";
+                return "repy::__ge__";
             case LT:
-                return "__repy::__lt__";
+                return "repy::__lt__";
             case LE:
-                return "__repy::__le__";
+                return "repy::__le__";
             default:
                 assert(false && "Internal compiler error");
                 break;
