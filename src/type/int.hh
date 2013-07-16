@@ -15,6 +15,8 @@ namespace type
 
             virtual std::ostream& dump(std::ostream& o) const;
 
+            virtual std::string cpp_type() const;
+
         private:
             Int() = default;
     };

@@ -16,6 +16,9 @@ namespace type
 
             /// @brief print a type onto a stream
             virtual std::ostream& dump(std::ostream& o) const = 0;
+
+            /// @brief String corresponding to C++ type
+            virtual std::string cpp_type() const = 0;
     };
 
     std::ostream& operator<<(std::ostream& o, const type::Type& type);

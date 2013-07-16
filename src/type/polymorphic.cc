@@ -20,4 +20,11 @@ namespace type
 
         return o;
     }
+
+    std::string Polymorphic::cpp_type() const
+    {
+        assert(false && "Polymorphic type can't be translated to C++");
+
+        return "";
+    }
 } // namespace type

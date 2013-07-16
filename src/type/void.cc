@@ -15,4 +15,9 @@ namespace type
 
         return o;
     }
+
+    std::string Void::cpp_type() const
+    {
+        return "void";
+    }
 } // namespace type

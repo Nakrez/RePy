@@ -2,6 +2,7 @@
 # define TYPE_FUNCTION_HH
 
 # include <list>
+# include <cassert>
 
 # include <type/type.hh>
 
@@ -24,6 +25,8 @@ namespace type
 
             virtual bool compatible_with(const Type& t);
             virtual std::ostream& dump(std::ostream& o) const;
+
+            virtual std::string cpp_type() const;
 
         protected:
             Type* return_type_;

@@ -83,4 +83,11 @@ namespace type
 
         return o;
     }
+
+    std::string Function::cpp_type() const
+    {
+        assert(false && "Internal compiler error: no C++ function type");
+
+        return "";
+    }
 } // namespace type

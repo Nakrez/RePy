@@ -15,4 +15,9 @@ namespace type
 
         return o;
     }
+
+    std::string Int::cpp_type() const
+    {
+        return "__repy_int*";
+    }
 } // namespace type

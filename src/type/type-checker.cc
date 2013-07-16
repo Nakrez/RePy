@@ -216,7 +216,7 @@ namespace type
 
         // FIXME avoid dirty (and unsafe) thing
         if (e.def_get())
-            type_set(dynamic_cast<ast::Expr*> (e.def_get()), e.rvalue_get());
+            type_check(dynamic_cast<ast::Expr*> (e.def_get()), &e);
     }
 
     void TypeChecker::operator()(ast::NumeralExpr& ast)

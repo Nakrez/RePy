@@ -15,4 +15,9 @@ namespace type
 
         return o;
     }
+
+    std::string Tuple::cpp_type() const
+    {
+        return "__repy_tuple*";
+    }
 } // namespace type

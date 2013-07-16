@@ -15,4 +15,9 @@ namespace type
 
         return o;
     }
+
+    std::string String::cpp_type() const
+    {
+        return "__repy_string*";
+    }
 } // namespace type
