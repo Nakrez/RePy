@@ -103,7 +103,14 @@ namespace cpp
 
     void CodeGenerator::operator()(ast::AssignExpr& ast)
     {
-        ast.lvalue_get()->accept(*this);
+        if (!ast.def_get())
+        {
+            params_ = true;
+            ast.lvalue_get()->accept(*this);
+            params_ = false;
+        }
+        else
+            ast.lvalue_get()->accept(*this);
 
         code_ << " = ";
 
