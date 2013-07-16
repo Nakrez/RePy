@@ -5,4 +5,4 @@ def generic_add(x, y):
     return add(x, y)
 
 a = generic_add(1, 2) + 1
-a = generic_add("foo ", "bar") + "foo"
+b = generic_add("foo ", "bar") + "foo"

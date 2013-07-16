@@ -1,4 +1,4 @@
-def generator(x, y):
+def generator(a, b):
     x = "foo"
     y = "bar"
     return x + y

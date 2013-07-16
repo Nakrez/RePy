@@ -4,4 +4,4 @@ def fun(x):
 y = fun(1) + 1
 y = fun(1) + 1
 y = fun(1) + 1
-y = fun("lol")
+z = fun("lol")
