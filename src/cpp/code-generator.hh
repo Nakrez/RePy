@@ -24,6 +24,7 @@ namespace cpp
             virtual void operator()(ast::StmtList& ast);
 
             virtual void operator()(ast::ModuleStmt& ast);
+            virtual void operator()(ast::ReturnStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
 
             virtual void operator()(ast::AssignExpr& ast);

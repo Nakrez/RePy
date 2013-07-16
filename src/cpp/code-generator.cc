@@ -70,6 +70,13 @@ namespace cpp
         o_ << "}" << misc::iendl;
     }
 
+    void CodeGenerator::operator()(ast::ReturnStmt& ast)
+    {
+        code_ << "return ";
+
+        ast::DefaultVisitor::operator()(ast);
+    }
+
     void CodeGenerator::operator()(ast::FunctionDec& ast)
     {
         // Generating all functions prototypes
