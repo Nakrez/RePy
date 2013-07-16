@@ -18,6 +18,6 @@ namespace type
 
     std::string Int::cpp_type() const
     {
-        return "__repy_int*";
+        return "__repy_int";
     }
 } // namespace type
