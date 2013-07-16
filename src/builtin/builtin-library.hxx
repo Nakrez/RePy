@@ -44,6 +44,11 @@ namespace builtin
     {
         return builtin_.find(s) != builtin_.end();
     }
+
+    inline std::string BuiltinLibrary::cpp_builtin(const std::string& s) const
+    {
+        return std::get<2>(builtin_.at(s));
+    }
 } // namespace builtin
 
 #endif /* !BUILTIN_BUILTIN_LIBRARY_HXX */

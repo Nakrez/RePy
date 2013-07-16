@@ -34,6 +34,7 @@ namespace builtin
             static BuiltinLibrary& instance();
 
             bool is_builtin(const std::string& s) const;
+            std::string cpp_builtin(const std::string& s) const;
             void type_check(ast::FunctionVar& v, misc::Error& error,
                             type::TypeChecker& typec);
             const ast::ExprList* args_get(const ast::FunctionVar& v) const;

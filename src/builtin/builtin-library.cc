@@ -49,7 +49,7 @@ namespace builtin
             return;
         }
 
-        if (std::get<1>(builtin_.at(var->id_get()))->compatible_with(prototype))
+        if (!std::get<1>(builtin_.at(var->id_get()))->compatible_with(prototype))
             error << misc::Error::TYPE
                   << v.location_get() << ": builtin \"" << var->id_get()
                   << "\" type mismatch" << std::endl;
