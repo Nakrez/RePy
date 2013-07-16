@@ -36,6 +36,20 @@ namespace cpp
         }
     }
 
+    void CodeGenerator::operator()(ast::StmtList& ast)
+    {
+        auto beg = ast.list_get().begin();
+        auto end = ast.list_get().end();
+
+        for (auto it = beg; it != end; ++it)
+        {
+            if (it != beg && !dynamic_cast<ast::FunctionDec*> (*it))
+                code_ << ";" << misc::iendl;
+
+            (*it)->accept(*this);
+        }
+    }
+
     void CodeGenerator::operator()(ast::ModuleStmt& ast)
     {
         modules_.push_back(ast.name_get());

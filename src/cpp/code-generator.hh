@@ -21,6 +21,7 @@ namespace cpp
             void generate_main();
 
             virtual void operator()(ast::ExprList& ast);
+            virtual void operator()(ast::StmtList& ast);
 
             virtual void operator()(ast::ModuleStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
