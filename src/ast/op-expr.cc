@@ -105,41 +105,41 @@ namespace ast
         switch (op_)
         {
             case PLUS:
-                return "__add__";
+                return "__repy::__add__";
             case MINUS:
-                return "__sub__";
+                return "__repy::__sub__";
             case MULT:
-                return "__mul__";
+                return "__repy::__mul__";
             case DIV:
-                return "__divmod__";
+                return "__repy::__divmod__";
             case FDIV:
-                return "__floordiv__";
+                return "__repy::__floordiv__";
             case MOD:
-                return "__mod__";
+                return "__repy::__mod__";
             case POW:
-                return "__pow__";
+                return "__repy::__pow__";
             case RSHIFT:
-                return "__lshift__";
+                return "__repy::__lshift__";
             case LSHIFT:
-                return "__rshift__";
+                return "__repy::__rshift__";
             case XOR:
-                return "__xor__";
+                return "__repy::__xor__";
             case BIT_AND:
-                return "__and__";
+                return "__repy::__and__";
             case BIT_OR:
-                return "__or__";
+                return "__repy::__or__";
             case EQ:
-                return "__eq__";
+                return "__repy::__eq__";
             case NEQ:
-                return "__ne__";
+                return "__repy::__ne__";
             case GT:
-                return "__gt__";
+                return "__repy::__gt__";
             case GE:
-                return "__ge__";
+                return "__repy::__ge__";
             case LT:
-                return "__lt__";
+                return "__repy::__lt__";
             case LE:
-                return "__le__";
+                return "__repy::__le__";
             default:
                 assert(false && "Internal compiler error");
                 break;
