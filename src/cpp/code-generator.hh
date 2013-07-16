@@ -1,6 +1,9 @@
 #ifndef CPP_CODE_GENERATOR_HH
 # define CPP_CODE_GENERATOR_HH
 
+# include <list>
+# include <sstream>
+
 # include <misc/indent.hh>
 
 # include <ast/default-visitor.hh>
@@ -15,12 +18,16 @@ namespace cpp
             CodeGenerator(std::ostream& o);
             virtual ~CodeGenerator();
 
+            void generate_main();
+
             virtual void operator()(ast::ModuleStmt& ast);
 
             virtual void operator()(ast::FunctionDec& ast);
 
         protected:
             std::ostream& o_;
+            std::stringstream code_;
+            std::list<std::string> modules_;
     };
 } // namespace cpp
 

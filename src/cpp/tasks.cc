@@ -6,10 +6,10 @@ namespace cpp
     {
         assert(ast::program_ast && "No ast to transform to cpp");
 
-
         CodeGenerator cgen(std::cout);
 
         cgen.visit(ast::program_ast);
+        cgen.generate_main();
     }
 
     void header_generator()
