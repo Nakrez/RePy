@@ -100,6 +100,54 @@ namespace ast
         return "";
     }
 
+    std::string OpExpr::to_cpp() const
+    {
+        switch (op_)
+        {
+            case PLUS:
+                return "__add__";
+            case MINUS:
+                return "__sub__";
+            case MULT:
+                return "__mul__";
+            case DIV:
+                return "__divmod__";
+            case FDIV:
+                return "__floordiv__";
+            case MOD:
+                return "__mod__";
+            case POW:
+                return "__pow__";
+            case RSHIFT:
+                return "__lshift__";
+            case LSHIFT:
+                return "__rshift__";
+            case XOR:
+                return "__xor__";
+            case BIT_AND:
+                return "__and__";
+            case BIT_OR:
+                return "__or__";
+            case EQ:
+                return "__eq__";
+            case NEQ:
+                return "__ne__";
+            case GT:
+                return "__gt__";
+            case GE:
+                return "__ge__";
+            case LT:
+                return "__lt__";
+            case LE:
+                return "__le__";
+            default:
+                assert(false && "Internal compiler error");
+                break;
+        }
+
+        return "";
+    }
+
     void OpExpr::set_left_expr(Expr* expr)
     {
         if (lexpr_ == nullptr)

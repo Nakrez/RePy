@@ -1,6 +1,7 @@
 #ifndef AST_OP_EXPR_HH
 # define AST_OP_EXPR_HH
 
+# include <cassert>
 # include <string>
 
 # include <ast/expr.hh>
@@ -54,6 +55,7 @@ namespace ast
 
             OpExpr::Operator op_get() const;
             std::string op_to_string() const;
+            std::string to_cpp() const;
 
             void set_left_expr(Expr* expr);
 
