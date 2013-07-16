@@ -48,7 +48,8 @@ namespace cpp
 
             (*it)->accept(*this);
 
-            if (!dynamic_cast<ast::FunctionDec*> (*it))
+            if (!dynamic_cast<ast::FunctionDec*> (*it)
+                && !dynamic_cast<ast::WhileStmt*> (*it))
                 code_ << ";";
         }
     }
@@ -75,6 +76,19 @@ namespace cpp
         code_ << "return ";
 
         ast::DefaultVisitor::operator()(ast);
+    }
+
+    void CodeGenerator::operator()(ast::WhileStmt& ast)
+    {
+        code_ << "while (";
+
+        ast.cond_get()->accept(*this);
+
+        code_ << ")" << misc::iendl << "{" << misc::indentendl;
+
+        ast.loop_get()->accept(*this);
+
+        code_ << misc::dedentendl << "}";
     }
 
     void CodeGenerator::operator()(ast::FunctionDec& ast)
