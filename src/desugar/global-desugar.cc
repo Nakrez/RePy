@@ -14,10 +14,16 @@ namespace desugar
 
     void GlobalDesugar::operator()(ast::ModuleStmt& ast)
     {
+        type::Function* init_type = new type::Function();
+
         init_body_ = new ast::StmtList(yy::location());
 
         init_fun_ = new ast::FunctionDec(yy::location(), "__init", nullptr,
                                          init_body_);
+
+        init_type->return_type_set(&type::Void::instance());
+        init_fun_->to_generate_add(init_type);
+
 
         global_space_ = true;
         ast::AstList* content = clone(ast.content_get());

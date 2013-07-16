@@ -7,6 +7,9 @@
 
 # include <cloner/ast-cloner.hh>
 
+# include <type/function.hh>
+# include <type/void.hh>
+
 namespace desugar
 {
     class GlobalDesugar : public cloner::AstCloner
