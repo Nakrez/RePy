@@ -52,8 +52,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wextra -std=c++11 -I${CMAKE_CURRENT_SOURCE_D
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG}")
 
 ADD_LIBRARY(repy_lib STATIC
-            lib/misc/error.cc
-            lib/misc/indent.cc
+            lib/repy/repy.cc
             )
 
 SET_TARGET_PROPERTIES(
@@ -161,9 +160,10 @@ add_executable(repy
                src/tasks/callback-task.cc
                src/tasks/boolean-task.cc
 
-               src/repy.cc)
+               src/misc/error.cc
+               src/misc/indent.cc
 
-target_link_libraries(repy repy_lib)
+               src/repy.cc)
 
 add_dependencies(repy repy_grammar)
 add_dependencies(repy repy_lexer)
