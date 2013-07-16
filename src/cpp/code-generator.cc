@@ -97,4 +97,16 @@ namespace cpp
 
         code_ << ast.id_get();
     }
+
+    void CodeGenerator::operator()(ast::FunctionVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        code_ << "(";
+
+        if (ast.params_get())
+            ast.params_get()->accept(*this);
+
+        code_ << ")";
+    }
 } // namespace cpp
