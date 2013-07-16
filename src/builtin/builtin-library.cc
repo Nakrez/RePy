@@ -32,13 +32,6 @@ namespace builtin
 
         assert(var && "Internal compiler error");
 
-        // FIXME : DIRTY
-        if (var->id_get() == "print")
-        {
-            v.type_set(&type::Void::instance());
-            return;
-        }
-
         if (v.params_get())
         {
             for (auto p : v.params_get()->list_get())
@@ -47,6 +40,13 @@ namespace builtin
 
                 prototype.args_type_add(p->type_get());
             }
+        }
+
+        // FIXME : DIRTY
+        if (var->id_get() == "print")
+        {
+            v.type_set(&type::Void::instance());
+            return;
         }
 
         if (!builtin_.at(var->id_get()).second->compatible_with(prototype))
