@@ -20,14 +20,18 @@ namespace cpp
 
             void generate_main();
 
-            virtual void operator()(ast::ModuleStmt& ast);
+            virtual void operator()(ast::ExprList& ast);
 
+            virtual void operator()(ast::ModuleStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
+
+            virtual void operator()(ast::IdVar& ast);
 
         protected:
             std::ostream& o_;
             std::stringstream code_;
             std::list<std::string> modules_;
+            bool params_;
     };
 } // namespace cpp
 
