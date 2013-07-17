@@ -2,22 +2,14 @@
 
 namespace repy
 {
-    template<typename... Args>
-    void __builtin_print(Args... a)
+    __repy_string* __builtin_input(__repy_string* str)
     {
-        std::tuple<Args...> args = {a...};
+        __repy_string* in = new __repy_string;
 
-        auto beg = args.begin();
-        auto end = args.end();
+        std::cout << str << std::endl;
 
-        for (auto it = beg; it != end; ++it)
-        {
-            if (it != beg)
-                std::cout << " ";
+        std::cin >> *in;
 
-            std::cout << *it;
-        }
-
-        std::cout << std::endl;
+        return in;
     }
 } // namespace repy
