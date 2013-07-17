@@ -116,7 +116,7 @@ namespace cpp
 
     void CodeGenerator::operator()(ast::IdVar& ast)
     {
-        if (params_)
+        if (params_ || (!ast.def_get() && ast.type_get()))
             code_ << ast.type_get()->cpp_type() << " ";
 
         if (builtin::BuiltinLibrary::instance().is_builtin(ast.id_get()))
@@ -140,14 +140,7 @@ namespace cpp
 
     void CodeGenerator::operator()(ast::AssignExpr& ast)
     {
-        if (!ast.def_get())
-        {
-            params_ = true;
-            ast.lvalue_get()->accept(*this);
-            params_ = false;
-        }
-        else
-            ast.lvalue_get()->accept(*this);
+        ast.lvalue_get()->accept(*this);
 
         code_ << " = ";
 

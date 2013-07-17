@@ -9,10 +9,18 @@
 
 namespace repy
 {
+    template<class T>
+    T& deref(T& t);
+
+    template<class T>
+    T& deref(T* t);
+
     template<typename... Args>
     void __builtin_print(Args... a);
 
     __repy_string* __builtin_input(__repy_string* str);
+
+    __repy_int __builtin_float(__repy_string* str);
 } // namespace repy
 
 # include <repy/builtin.hxx>

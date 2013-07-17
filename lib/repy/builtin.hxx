@@ -5,14 +5,26 @@
 
 namespace repy
 {
-    template<unsigned N>
+    template<class T>
+    T& deref(T& t)
+    {
+        return t;
+    }
+
+    template<class T>
+    T& deref(T* t)
+    {
+        return *t;
+    }
+
+    template<int N>
     struct __internal_print
     {
         template<typename T>
         static void call(T& a)
         {
             __internal_print<N - 1>::call(a);
-            std::cout << std::get<N>(a) << " ";
+            std::cout << deref(std::get<N>(a)) << " ";
         }
     };
 
@@ -22,8 +34,16 @@ namespace repy
         template<typename T>
         static void call(T& a)
         {
-            std::cout << std::get<0>(a) << " ";
+            std::cout << deref(std::get<0>(a)) << " ";
         }
+    };
+
+    template<>
+    struct __internal_print<-1>
+    {
+        template<typename T>
+        static void call(T& a)
+        {}
     };
 
     template<typename... Args>
@@ -31,16 +51,10 @@ namespace repy
     {
         std::tuple<Args...> args = std::make_tuple(a...);
 
-        const unsigned size = std::tuple_size<std::tuple<Args...>>::value - 1;
+        const int size = std::tuple_size<std::tuple<Args...>>::value - 1;
 
         __internal_print<size>::call(args);
 
-        std::cout << std::endl;
-    }
-
-    template<>
-    void __builtin_print()
-    {
         std::cout << std::endl;
     }
 } // namespace repy
