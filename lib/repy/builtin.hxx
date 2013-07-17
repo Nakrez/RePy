@@ -34,6 +34,13 @@ namespace repy
         const unsigned size = std::tuple_size<std::tuple<Args...>>::value - 1;
 
         __internal_print<size>::call(args);
+
+        std::cout << std::endl;
+    }
+
+    template<>
+    void __builtin_print()
+    {
         std::cout << std::endl;
     }
 } // namespace repy
