@@ -1,0 +1,31 @@
+______    ______
+| ___ \   | ___ \
+| |_/ /___| |_/ /   _
+|    // _ \  __/ | | |
+| |\ \  __/ |  | |_| |
+\_| \_\___\_|   \__, |
+                 __/ |
+                 |___/
+
+Repy is a compiler that aims at compiling python language into binary. To do
+it it will transform python code to C++ code and compile it using C++ compiler.
+Repy is no able to compile every valid python code, there is some restrictions
+(see Documentation for more infos)
+
+* Build
+
+cmake .
+make
+
+* Documentation
+
+Soon
+
+* License
+
+RePy is under MIT license. See LICENSE file for more informations
+
+* Bug and ideas
+
+Feel free to contact me at b.covolato@gmail.com or github if you found any bug
+or if you have any improvement idea
