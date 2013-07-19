@@ -27,10 +27,44 @@ import re
 import configparser
 import filecmp
 import argparse
+import logging
+from threading import Thread
+from queue import Queue
 
 testme_version = "0.2"
 testme_config_name = "testme.conf"
-testme_args = {}
+testme_args = {'threads' : 1}
+
+class ThreadPool:
+
+    class _ThreadQueue(Thread):
+        def __init__(self, pool, *args, **kwargs):
+            super(ThreadPool._ThreadQueue, self).__init__(*args, **kwargs)
+            self.tasks = pool.tasks
+            self.daemon = True
+            self.start()
+
+        def run(self):
+            while True:
+                task,args = self.tasks.get(True)
+                try:
+                    task(*args)
+                except Exception:
+                    pass
+                finally:
+                    self.tasks.task_done()
+
+    def __init__(self, num=10):
+        self.tasks = Queue(num)
+        for _ in range(num):
+            self._ThreadQueue(self)
+
+    def add_task(self, target, args):
+        self.tasks.put((target, args))
+
+    def wait_completion(self):
+        self.tasks.join()
+
 
 class TestPrinter:
     def __init__(self):
@@ -124,6 +158,9 @@ class TestSuit:
         return ret
 
     def run_test(self, test_file):
+        self.total_test += 1
+        self.cat_test += 1
+
         ret_value = True
 
         if self.cat_field_get('input'):
@@ -148,20 +185,23 @@ class TestSuit:
         if self.cat_field_get('check_code'):
             ret_value &= str(process.returncode) in self.cat_field_get('error_code')
 
-        return ret_value
+        if ret_value:
+            self.cat_good += 1
+            self.total_good += 1
+        self.printer.print_result(ret_value, test_file)
+
+    def thread_run(self, dir_file):
+        if dir_file.endswith(self.cat_field_get(self.ext)):
+            self.run_test(dir_file)
 
     def run_directory(self):
+        global testme_args
         try:
+            pool = ThreadPool(testme_args['threads'])
             for dir_file in os.listdir(self.cat_field_get(self.running_dir)):
-                if dir_file.endswith(self.cat_field_get(self.ext)):
-                    self.total_test += 1
-                    self.cat_test += 1
-                    test_result = self.run_test(dir_file)
-                    if test_result:
-                        self.cat_good += 1
-                        self.total_good += 1
-                    self.printer.print_result(test_result, dir_file)
+                pool.add_task(target=self.run_test, args=(dir_file,))
 
+            pool.wait_completion()
             self.printer.print_summary(self.running_cat, self.cat_good,
                                        self.cat_test)
 
@@ -286,6 +326,8 @@ def parse_argv():
 
     parser.add_argument('--dir', action="store",
                         help='The directory where you want to run testme')
+    parser.add_argument('--threads', action="store", type=int,
+                        help='Indicate the number of thread you want to use')
     parser.add_argument('-v', '--verbose', action="store_true",
                         help='TestMe will display extra informations')
     parser.add_argument('-c', '--category', nargs='+', action="store",
