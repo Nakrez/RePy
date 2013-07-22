@@ -175,9 +175,8 @@
 program:
        | input_file
        {
-        driver.ast_set(new ast::ModuleStmt(@1,
-                                           driver.file_get().substr(0,
-                                                                    driver.file_get().size() - 3),
+        std::string name = std::string(basename(driver.file_get().c_str()));
+        driver.ast_set(new ast::ModuleStmt(@1, name.substr(0, name.size() - 3),
                                            $1));
        }
        ;

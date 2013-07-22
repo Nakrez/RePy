@@ -6,6 +6,8 @@ namespace cpp
     {
         assert(ast::program_ast && "No ast to transform to cpp");
 
+        std::cout << "#include <repy/repy.hh>" << std::endl;
+
         CodeGenerator cgen(std::cout);
 
         cgen.visit(ast::program_ast);

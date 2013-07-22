@@ -47,12 +47,8 @@ class ThreadPool:
         def run(self):
             while True:
                 task,args = self.tasks.get(True)
-                try:
-                    task(*args)
-                except Exception:
-                    pass
-                finally:
-                    self.tasks.task_done()
+                task(*args)
+                self.tasks.task_done()
 
     def __init__(self, num=10):
         self.tasks = Queue(num)
@@ -141,9 +137,11 @@ class TestSuit:
         if self.cat_field_get('stdin'):
             stdin_file = os.path.join(self.cat_field_get('stdin_dir'), test_name)
             stdin_file = self.change_extension(stdin_file, self.cat_field_get('stdin_ext'))
-            stdin_fd = open(stdin_file, "r")
-            stdin_val = stdin_fd.read()
-            stdin_fd.close()
+            stdin_val = ""
+            if os.path.exists(stdin_file):
+                stdin_fd = open(stdin_file, "r")
+                stdin_val = stdin_fd.read()
+                stdin_fd.close()
 
         return stdin_val
 
@@ -152,15 +150,16 @@ class TestSuit:
         if self.cat_field_get(output):
             filename = self.change_extension(test_file, self.cat_field_get(output + '_ext'))
             filename = os.path.join(self.cat_field_get(output + '_dir'), filename)
+            file_content = ""
 
             if os.path.exists(filename):
                 fd = open(filename, "r")
                 file_content = fd.read()
                 fd.close()
-
-                ret = ret and (file_content == value)
             else:
                 print_verbose("\033[33m[TESTME] " + filename + " not present " + output + " ignored\033[0m")
+
+            ret = ret and (file_content == value)
 
         return ret
 
@@ -188,6 +187,7 @@ class TestSuit:
             input_file = os.path.join(self.cat_field_get('input_dir'), test_file)
             self.environement['TESTME_RUNNING_INPUT'] = input_file
 
+        self.environement['TESTME_TEMPFILE'] = self.change_extension(os.path.basename(test_file), 'tmp')
         stdinput = self.stdin_input(test_file)
 
         command = self.cat_field_get('cmd_line')
@@ -220,7 +220,13 @@ class TestSuit:
 
         display_opt = ((ret_value and self.cat_field_get('display_ok_tests')) or
                       (not ret_value and self.cat_field_get('display_ko_tests')))
+
         self.printer.print_result(ret_value, test_file, display_opt)
+
+        try:
+            os.unlink(self.environement['TESTME_TEMPFILE'])
+        except Exception:
+            pass
 
     def thread_run(self, dir_file):
         if dir_file.endswith(self.cat_field_get(self.ext)):
