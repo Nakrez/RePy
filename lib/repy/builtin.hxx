@@ -21,10 +21,13 @@ namespace repy
     struct __internal_print
     {
         template<typename T>
-        static void call(T& a)
+        static void call(T& a, int size)
         {
-            __internal_print<N - 1>::call(a);
-            std::cout << deref(std::get<N>(a)) << " ";
+            __internal_print<N - 1>::call(a, size);
+            std::cout << deref(std::get<N>(a));
+
+            if (N != size)
+                std::cout << " ";
         }
     };
 
@@ -32,9 +35,11 @@ namespace repy
     struct __internal_print<0>
     {
         template<typename T>
-        static void call(T& a)
+        static void call(T& a, int size)
         {
-            std::cout << deref(std::get<0>(a)) << " ";
+            std::cout << deref(std::get<0>(a));
+            if (size != 0)
+                std::cout << " ";
         }
     };
 
@@ -42,7 +47,7 @@ namespace repy
     struct __internal_print<-1>
     {
         template<typename T>
-        static void call(T& a)
+        static void call(T& a, int size)
         {}
     };
 
@@ -53,7 +58,7 @@ namespace repy
 
         const int size = std::tuple_size<std::tuple<Args...>>::value - 1;
 
-        __internal_print<size>::call(args);
+        __internal_print<size>::call(args, size);
 
         std::cout << std::endl;
     }
