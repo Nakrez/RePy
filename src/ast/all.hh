@@ -34,5 +34,6 @@
 # include <ast/var.hh>
 # include <ast/id-var.hh>
 # include <ast/function-var.hh>
+# include <ast/field-var.hh>
 
 #endif /* !AST_ALL_HH */

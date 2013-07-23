@@ -293,4 +293,11 @@ namespace ast
 
         o_ << ")";
     }
+
+    void PrettyPrinter::operator()(const FieldVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        o_ << "." << ast.name_get();
+    }
 } // namespace ast

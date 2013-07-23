@@ -177,6 +177,13 @@ namespace ast
         if (v.params_get())
             v.params_get()->accept(*this);
     }
+
+    template <template <typename> class Const>
+    void
+    GenDefaultVisitor<Const>::operator()(typename Const<FieldVar>::type& v)
+    {
+        v.var_get()->accept(*this);
+    }
 } // namespace ast
 
 #endif /* !AST_DEFAULT_VISITOR_HXX */

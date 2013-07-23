@@ -30,6 +30,7 @@ namespace ast
     class Var;
     class IdVar;
     class FunctionVar;
+    class FieldVar;
 
     template <class T>
     class AnyList;

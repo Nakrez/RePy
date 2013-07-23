@@ -1063,6 +1063,7 @@ trailer: "(" ")"
        { $$ = new ast::FunctionVar(@1, nullptr, $2); }
        | "[" subscriptlist "]"
        | "." "identifier"
+       { $$ = new ast::FieldVar(@1, nullptr, std::string(*$2)); delete $2; }
        ;
 
 subscriptlist: subscript
