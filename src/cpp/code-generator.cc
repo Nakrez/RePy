@@ -79,6 +79,16 @@ namespace cpp
         ast::DefaultVisitor::operator()(ast);
     }
 
+    void CodeGenerator::operator()(ast::ContinueStmt&)
+    {
+        code_ << "continue";
+    }
+
+    void CodeGenerator::operator()(ast::BreakStmt&)
+    {
+        code_ << "break";
+    }
+
     void CodeGenerator::operator()(ast::IfStmt& ast)
     {
         code_ << "if (";
