@@ -26,6 +26,7 @@ namespace ast
             virtual void operator()(typename Const<WhileStmt>::type& ast);
             virtual void operator()(typename Const<ReturnStmt>::type& ast);
             virtual void operator()(typename Const<FunctionDec>::type& ast);
+            virtual void operator()(typename Const<ClassDec>::type& ast);
             virtual void operator()(typename Const<ModuleStmt>::type& ast);
 
             virtual void operator()(typename Const<OpExpr>::type& ast);

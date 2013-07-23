@@ -100,6 +100,16 @@ namespace ast
 
     template <template <typename> class Const>
     void
+    GenDefaultVisitor<Const>::operator()(typename Const<ClassDec>::type & s)
+    {
+        if (s.inherit_get())
+            s.inherit_get()->accept(*this);
+
+        s.def_get()->accept(*this);
+    }
+
+    template <template <typename> class Const>
+    void
     GenDefaultVisitor<Const>::operator()(typename Const<OpExpr>::type& e)
     {
         e.left_expr_get()->accept(*this);

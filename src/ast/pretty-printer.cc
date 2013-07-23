@@ -184,6 +184,36 @@ namespace ast
         o_ << misc::dedentendl;
     }
 
+    void PrettyPrinter::operator()(const ClassDec& d)
+    {
+        o_ << "class " << d.name_get();
+
+        if (bind::print_bind)
+            o_ << " \"\"\"" << &d << "\"\"\" ";
+
+        o_ << "(";
+
+        if (d.inherit_get())
+        {
+            auto beg = d.inherit_get()->list_get().begin();
+            auto end = d.inherit_get()->list_get().end();
+
+            for (auto it = beg; it != end; ++it)
+            {
+                if (it != beg)
+                    o_ << ",";
+
+                (*it)->accept(*this);
+            }
+        }
+
+        o_ << "):" << misc::indentendl;
+
+        d.def_get()->accept(*this);
+
+        o_ << misc::dedentendl;
+    }
+
     void PrettyPrinter::operator()(const OpExpr& e)
     {
         e.left_expr_get()->accept(*this);

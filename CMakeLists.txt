@@ -112,6 +112,7 @@ add_executable(repy
                src/ast/return-stmt.cc
                src/ast/module-stmt.cc
                src/ast/function-dec.cc
+               src/ast/class-dec.cc
                src/ast/assign-expr.cc
                src/ast/unary-expr.cc
                src/ast/op-expr.cc

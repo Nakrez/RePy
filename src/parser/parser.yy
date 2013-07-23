@@ -148,7 +148,7 @@
 %type<stmt_list> small_stm_list stmt_list
 %type<stmt_val> small_stmt pass_stmt flow_stmt break_stmt continue_stmt
                 expr_stmt stmt simple_stmt suite compound_stmt if_stmt
-                else_stmt while_stmt funcdef return_stmt yield_stmt
+                else_stmt while_stmt funcdef return_stmt yield_stmt classdef
 %type<if_val>   elif_list
 
 %type<expr_val> test_or_star test testlist_star_expr or_test and_test not_test
@@ -395,7 +395,7 @@ small_stmt : expr_stmt { $$ = $1; }
            | assert_stmt
            ;
 
-expr_stmt: testlist_star_expr augassign yield_expr { exit(20); }
+expr_stmt: testlist_star_expr augassign yield_expr
          /* FIXME: Originally test was testlist */
          | testlist_star_expr augassign test
          {
@@ -546,7 +546,7 @@ compound_stmt: if_stmt { $$ = $1; }
              | try_stmt
              | with_stmt
              | funcdef
-             | classdef
+             | classdef { $$ = $1; }
              /*| decorated*/
              ;
 
@@ -1127,8 +1127,20 @@ coma_test_list: "," test
               ;
 
 classdef: "class" "identifier" ":" suite
+        {
+            $$ = new ast::ClassDec(@1, std::string(*$2), nullptr, $4);
+            delete $2;
+        }
         | "class" "identifier" "(" ")" ":" suite
-        | "class" "identifier" "(" arglist ")" suite
+        {
+            $$ = new ast::ClassDec(@1, std::string(*$2), nullptr, $6);
+            delete $2;
+        }
+        | "class" "identifier" "(" arglist ")" ":" suite
+        {
+            $$ = new ast::ClassDec(@1, std::string(*$2), $4, $7);
+            delete $2;
+        }
         ;
 
 arglist: argument
