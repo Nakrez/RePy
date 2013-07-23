@@ -176,6 +176,7 @@ program:
        | input_file
        {
         std::string name = std::string(basename(driver.file_get().c_str()));
+        std::replace(name.begin(), name.end(), '-', '_');
         driver.ast_set(new ast::ModuleStmt(@1, name.substr(0, name.size() - 3),
                                            $1));
        }
