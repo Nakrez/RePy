@@ -7,7 +7,13 @@
 namespace repy
 {
     template<class T>
+    T __add__(T a, T b);
+
+    template<class T>
     T __mul__(T a, T b);
+
+    template<class T>
+    T __ge__(T a, T b);
 
     template<class T>
     T __le__(T a, T b);
