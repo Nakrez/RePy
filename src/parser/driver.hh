@@ -10,6 +10,8 @@
 
 # include <ast/fwd.hh>
 
+# include <cloner/ast-cloner.hh>
+
 # define YY_DECL                                        \
     yy::tpy_parser::token_type yylex(                   \
             yy::tpy_parser::semantic_type* yylval,      \

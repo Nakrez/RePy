@@ -395,8 +395,22 @@ small_stmt : expr_stmt { $$ = $1; }
            | assert_stmt
            ;
 
-expr_stmt: testlist_star_expr augassign yield_expr
-         | testlist_star_expr augassign testlist
+expr_stmt: testlist_star_expr augassign yield_expr { exit(20); }
+         /* FIXME: Originally test was testlist */
+         | testlist_star_expr augassign test
+         {
+            /* We use a little cloner because future rvalue cant be the same
+            as lvalue */
+            cloner::AstCloner cloner;
+            cloner.visit($1);
+
+            ast::Expr* e = nullptr;
+            ast::Expr* lexpr = dynamic_cast<ast::Expr*> (cloner.cloned_ast_get());
+
+            e = new ast::AssignExpr(@1, $1, new ast::OpExpr(@2, lexpr, $2, $3));
+
+            $$ = new ast::ExprStmt(e);
+         }
          | testlist_star_expr expr_simple_assign
          {
             $$ = new ast::ExprStmt($2);
