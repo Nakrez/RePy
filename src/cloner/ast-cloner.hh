@@ -53,6 +53,7 @@ namespace cloner
 
             virtual void operator()(ast::IdVar& ast);
             virtual void operator()(ast::FunctionVar& ast);
+            virtual void operator()(ast::FieldVar& ast);
 
         protected:
             ast::Ast* cloned_ast_;
