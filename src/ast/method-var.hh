@@ -23,6 +23,9 @@ namespace ast
             const FunctionVar* call_get() const;
             FunctionVar* call_get();
 
+            const FieldVar* field_get() const;
+            FieldVar* field_get();
+
             const Var* var_get() const;
             Var* var_get();
 

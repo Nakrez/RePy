@@ -35,7 +35,6 @@ namespace ast
         return call_->params_get();
     }
 
-
     const FunctionVar* MethodVar::call_get() const
     {
         return call_;
@@ -44,6 +43,16 @@ namespace ast
     FunctionVar* MethodVar::call_get()
     {
         return call_;
+    }
+
+    const FieldVar* MethodVar::field_get() const
+    {
+        return field_;
+    }
+
+    FieldVar* MethodVar::field_get()
+    {
+        return field_;
     }
 
     const Var* MethodVar::var_get() const
