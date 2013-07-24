@@ -14,12 +14,12 @@ namespace ast
         delete var_;
     }
 
-    const std::string FieldVar::name_get() const
+    const std::string& FieldVar::name_get() const
     {
         return name_;
     }
 
-    std::string FieldVar::name_get()
+    std::string& FieldVar::name_get()
     {
         return name_;
     }

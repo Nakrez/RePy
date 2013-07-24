@@ -12,8 +12,8 @@ namespace ast
                      const std::string name);
             virtual ~FieldVar();
 
-            const std::string name_get() const;
-            std::string name_get();
+            const std::string& name_get() const;
+            std::string& name_get();
 
             const Var* var_get() const;
             Var* var_get();
