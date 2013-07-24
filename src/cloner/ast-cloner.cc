@@ -100,6 +100,18 @@ namespace cloner
                                           content);
     }
 
+    void AstCloner::operator()(ast::ClassDec& ast)
+    {
+        ast::ExprList* inherit = nullptr;
+        ast::Stmt* def = clone(ast.def_get());
+
+        if (ast.inherit_get())
+            inherit = clone_list(*ast.inherit_get());
+
+        cloned_ast_ = new ast::ClassDec(ast.location_get(), ast.name_get(),
+                                        inherit, def);
+    }
+
     void AstCloner::operator()(ast::OpExpr& ast)
     {
         ast::Expr* lexpr = clone(ast.left_expr_get());
