@@ -268,9 +268,12 @@ namespace ast
         // FIXME : dirty fix
         bool temp = bind::print_bind;
 
-        bind::print_bind = false;
-        v.var_get()->accept(*this);
-        bind::print_bind = temp;
+        if (v.var_get())
+        {
+            bind::print_bind = false;
+            v.var_get()->accept(*this);
+            bind::print_bind = temp;
+        }
 
         if (bind::print_bind)
             o_ << " \"\"\"" << v.def_get() << "\"\"\" ";
@@ -299,5 +302,13 @@ namespace ast
         ast.var_get()->accept(*this);
 
         o_ << "." << ast.name_get();
+    }
+
+    void PrettyPrinter::operator()(const MethodVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        o_ << "." << ast.name_get();
+        ast.call_get()->accept(*this);
     }
 } // namespace ast

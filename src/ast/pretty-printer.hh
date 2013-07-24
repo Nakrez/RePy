@@ -48,6 +48,7 @@ namespace ast
             void operator()(const IdVar& ast);
             void operator()(const FunctionVar& ast);
             void operator()(const FieldVar& ast);
+            void operator()(const MethodVar& ast);
 
         private:
             std::ostream& o_;

@@ -125,6 +125,7 @@ add_executable(repy
                src/ast/id-var.cc
                src/ast/function-var.cc
                src/ast/field-var.cc
+               src/ast/method-var.cc
                src/ast/pretty-printer.cc
                src/ast/typed.cc
                src/ast/tasks.cc

@@ -41,6 +41,7 @@ namespace ast
             virtual void operator()(typename Const<IdVar>::type& ast);
             virtual void operator()(typename Const<FunctionVar>::type& ast);
             virtual void operator()(typename Const<FieldVar>::type& ast);
+            virtual void operator()(typename Const<MethodVar>::type& ast);
     };
 
     typedef GenDefaultVisitor<misc::const_type> DefaultConstVisitor;

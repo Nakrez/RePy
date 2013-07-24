@@ -982,8 +982,15 @@ power: atom { $$ = $1; }
 trailer_list: trailer { $$ = $1; }
             | trailer_list trailer
             {
-                $$ = $2;
-                $$->add_component($1);
+                ast::FieldVar* fi = dynamic_cast<ast::FieldVar*> ($1);
+                ast::FunctionVar* fun = dynamic_cast<ast::FunctionVar*> ($2);
+                if (fi && fun)
+                    $$ = new ast::MethodVar(@1, fi, fun);
+                else
+                {
+                    $$ = $2;
+                    $$->add_component($1);
+                }
             }
             ;
 
