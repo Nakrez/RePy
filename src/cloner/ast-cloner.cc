@@ -225,4 +225,12 @@ namespace cloner
         cloned_ast_ = new ast::FieldVar(ast.location_get(), var,
                                         ast.name_get());
     }
+
+    void AstCloner::operator()(ast::MethodVar& ast)
+    {
+        ast::FieldVar* field = clone(ast.field_get());
+        ast::FunctionVar* call = clone(ast.call_get());
+
+        cloned_ast_ = new ast::MethodVar(ast.location_get(), field, call);
+    }
 }
