@@ -149,8 +149,7 @@ add_executable(repy
                src/cloner/ast-cloner.cc
 
                src/desugar/tasks.cc
-               src/desugar/function-call-desugar.cc
-               src/desugar/function-dec-desugar.cc
+               src/desugar/declaration-generator.cc
                src/desugar/global-desugar.cc
 
                src/cpp/tasks.cc

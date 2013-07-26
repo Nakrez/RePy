@@ -14,7 +14,7 @@ namespace bind
     bool print_bind = false;
 
     REGULAR_TASK("b|compute-binding", "Compute bind on ast",
-                 "parse", compute_bind);
+                 "declaration-generator", compute_bind);
 
     BOOLEAN_TASK("B|print-binding-infos", "Print related binding infos",
                  "compute-binding", print_bind);

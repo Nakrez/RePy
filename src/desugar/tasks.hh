@@ -9,18 +9,14 @@
 
 # include <bind/binder.hh>
 
-# include <desugar/function-call-desugar.hh>
-# include <desugar/function-dec-desugar.hh>
+# include <desugar/declaration-generator.hh>
 # include <desugar/global-desugar.hh>
 
 namespace desugar
 {
-    REGULAR_TASK("f|function-call-desugar", "Compute function call desugar",
-                 "compute-binding", fun_call_desugar);
-
-    REGULAR_TASK("d|function-dec-desugar",
-                 "Compute function declaration desugar",
-                 "function-call-desugar", fun_dec_desugar);
+    REGULAR_TASK("declaration-generator",
+                 "Generates clean prototypes of function",
+                 "parse", dec_generator);
 
     REGULAR_TASK("g|global-desugar",
                  "Compute global desugar",
