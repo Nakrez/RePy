@@ -78,13 +78,18 @@ namespace cloner
     void AstCloner::operator()(ast::FunctionDec& ast)
     {
         ast::ExprList* args = nullptr;
+        ast::ExprList* final_args = nullptr;
         ast::Stmt* body = clone(ast.body_get());
 
+        if (ast.original_args_get())
+            args = clone_list(*ast.original_args_get());
+
         if (ast.args_get())
-            args = clone_list(*ast.args_get());
+            final_args = clone_list(*ast.args_get());
 
         ast::FunctionDec* f = new ast::FunctionDec(ast.location_get(),
                                                    ast.name_get(), args, body);
+        f->args_set(final_args);
 
         f->type_set(ast.type_get());
         f->to_generate_set(ast.to_generate_get());
