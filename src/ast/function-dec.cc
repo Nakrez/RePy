@@ -8,14 +8,16 @@ namespace ast
                              Stmt* body)
         : Stmt(location)
         , name_(name)
-        , args_(args)
+        , final_args_(nullptr)
+        , original_args_(args)
         , body_(body)
         , type_(nullptr)
     {}
 
     FunctionDec::~FunctionDec()
     {
-        delete args_;
+        delete final_args_;
+        delete original_args_;
         delete body_;
     }
 
@@ -31,12 +33,27 @@ namespace ast
 
     const ExprList* FunctionDec::args_get() const
     {
-        return args_;
+        return final_args_;
     }
 
     ExprList* FunctionDec::args_get()
     {
-        return args_;
+        return final_args_;
+    }
+
+    const ExprList* FunctionDec::original_args_get() const
+    {
+        return original_args_;
+    }
+
+    ExprList* FunctionDec::original_args_get()
+    {
+        return original_args_;
+    }
+
+    void FunctionDec::args_set(ExprList* args)
+    {
+        final_args_ = args;
     }
 
     const Stmt* FunctionDec::body_get() const
@@ -65,11 +82,11 @@ namespace ast
 
         if (t)
         {
-            if (args_ && t->args_get().size())
+            if (final_args_ && t->args_get().size())
             {
                 auto it = t->args_get().begin();
 
-                for (auto params : args_->list_get())
+                for (auto params : final_args_->list_get())
                 {
                     params->type_set(*it);
                     ++it;

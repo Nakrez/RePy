@@ -27,6 +27,13 @@ namespace ast
             const ExprList* args_get() const;
             ExprList* args_get();
 
+            // Original args are used by the type checker to generate
+            // prototypes of calls without assignement
+            const ExprList* original_args_get() const;
+            ExprList* original_args_get();
+
+            void args_set(ExprList* args);
+
             const Stmt* body_get() const;
             Stmt* body_get();
 
@@ -46,7 +53,8 @@ namespace ast
 
         protected:
             std::string name_;
-            ExprList* args_;
+            ExprList* final_args_;
+            ExprList* original_args_;
             Stmt* body_;
             type::Function* type_;
             std::list<type::Function*> to_generate_;
