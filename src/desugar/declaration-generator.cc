@@ -13,11 +13,11 @@ namespace desugar
     {
         ast::ExprList* final_args = nullptr;
 
-        if (ast.args_get())
+        if (ast.original_args_get())
         {
-            final_args = new ast::ExprList(ast.args_get()->location_get());
+            final_args = new ast::ExprList(ast.original_args_get()->location_get());
 
-            for (auto arg : ast.args_get()->list_get())
+            for (auto arg : ast.original_args_get()->list_get())
             {
                 ast::AssignExpr* e = dynamic_cast<ast::AssignExpr*> (arg);
 

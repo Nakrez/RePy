@@ -2,6 +2,7 @@
 # define DESUGAR_DECLARATION_GENERATOR_HH
 
 # include <ast/default-visitor.hh>
+# include <ast/pretty-printer.hh>
 # include <cloner/ast-cloner.hh>
 
 namespace desugar
