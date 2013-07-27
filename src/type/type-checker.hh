@@ -71,7 +71,9 @@ namespace type
 
         private:
             misc::Error error_;
+            type::Class* current_class_;
             std::stack<ast::FunctionDec*> in_declaration_;
+            std::map<std::string, type::Class*> declared_class_;
     };
 } // namespace type
 

@@ -4,6 +4,7 @@
 namespace type
 {
     TypeChecker::TypeChecker()
+        : current_class_(nullptr)
     {}
 
     TypeChecker::~TypeChecker()
@@ -135,7 +136,16 @@ namespace type
 
     void TypeChecker::operator()(ast::ClassDec& ast)
     {
+        if (declared_class_[ast.name_get()])
+            error_ << misc::Error::TYPE
+                   << ast.location_get() << " : Redeclaration of class"
+                   << ast.name_get() << std::endl;
+        else
+            declared_class_[ast.name_get()] = &ast.type_get();
 
+        current_class_ = &ast.type_get();
+        ast.def_get()->accept(*this);
+        current_class_ = nullptr;
     }
 
     void TypeChecker::operator()(ast::FunctionVar& e)
