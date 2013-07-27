@@ -216,6 +216,11 @@ namespace cloner
         v->type_set(ast.type_get());
         v->global_set(ast.global_get());
 
+        // These binding conservations are only used by the cloning made by the
+        // type checker because they are still valid. They can't be used on a
+        // complete cloning
+        v->def_set(ast.def_get());
+
         cloned_ast_ = v;
     }
 
@@ -231,6 +236,11 @@ namespace cloner
                                                    params);
 
         v->type_set(ast.type_get());
+
+        // These binding conservations are only used by the cloning made by the
+        // type checker because they are still valid. They can't be used on a
+        // complete cloning
+        v->def_set(ast.def_get());
 
         cloned_ast_ = v;
     }
