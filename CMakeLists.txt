@@ -141,6 +141,7 @@ add_executable(repy
                src/type/function.cc
                src/type/polymorphic.cc
                src/type/tuple.cc
+               src/type/class.cc
                src/type/type-checker.cc
 
                src/builtin/builtin-library.cc
