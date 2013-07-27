@@ -40,6 +40,7 @@ namespace type
 
             void operator()(ast::ReturnStmt& ast);
             void operator()(ast::FunctionDec& ast);
+            void operator()(ast::ClassDec& ast);
             void operator()(ast::FunctionVar& ast);
             void operator()(ast::AssignExpr& ast);
             void operator()(ast::OpExpr& ast);

@@ -133,6 +133,11 @@ namespace type
             f_type->return_type_set(&Void::instance());
     }
 
+    void TypeChecker::operator()(ast::ClassDec& ast)
+    {
+
+    }
+
     void TypeChecker::operator()(ast::FunctionVar& e)
     {
         // FIXME : Dirty fix supposed to be set when an ambiguous call is made
