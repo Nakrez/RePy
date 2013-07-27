@@ -154,8 +154,7 @@ namespace bind
         ast::IdVar* var = dynamic_cast<ast::IdVar*> (e.lvalue_get());
 
         if (!var)
-            error_ << misc::Error::BIND
-                   << e.location_get() << ": assignation error" << std::endl;
+            e.lvalue_get()->accept(*this);
         else
         {
             if (!scope_map_.get(var->id_get()))
