@@ -9,6 +9,7 @@ namespace ast
         , name_(name)
         , inherit_(inherit)
         , def_(def)
+        , type_(name)
     {}
 
     ClassDec::~ClassDec()
@@ -45,6 +46,16 @@ namespace ast
     Stmt* ClassDec::def_get()
     {
         return def_;
+    }
+
+    const type::Class& ClassDec::type_get() const
+    {
+        return type_;
+    }
+
+    type::Class& ClassDec::type_get()
+    {
+        return type_;
     }
 
     void ClassDec::accept(Visitor& v)
