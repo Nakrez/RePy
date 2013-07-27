@@ -24,6 +24,7 @@ namespace ast
             FunctionDec* def_get();
 
             void def_set(FunctionDec* d);
+            void params_set(ExprList* p);
 
             virtual void add_component(Var* v);
 

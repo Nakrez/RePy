@@ -53,6 +53,11 @@ namespace ast
         def_ = d;
     }
 
+    void FunctionVar::params_set(ExprList* p)
+    {
+        params_ = p;
+    }
+
     void FunctionVar::add_component(Var* v)
     {
         if (var_ == nullptr)

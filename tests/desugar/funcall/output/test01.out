@@ -1,5 +1,5 @@
 ### Pretty printing AST ###
-def fun(d = 1):
+def fun(d):
     return 1
     
 fun(1)

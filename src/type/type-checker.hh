@@ -3,6 +3,7 @@
 
 # include <cassert>
 # include <stack>
+# include <map>
 
 # include <misc/error.hh>
 
@@ -17,10 +18,14 @@
 
 # include <builtin/builtin-library.hh>
 
+# include <cloner/ast-cloner.hh>
+
 namespace type
 {
     class TypeChecker : public ast::DefaultVisitor
     {
+        typedef std::pair<ast::Expr*, bool> parameter;
+
         public:
             using ast::DefaultVisitor::operator();
 
@@ -43,9 +48,32 @@ namespace type
             void operator()(ast::NumeralExpr& ast);
 
         private:
+            template <class T>
+            ast::ExprList* generate_prototype(T& dec);
+
+            const std::string& name_get(const ast::Expr* e);
+
+            void build_mapping(const ast::ExprList* args,
+                               std::map<std::string, parameter>& args_map,
+                               std::vector<std::string>& order);
+
+            void build_call(const ast::ExprList* args,
+                            std::map<std::string, parameter>& args_map,
+                            std::vector<std::string>& order);
+
+            ast::ExprList*
+            generate_list(const yy::location& loc,
+                          std::map<std::string, parameter>& args_map,
+                          std::vector<std::string>& order);
+
+            ast::Expr* clone(ast::Ast* ast);
+
+        private:
             misc::Error error_;
             std::stack<ast::FunctionDec*> in_declaration_;
     };
 } // namespace type
+
+# include <type/type-checker.hxx>
 
 #endif /* !TYPE_TYPE_CHECKER_HH */

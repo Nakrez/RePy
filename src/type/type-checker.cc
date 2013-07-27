@@ -134,6 +134,13 @@ namespace type
         // FIXME : Dirty fix supposed to be set when an ambiguous call is made
         // This ambiguous call must only be made when checking function
         // declaration. Else it is a bug or something I did not think of.
+        ast::ExprList* tmp = generate_prototype(e);
+
+        if (e.params_get() != tmp)
+        {
+            delete e.params_get();
+            e.params_set(tmp);
+        }
 
         // If def get is null it is a builtin function (or a bug)
         if (!e.def_get())
@@ -227,5 +234,116 @@ namespace type
     void TypeChecker::operator()(ast::StringExpr& ast)
     {
         ast.type_set(&String::instance());
+    }
+
+    const std::string& TypeChecker::name_get(const ast::Expr* e)
+    {
+        const ast::IdVar* v = dynamic_cast<const ast::IdVar*> (e);
+
+        assert(v && "Internal compiler error");
+
+        return v->id_get();
+    }
+
+    void TypeChecker::build_mapping(const ast::ExprList* args,
+                                    std::map<std::string,
+                                             parameter>& args_map,
+                                    std::vector<std::string>& order)
+    {
+        // Build the mapping
+        for (auto param : args->list_get())
+        {
+            ast::AssignExpr* e = dynamic_cast<ast::AssignExpr*> (param);
+
+            if (e)
+            {
+                std::string s = name_get(e->lvalue_get());
+
+                args_map[s] = parameter(e->rvalue_get(), false);
+                order.push_back(s);
+            }
+            else
+            {
+                std::string s = name_get(param);
+
+                args_map[s] = parameter(nullptr,
+                        false);
+                order.push_back(s);
+            }
+        }
+    }
+
+    void TypeChecker::build_call(const ast::ExprList* args,
+                                 std::map<std::string,
+                                          parameter>& args_map,
+                                 std::vector<std::string>& order)
+    {
+        auto order_it = order.begin();
+        bool positional = true;
+
+        for (auto call_arg : args->list_get())
+        {
+            ast::AssignExpr* e = dynamic_cast<ast::AssignExpr*> (call_arg);
+
+            if (e)
+            {
+                std::string s = name_get(e->lvalue_get());
+                positional = false;
+
+                if (args_map[s].second)
+                    error_ << misc::Error::TYPE
+                        << call_arg->location_get() << ": Parameter " << s
+                        << " already specified" << std::endl;
+                else
+                    args_map[s] = parameter(e->rvalue_get(), true);
+            }
+            else if (!positional)
+                error_ << misc::Error::TYPE
+                    << call_arg->location_get() << ": Non positional argument"
+                    << " detected after positional argument"
+                    << std::endl;
+            else
+            {
+                std::string s = *order_it;
+
+                if (args_map[s].second)
+                    error_ << misc::Error::TYPE
+                        << call_arg->location_get() << ": Parameter " << s
+                        << " already specified" << std::endl;
+                else
+                    args_map[s] = parameter(call_arg, true);
+
+                ++order_it;
+            }
+        }
+    }
+
+    ast::ExprList* TypeChecker::generate_list(const yy::location& loc,
+                                              std::map<std::string,
+                                                       parameter>& args_map,
+                                              std::vector<std::string>& order)
+    {
+        ast::ExprList* params = new ast::ExprList(loc);
+
+        for (auto arg : order)
+        {
+            if (!args_map[arg].first)
+                error_ << misc::Error::TYPE
+                       << loc << ": Argument " << arg
+                       << " not specified" << std::endl;
+            else
+                params->push_back(clone(args_map[arg].first));
+        }
+
+        return params;
+    }
+
+    ast::Expr* TypeChecker::clone(ast::Ast* ast)
+    {
+        cloner::AstCloner clone;
+
+        clone.visit(ast);
+
+        return dynamic_cast<ast::Expr*> (clone.cloned_ast_get());
     }
 } // namespace type
