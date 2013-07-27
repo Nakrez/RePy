@@ -16,15 +16,19 @@ namespace type
 
     void TypeChecker::type_check(ast::Expr* e1, ast::Expr* e2)
     {
-        if (!e1->type_get() || !e2->type_get())
-            assert(false && "Compiler internal error");
-
-        if (!e1->type_get()->compatible_with(*(e2->type_get())))
+        // FIXME : quick fix that breaks multiple type error report
+        if (error_.error_type_get() == misc::Error::NONE)
         {
-            error_ << misc::Error::TYPE
-                   << e1->location_get() << ": Type error, excpected "
-                   << *(e1->type_get()) << ", got " << *(e2->type_get())
-                   << std::endl;
+            if (!e1->type_get() || !e2->type_get())
+                assert(false && "Compiler internal error");
+
+            if (!e1->type_get()->compatible_with(*(e2->type_get())))
+            {
+                error_ << misc::Error::TYPE
+                    << e1->location_get() << ": Type error, excpected "
+                    << *(e1->type_get()) << ", got " << *(e2->type_get())
+                    << std::endl;
+            }
         }
     }
 
