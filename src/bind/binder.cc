@@ -62,7 +62,7 @@ namespace bind
 
     void Binder::operator()(ast::FunctionDec& s)
     {
-        if (in_class_)
+        if (!in_class_)
             scope_map_.add(s.name_get(), &s);
 
         scope_map_.scope_begin();
