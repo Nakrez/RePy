@@ -18,6 +18,11 @@ namespace ast
             const Var* var_get() const;
             Var* var_get();
 
+            const type::Type* type_get() const;
+            type::Type* type_get();
+
+            void type_set(type::Type* t);
+
             virtual void add_component(Var* v);
 
             virtual void accept(Visitor& v);
@@ -26,6 +31,7 @@ namespace ast
         protected:
             Var* var_;
             std::string name_;
+            type::Type* type_;
     };
 } // namespace ast
 

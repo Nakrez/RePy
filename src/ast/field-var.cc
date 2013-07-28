@@ -34,6 +34,21 @@ namespace ast
         return var_;
     }
 
+    const type::Type* FieldVar::type_get() const
+    {
+        return type_;
+    }
+
+    type::Type* FieldVar::type_get()
+    {
+        return type_;
+    }
+
+    void FieldVar::type_set(type::Type* t)
+    {
+        type_ = t;
+    }
+
     void FieldVar::add_component(Var* v)
     {
         if (var_ == nullptr)
