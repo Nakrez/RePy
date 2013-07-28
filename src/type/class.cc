@@ -22,7 +22,7 @@ namespace type
     bool Class::component_add(const std::string& name, ast::Ast* dec)
     {
         // Component already exists
-        if (!content_[name])
+        if (content_[name])
             return false;
 
         content_[name] = dec;
