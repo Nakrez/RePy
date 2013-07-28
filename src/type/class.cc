@@ -14,12 +14,12 @@ namespace type
         return name_;
     }
 
-    ast::Stmt* Class::component_get(const std::string& name)
+    ast::Ast* Class::component_get(const std::string& name)
     {
         return content_.at(name);
     }
 
-    bool Class::component_add(const std::string& name, ast::Stmt* dec)
+    bool Class::component_add(const std::string& name, ast::Ast* dec)
     {
         // Component already exists
         if (!content_.at(name))

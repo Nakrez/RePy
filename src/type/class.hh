@@ -17,16 +17,16 @@ namespace type
 
             const std::string& name_get() const;
 
-            ast::Stmt* component_get(const std::string& name);
+            ast::Ast* component_get(const std::string& name);
 
-            bool component_add(const std::string& name, ast::Stmt* dec);
+            bool component_add(const std::string& name, ast::Ast* dec);
 
             virtual std::ostream& dump(std::ostream& o) const;
 
             virtual std::string cpp_type() const;
 
         private:
-            std::map<std::string, ast::Stmt*> content_;
+            std::map<std::string, ast::Ast*> content_;
             std::string name_;
     };
 } // namepsace type
