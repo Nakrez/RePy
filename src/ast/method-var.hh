@@ -29,6 +29,12 @@ namespace ast
             const Var* var_get() const;
             Var* var_get();
 
+            const FunctionDec* def_get() const;
+            FunctionDec* def_get();
+
+            void def_set(FunctionDec* d);
+            void params_set(ExprList* p);
+
             virtual void add_component(Var* v);
 
             virtual void accept(Visitor& v);

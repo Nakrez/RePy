@@ -65,6 +65,26 @@ namespace ast
         return field_->var_get();
     }
 
+    const FunctionDec* MethodVar::def_get() const
+    {
+        return call_->def_get();
+    }
+
+    FunctionDec* MethodVar::def_get()
+    {
+        return call_->def_get();
+    }
+
+    void MethodVar::def_set(FunctionDec* d)
+    {
+        call_->def_set(d);
+    }
+
+    void MethodVar::params_set(ExprList* p)
+    {
+        call_->params_set(p);
+    }
+
     void MethodVar::add_component(Var* v)
     {
         field_->add_component(v);
