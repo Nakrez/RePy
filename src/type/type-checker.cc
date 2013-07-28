@@ -224,6 +224,16 @@ namespace type
 
     void TypeChecker::operator()(ast::IdVar& ast)
     {
+        if (ast.id_get() == "self")
+        {
+            if (current_class_)
+                ast.type_set(current_class_);
+            else
+                error_ << misc::Error::TYPE
+                       << ast.location_get() << " : self used outside class "
+                       << "definition" << std::endl;
+            return;
+        }
         ast::Expr* e = dynamic_cast<ast::Expr*> (ast.def_get());
 
         if (e)
