@@ -16,13 +16,13 @@ namespace type
 
     ast::Ast* Class::component_get(const std::string& name)
     {
-        return content_.at(name);
+        return content_[name];
     }
 
     bool Class::component_add(const std::string& name, ast::Ast* dec)
     {
         // Component already exists
-        if (!content_.at(name))
+        if (!content_[name])
             return false;
 
         content_[name] = dec;
