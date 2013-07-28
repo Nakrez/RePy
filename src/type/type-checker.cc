@@ -296,6 +296,12 @@ namespace type
         e.rvalue_get()->accept(*this);
         e.lvalue_get()->accept(*this);
 
+        if (!e.rvalue_get()->type_get()
+            && dynamic_cast<ast::FieldVar*> (e.rvalue_get()))
+            error_ << misc::Error::TYPE
+                   << e.rvalue_get()->location_get() << " : unknown field"
+                   << std::endl;
+
         type_set(e.lvalue_get(), e.rvalue_get());
         type_set(&e, e.rvalue_get());
 
