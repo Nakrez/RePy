@@ -42,6 +42,7 @@ namespace bind
             void operator()(ast::BreakStmt& ast);
             void operator()(ast::ContinueStmt& ast);
 
+            void operator()(ast::ClassDec& ast);
             void operator()(ast::FunctionDec& ast);
             void operator()(ast::FunctionVar& ast);
 
@@ -56,6 +57,7 @@ namespace bind
             std::stack<ast::Stmt*> loop_stack_;
             misc::Error error_;
             bool declaration_;
+            bool in_class_;
     };
 } // namespace bind
 

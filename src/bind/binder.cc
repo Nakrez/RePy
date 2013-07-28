@@ -5,6 +5,7 @@ namespace bind
     Binder::Binder()
         : scope_map_(misc::ScopedMap<std::string, ast::Ast*>(nullptr))
         , declaration_(false)
+        , in_class_(false)
     {}
 
     Binder::~Binder()
@@ -50,9 +51,19 @@ namespace bind
             ast.in_loop_set(loop_stack_.top());
     }
 
+    void Binder::operator()(ast::ClassDec& ast)
+    {
+        bool old = in_class_;
+
+        in_class_ = true;
+        ast.def_get()->accept(*this);
+        in_class_ = old;
+    }
+
     void Binder::operator()(ast::FunctionDec& s)
     {
-        scope_map_.add(s.name_get(), &s);
+        if (in_class_)
+            scope_map_.add(s.name_get(), &s);
 
         scope_map_.scope_begin();
 
