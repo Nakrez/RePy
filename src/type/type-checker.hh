@@ -42,6 +42,7 @@ namespace type
             virtual void operator()(ast::FunctionDec& ast);
             virtual void operator()(ast::ClassDec& ast);
             virtual void operator()(ast::FunctionVar& ast);
+            virtual void operator()(ast::MethodVar& ast);
             virtual void operator()(ast::AssignExpr& ast);
             virtual void operator()(ast::OpExpr& ast);
             virtual void operator()(ast::IdVar& ast);
@@ -53,6 +54,13 @@ namespace type
             // Type callable expression (FunctionVar, MethodVar)
             template <class T>
             void type_callable(T& e);
+
+            // FIXME : There must be a less dirty way
+            template <class T>
+            void check_builtin(T& e);
+
+            template <class T>
+            const ast::ExprList* builtin_get(T& e);
 
             template <class T>
             ast::ExprList* generate_prototype(T& dec);

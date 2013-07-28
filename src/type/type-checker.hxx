@@ -22,7 +22,7 @@ namespace type
         // If def get is null it is a builtin function (or a bug)
         if (!e.def_get())
         {
-            builtin::BuiltinLibrary::instance().type_check(e, error_, *this);
+            check_builtin(e);
             return;
         }
 
@@ -71,7 +71,7 @@ namespace type
 
         if (!dec.def_get())
         {
-            dec_get = builtin::BuiltinLibrary::instance().args_get(dec);
+            dec_get = builtin_get(dec);
 
             if (!dec_get)
                 return dec.params_get();

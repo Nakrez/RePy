@@ -132,6 +132,9 @@ namespace type
 
         if (!f_type->return_type_get())
             f_type->return_type_set(&Void::instance());
+
+        if (current_class_)
+            current_class_->component_add(s.name_get(), &s);
     }
 
     void TypeChecker::operator()(ast::ClassDec& ast)
@@ -150,6 +153,42 @@ namespace type
 
     void TypeChecker::operator()(ast::FunctionVar& e)
     {
+        type_callable(e);
+    }
+
+    void TypeChecker::operator()(ast::MethodVar& e)
+    {
+        e.field_get()->var_get()->accept(*this);
+
+        Class* field_type = dynamic_cast<Class*> (e.field_get()->var_get()->type_get());
+
+        // Check that field type is a class
+        if (!field_type)
+        {
+            error_ << misc::Error::TYPE
+                   << e.location_get() << " : Not a class" << std::endl;
+
+            return;
+        }
+
+        ast::FunctionDec* method = nullptr;
+
+        method = dynamic_cast<ast::FunctionDec*> (field_type->component_get(e.name_get()));
+
+        // Check that the method exists and is not a field
+        if (!method)
+        {
+            error_ << misc::Error::TYPE
+                   << e.location_get() << " : " << e.name_get()
+                   << " is not a callable object or not part of " << *field_type
+                   << std::endl;
+
+            return;
+        }
+
+        // Set the definition and check the call
+        e.def_set(method);
+
         type_callable(e);
     }
 
@@ -173,6 +212,10 @@ namespace type
     {
         if (ast.id_get() == "self")
         {
+            // Usefull in methodvar check to avoid recheck of self statement
+            if (ast.type_get())
+                return;
+
             if (current_class_)
                 ast.type_set(current_class_);
             else
@@ -181,6 +224,7 @@ namespace type
                        << "definition" << std::endl;
             return;
         }
+
         ast::Expr* e = dynamic_cast<ast::Expr*> (ast.def_get());
 
         if (e)
@@ -265,6 +309,32 @@ namespace type
     void TypeChecker::operator()(ast::StringExpr& ast)
     {
         ast.type_set(&String::instance());
+    }
+
+    template <>
+    void TypeChecker::check_builtin(ast::FunctionVar& e)
+    {
+        builtin::BuiltinLibrary::instance().type_check(e, error_, *this);
+    }
+
+    template <>
+    void TypeChecker::check_builtin(ast::MethodVar&)
+    {
+        assert(false && "Internal compiler error");
+    }
+
+    template <>
+    const ast::ExprList* TypeChecker::builtin_get(ast::FunctionVar& e)
+    {
+        return builtin::BuiltinLibrary::instance().args_get(e);
+    }
+
+    template <>
+    const ast::ExprList* TypeChecker::builtin_get(ast::MethodVar&)
+    {
+        assert(false && "Internal compiler error");
+
+        return nullptr;
     }
 
     const std::string& TypeChecker::name_get(const ast::Expr* e)
