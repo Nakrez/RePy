@@ -180,6 +180,9 @@ namespace bind
 
     void Binder::operator()(ast::IdVar& ast)
     {
+        if (in_class_ && ast.id_get() == "self")
+            return;
+
         if (!scope_map_.get(ast.id_get()))
             error_ << misc::Error::BIND
                    << ast.location_get() << ": unknown identifier "
