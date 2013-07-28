@@ -50,6 +50,10 @@ namespace type
             virtual void operator()(ast::NumeralExpr& ast);
 
         private:
+            // Type callable expression (FunctionVar, MethodVar)
+            template <class T>
+            void type_callable(T& e);
+
             template <class T>
             ast::ExprList* generate_prototype(T& dec);
 

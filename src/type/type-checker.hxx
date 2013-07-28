@@ -6,6 +6,65 @@
 namespace type
 {
     template <class T>
+    void TypeChecker::type_callable(T& e)
+    {
+        // FIXME : Dirty fix supposed to be set when an ambiguous call is made
+        // This ambiguous call must only be made when checking function
+        // declaration. Else it is a bug or something I did not think of.
+        ast::ExprList* tmp = generate_prototype(e);
+
+        if (e.params_get() != tmp)
+        {
+            delete e.params_get();
+            e.params_set(tmp);
+        }
+
+        // If def get is null it is a builtin function (or a bug)
+        if (!e.def_get())
+        {
+            builtin::BuiltinLibrary::instance().type_check(e, error_, *this);
+            return;
+        }
+
+        bool ambigous = false;
+        Function* prototype = new Function();
+
+        if (e.params_get())
+        {
+            for (auto p : e.params_get()->list_get())
+            {
+                p->accept(*this);
+
+                if (p->type_get() == &Polymorphic::instance())
+                    ambigous = true;
+
+                prototype->args_type_add(p->type_get());
+            }
+        }
+
+        if (!ambigous)
+        {
+            e.type_set(type_call(e.def_get(), prototype));
+
+            // If the result of the process is Polymorphic type then the code
+            // is invalid or contains a part of unsupported stuff.
+            // If you fine any example that is valid and fully supported
+            // I would be glad to see it and review my algorithm
+            if (e.type_get() == &Polymorphic::instance())
+                error_ << misc::Error::TYPE
+                       << e.location_get() << ": Function return type "
+                       << "ambiguous or contains unsupported stuff."
+                       << " If you believe your code works and is supported "
+                       << "please report it as BUG. Thanks !"
+                       << std::endl;
+            else if (!e.type_get())
+                e.type_set(&Polymorphic::instance());
+        }
+        else
+            e.type_set(&Polymorphic::instance());
+    }
+
+    template <class T>
     ast::ExprList* TypeChecker::generate_prototype(T& dec)
     {
         const ast::ExprList* dec_get;
