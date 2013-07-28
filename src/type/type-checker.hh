@@ -38,15 +38,16 @@ namespace type
             void type_set(ast::Expr* e1, ast::Expr* e2);
             Type* type_call(ast::FunctionDec* d, Function* type);
 
-            void operator()(ast::ReturnStmt& ast);
-            void operator()(ast::FunctionDec& ast);
-            void operator()(ast::ClassDec& ast);
-            void operator()(ast::FunctionVar& ast);
-            void operator()(ast::AssignExpr& ast);
-            void operator()(ast::OpExpr& ast);
-            void operator()(ast::IdVar& ast);
-            void operator()(ast::StringExpr& ast);
-            void operator()(ast::NumeralExpr& ast);
+            virtual void operator()(ast::ReturnStmt& ast);
+            virtual void operator()(ast::FunctionDec& ast);
+            virtual void operator()(ast::ClassDec& ast);
+            virtual void operator()(ast::FunctionVar& ast);
+            virtual void operator()(ast::AssignExpr& ast);
+            virtual void operator()(ast::OpExpr& ast);
+            virtual void operator()(ast::IdVar& ast);
+            virtual void operator()(ast::FieldVar& ast);
+            virtual void operator()(ast::StringExpr& ast);
+            virtual void operator()(ast::NumeralExpr& ast);
 
         private:
             template <class T>

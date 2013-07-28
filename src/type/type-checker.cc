@@ -232,6 +232,55 @@ namespace type
             assert(false && "Compiler internal error");
     }
 
+    void TypeChecker::operator()(ast::FieldVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        type::Class* field_super = nullptr;
+
+        field_super = dynamic_cast<type::Class*> (ast.var_get()->type_get());
+
+        // If the type of the field before is not a class or is not set
+        if (!field_super)
+        {
+            error_ << misc::Error::TYPE
+                   << ast.location_get() << " : not a class" << std::endl;
+            return;
+        }
+
+        // If name already exists in the class definition
+        if (field_super->component_get(ast.name_get()))
+        {
+            ast::Ast* dec = field_super->component_get(ast.name_get());
+
+            ast::FieldVar* var = dynamic_cast<ast::FieldVar*> (dec);
+
+            // If the name is not a field in the definition -> error
+            if (!var)
+            {
+                error_ << misc::Error::TYPE
+                       << ast.location_get() << " : " << ast.name_get()
+                       << " member of " << field_super << " not declared as"
+                       << " field" << std::endl;
+                return;
+            }
+
+            // If the definition as no type
+            if (!var->type_get())
+            {
+                error_ << misc::Error::TYPE
+                       << ast.location_get() << " : can't deduce type of "
+                       << *ast.var_get() << std::endl;
+                return;
+            }
+
+            // Else OK
+            type_set(&ast, var);
+        }
+        else // If the name does not exists the define it in the class
+            field_super->component_add(ast.name_get(), &ast);
+    }
+
     void TypeChecker::operator()(ast::AssignExpr& e)
     {
         e.rvalue_get()->accept(*this);
