@@ -231,4 +231,16 @@ namespace cpp
 
         code_ << "->" << ast.name_get();
     }
+
+    void CodeGenerator::operator()(ast::MethodVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        code_ << "->" << ast.name_get() << "(";
+
+        if (ast.params_get())
+            ast.params_get()->accept(*this);
+
+        code_ << ")";
+    }
 } // namespace cpp
