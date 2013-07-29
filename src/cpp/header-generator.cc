@@ -40,9 +40,15 @@ namespace cpp
     {
         type::Class* type = ast.type_get();
 
+        // Print all C++ stuff for class definition
         o_ << "class " << type->name_get() << misc::iendl;
         o_ << "{" << misc::indentendl;
         o_ << "public:" << misc::indentendl;
+
+        // Print the body
+        ast.def_get()->accept(*this);
+
+        // Close the definition
         o_ << misc::dedent << misc::dedentendl << "};" << misc::iendl;
     }
 
