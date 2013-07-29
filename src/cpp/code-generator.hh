@@ -9,6 +9,8 @@
 # include <ast/default-visitor.hh>
 # include <builtin/builtin-library.hh>
 
+# include <type/class.hh>
+
 namespace cpp
 {
     class CodeGenerator : public ast::DefaultVisitor
@@ -31,6 +33,7 @@ namespace cpp
             virtual void operator()(ast::IfStmt& ast);
             virtual void operator()(ast::WhileStmt& ast);
             virtual void operator()(ast::FunctionDec& ast);
+            virtual void operator()(ast::ClassDec& ast);
 
             virtual void operator()(ast::OpExpr& ast);
             virtual void operator()(ast::AssignExpr& ast);
@@ -38,12 +41,14 @@ namespace cpp
             virtual void operator()(ast::StringExpr& ast);
             virtual void operator()(ast::IdVar& ast);
             virtual void operator()(ast::FunctionVar& ast);
+            virtual void operator()(ast::FieldVar& ast);
 
         protected:
             std::ostream& o_;
             std::stringstream code_;
             std::list<std::string> modules_;
             bool params_;
+            type::Class* current_class_;
     };
 } // namespace cpp
 

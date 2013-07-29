@@ -6,6 +6,7 @@ namespace cpp
     CodeGenerator::CodeGenerator(std::ostream& o)
         : o_(o)
         , params_(false)
+        , current_class_(nullptr)
     {}
 
     CodeGenerator::~CodeGenerator()
@@ -130,8 +131,14 @@ namespace cpp
         {
             ast.type_set(proto);
 
-            code_ << ast.type_get()->return_type_get()->cpp_type() << " "
-                << ast.name_get() << "(";
+            code_ << ast.type_get()->return_type_get()->cpp_type() << " ";
+
+            // If function is the method add the name of the class followed
+            // by "::"
+            if (current_class_)
+                code_ << current_class_->name_get() << "::";
+
+            code_ << ast.name_get() << "(";
 
             params_ = true;
             if (ast.args_get())
@@ -146,8 +153,25 @@ namespace cpp
         }
     }
 
+    void CodeGenerator::operator()(ast::ClassDec& ast)
+    {
+        type::Class* old = current_class_;
+
+        current_class_ = ast.type_class_get();
+
+        ast.def_get()->accept(*this);
+
+        current_class_ = old;
+    }
+
     void CodeGenerator::operator()(ast::IdVar& ast)
     {
+        if (current_class_ && ast.id_get() == "self")
+        {
+            code_ << "this";
+            return;
+        }
+
         if (params_ || (!ast.def_get() && ast.type_get()))
             code_ << ast.type_get()->cpp_type() << " ";
 
@@ -199,5 +223,12 @@ namespace cpp
             ast.params_get()->accept(*this);
 
         code_ << ")";
+    }
+
+    void CodeGenerator::operator()(ast::FieldVar& ast)
+    {
+        ast.var_get()->accept(*this);
+
+        code_ << "->" << ast.name_get();
     }
 } // namespace cpp
