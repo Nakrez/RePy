@@ -163,8 +163,13 @@ namespace type
             ast::FunctionDec* c;
             c = dynamic_cast<ast::FunctionDec*> (t->component_get("__init__"));
 
+            // Indicates that this function var is an instanciation of an
+            // object (usefull to add new C++ keyword)
             if (c)
+            {
                 e.def_set(c);
+                e.constructor_set(true);
+            }
         }
 
         type_callable(e);

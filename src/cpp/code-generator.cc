@@ -215,6 +215,9 @@ namespace cpp
 
     void CodeGenerator::operator()(ast::FunctionVar& ast)
     {
+        if (ast.constructor_get())
+            code_ << "new ";
+
         ast.var_get()->accept(*this);
 
         code_ << "(";

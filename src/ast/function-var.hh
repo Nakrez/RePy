@@ -23,6 +23,9 @@ namespace ast
             const FunctionDec* def_get() const;
             FunctionDec* def_get();
 
+            bool constructor_get() const;
+            void constructor_set(bool c);
+
             void def_set(FunctionDec* d);
             void params_set(ExprList* p);
 
@@ -35,6 +38,7 @@ namespace ast
             Var* var_;
             ExprList* params_;
             FunctionDec* def_;
+            bool constructor_;
     };
 } // namespace ast
 

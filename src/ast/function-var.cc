@@ -10,6 +10,7 @@ namespace ast
         , var_(var)
         , params_(params)
         , def_(nullptr)
+        , constructor_(false)
     {}
 
     FunctionVar::~FunctionVar()
@@ -46,6 +47,16 @@ namespace ast
     FunctionDec* FunctionVar::def_get()
     {
         return def_;
+    }
+
+    bool FunctionVar::constructor_get() const
+    {
+        return constructor_;
+    }
+
+    void FunctionVar::constructor_set(bool c)
+    {
+        constructor_ = c;
     }
 
     void FunctionVar::def_set(FunctionDec* d)
