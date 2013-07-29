@@ -55,6 +55,8 @@ namespace bind
     {
         bool old = in_class_;
 
+        scope_map_.add(ast.name_get(), &ast);
+
         in_class_ = true;
         ast.def_get()->accept(*this);
         in_class_ = old;
@@ -103,9 +105,13 @@ namespace bind
                 ast.def_set(d);
             else if (!builtin::BuiltinLibrary::instance().is_builtin(v->id_get()))
             {
-                error_ << misc::Error::BIND
-                       << ast.location_get() << ": undeclared function "
-                       << v->id_get() << std::endl;
+                // Check if the name match a class dec
+                ast::ClassDec* c = dynamic_cast<ast::ClassDec*> (scope_map_.get(v->id_get()));
+
+                if (!c)
+                    error_ << misc::Error::BIND
+                           << ast.location_get() << ": undeclared function "
+                           << v->id_get() << std::endl;
             }
         }
         else
@@ -188,6 +194,8 @@ namespace bind
                    << ast.location_get() << ": unknown identifier "
                    << ast.id_get() << std::endl;
         else
+        {
             ast.def_set(scope_map_.get(ast.id_get()));
+        }
     }
 } // namespace bind
