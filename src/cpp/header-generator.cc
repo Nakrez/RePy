@@ -5,10 +5,25 @@ namespace cpp
 {
     HeaderGenerator::HeaderGenerator(std::ostream& o)
         : o_(o)
+        , params_(false)
     {}
 
     HeaderGenerator::~HeaderGenerator()
     {}
+
+    void HeaderGenerator::operator()(ast::ExprList& ast)
+    {
+        auto beg = ast.list_get().begin();
+        auto end = ast.list_get().end();
+
+        for (auto it = beg; it != end; ++it)
+        {
+            if (it != beg && params_)
+                o_ << ", ";
+
+            (*it)->accept(*this);
+        }
+    }
 
     void HeaderGenerator::operator()(ast::ModuleStmt& ast)
     {
@@ -28,10 +43,23 @@ namespace cpp
         {
             ast.type_set(proto);
 
+            o_ << ast.type_get()->return_type_get()->cpp_type() << " "
+                << ast.name_get() << "(";
+
+            params_ = true;
             if (ast.args_get())
                 ast.args_get()->accept(*this);
+            params_ = false;
 
             ast.body_get()->accept(*this);
+
+            o_ << ");" << misc::iendl;
         }
+    }
+
+    void HeaderGenerator::operator()(ast::IdVar& ast)
+    {
+        if (params_ || (!ast.def_get() && ast.type_get()))
+            o_ << ast.type_get()->cpp_type() << " " << ast.id_get();
     }
 } // namespace cpp

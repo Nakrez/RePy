@@ -15,12 +15,15 @@ namespace cpp
             HeaderGenerator(std::ostream& o);
             virtual ~HeaderGenerator();
 
+            virtual void operator()(ast::ExprList& ast);
             virtual void operator()(ast::ModuleStmt& ast);
 
             virtual void operator()(ast::FunctionDec& ast);
+            virtual void operator()(ast::IdVar& ast);
 
         protected:
             std::ostream& o_;
+            bool params_;
     };
 } // namespace cpp
 
