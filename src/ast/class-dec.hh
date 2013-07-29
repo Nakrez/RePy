@@ -23,8 +23,8 @@ namespace ast
             const Stmt* def_get() const;
             Stmt* def_get();
 
-            const type::Class& type_get() const;
-            type::Class& type_get();
+            const type::Class* type_get() const;
+            type::Class* type_get();
 
             virtual void accept(Visitor& v);
             virtual void accept(ConstVisitor& v) const;
@@ -33,7 +33,7 @@ namespace ast
             std::string name_;
             ExprList* inherit_;
             Stmt* def_;
-            type::Class type_;
+            type::Class* type_;
     };
 } // namespace ast
 

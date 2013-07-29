@@ -23,4 +23,9 @@ namespace type
 
         return o;
     }
+
+    std::string Type::cpp_type() const
+    {
+        return "lol";
+    }
 } // namespace type

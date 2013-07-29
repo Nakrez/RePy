@@ -36,6 +36,16 @@ namespace cpp
         o_ << "}" << misc::iendl;
     }
 
+    void HeaderGenerator::operator()(ast::ClassDec& ast)
+    {
+        type::Class* type = ast.type_get();
+
+        o_ << "class " << type->name_get() << misc::iendl;
+        o_ << "{" << misc::indentendl;
+        o_ << "public:" << misc::indentendl;
+        o_ << misc::dedent << misc::dedentendl << "};" << misc::iendl;
+    }
+
     void HeaderGenerator::operator()(ast::FunctionDec& ast)
     {
         // Generating all functions prototypes
@@ -51,15 +61,15 @@ namespace cpp
                 ast.args_get()->accept(*this);
             params_ = false;
 
-            ast.body_get()->accept(*this);
-
             o_ << ");" << misc::iendl;
+
+            ast.body_get()->accept(*this);
         }
     }
 
     void HeaderGenerator::operator()(ast::IdVar& ast)
     {
-        if (params_ || (!ast.def_get() && ast.type_get()))
+        if (params_ && (!ast.def_get() && ast.type_get()))
             o_ << ast.type_get()->cpp_type() << " " << ast.id_get();
     }
 } // namespace cpp

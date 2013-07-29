@@ -9,7 +9,7 @@ namespace ast
         , name_(name)
         , inherit_(inherit)
         , def_(def)
-        , type_(name)
+        , type_(new type::Class(name))
     {}
 
     ClassDec::~ClassDec()
@@ -48,12 +48,12 @@ namespace ast
         return def_;
     }
 
-    const type::Class& ClassDec::type_get() const
+    const type::Class* ClassDec::type_get() const
     {
         return type_;
     }
 
-    type::Class& ClassDec::type_get()
+    type::Class* ClassDec::type_get()
     {
         return type_;
     }

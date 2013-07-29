@@ -18,7 +18,7 @@ namespace type
             virtual std::ostream& dump(std::ostream& o) const = 0;
 
             /// @brief String corresponding to C++ type
-            virtual std::string cpp_type() const = 0;
+            virtual std::string cpp_type() const;
     };
 
     std::ostream& operator<<(std::ostream& o, const type::Type& type);
