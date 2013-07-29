@@ -123,6 +123,29 @@ namespace ast
         to_generate_.push_back(f);
     }
 
+    void FunctionDec::delete_self()
+    {
+        auto self = dynamic_cast<ast::IdVar*> (final_args_->list_get().front());
+
+        if (self && self->id_get() == "self")
+        {
+            final_args_->pop_front();
+            original_args_->pop_front();
+
+            if (final_args_->list_get().empty())
+            {
+                delete final_args_;
+                final_args_ = nullptr;
+            }
+
+            if (original_args_->list_get().empty())
+            {
+                delete original_args_;
+                original_args_ = nullptr;
+            }
+        }
+    }
+
     void FunctionDec::accept(Visitor& v)
     {
         v(*this);
