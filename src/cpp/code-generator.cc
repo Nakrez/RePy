@@ -131,14 +131,18 @@ namespace cpp
         {
             ast.type_set(proto);
 
-            code_ << ast.type_get()->return_type_get()->cpp_type() << " ";
+            if (!(ast.name_get() == "__init__" && current_class_))
+                code_ << ast.type_get()->return_type_get()->cpp_type() << " ";
 
             // If function is the method add the name of the class followed
             // by "::"
             if (current_class_)
                 code_ << current_class_->name_get() << "::";
 
-            code_ << ast.name_get() << "(";
+            if (ast.name_get() == "__init__" && current_class_)
+                code_ << current_class_->name_get() << "(";
+            else
+                code_ << ast.name_get() << "(";
 
             params_ = true;
             if (ast.args_get())
