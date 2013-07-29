@@ -49,6 +49,18 @@ namespace repy
     }
 
     template<class T>
+    T __gt__(T a, T b)
+    {
+        return a->__gt__(b);
+    }
+
+    template <>
+    __repy_int __gt__(__repy_int a, __repy_int b)
+    {
+        return a > b;
+    }
+
+    template<class T>
     T __le__(T a, T b)
     {
         return a->__le__(b);

@@ -16,6 +16,9 @@ namespace repy
     T __ge__(T a, T b);
 
     template<class T>
+    T __gt__(T a, T b);
+
+    template<class T>
     T __le__(T a, T b);
 
     template<class T>
