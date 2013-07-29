@@ -51,6 +51,7 @@ namespace cpp
 
             if (!dynamic_cast<ast::FunctionDec*> (*it)
                 && !dynamic_cast<ast::WhileStmt*> (*it)
+                && !dynamic_cast<ast::PassStmt*> (*it)
                 && !dynamic_cast<ast::IfStmt*> (*it))
                 code_ << ";";
         }
