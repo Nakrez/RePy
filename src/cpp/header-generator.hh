@@ -23,6 +23,7 @@ namespace cpp
             virtual void operator()(ast::ClassDec& ast);
             virtual void operator()(ast::FunctionDec& ast);
             virtual void operator()(ast::IdVar& ast);
+            virtual void operator()(ast::FieldVar& ast);
 
         protected:
             std::ostream& o_;

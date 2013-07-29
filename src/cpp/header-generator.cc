@@ -92,4 +92,10 @@ namespace cpp
         if (params_ && (!ast.def_get() && ast.type_get()))
             o_ << ast.type_get()->cpp_type() << " " << ast.id_get();
     }
+
+    void HeaderGenerator::operator()(ast::FieldVar& ast)
+    {
+        o_ << ast.type_get()->cpp_type() << " " << ast.name_get() << ";"
+           << misc::iendl;
+    }
 } // namespace cpp
