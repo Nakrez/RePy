@@ -59,6 +59,18 @@ namespace repy
     {
         return a <= b;
     }
+
+    template<class T>
+    T __lt__(T a, T b)
+    {
+        return a->__lt__(b);
+    }
+
+    template <>
+    __repy_int __lt__(__repy_int a, __repy_int b)
+    {
+        return a < b;
+    }
 } // namespace repy
 
 #endif /* !LIB_REPY_HXX */

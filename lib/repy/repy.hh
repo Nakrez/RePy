@@ -17,6 +17,9 @@ namespace repy
 
     template<class T>
     T __le__(T a, T b);
+
+    template<class T>
+    T __lt__(T a, T b);
 } // namespace repy
 
 # include <repy/repy.hxx>
