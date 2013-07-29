@@ -188,6 +188,10 @@ namespace type
         // Check that field type is a class
         if (!field_type)
         {
+            // FIXME : quick fix of a deep duck typing issue
+            if (dynamic_cast<Polymorphic*> (e.field_get()->var_get()->type_get()))
+                return;
+
             error_ << misc::Error::TYPE
                    << e.location_get() << " : Not a class" << std::endl;
 
