@@ -71,21 +71,30 @@ namespace bind
 
         if (s.args_get())
         {
-            for (auto arg : s.args_get()->list_get())
-            {
-                ast::IdVar* var = dynamic_cast<ast::IdVar*> (arg);
+            // Remove self argument (Don't think it is usefull yet)
+            if (in_class_)
+                s.delete_self();
 
-                if (var)
-                    scope_map_.add(var->id_get(), var);
-                else
+            if (s.args_get())
+            {
+                // Add all argument in the current scope
+                for (auto arg : s.args_get()->list_get())
                 {
-                    declaration_ = true;
-                    arg->accept(*this);
-                    declaration_ = false;
+                    ast::IdVar* var = dynamic_cast<ast::IdVar*> (arg);
+
+                    if (var)
+                        scope_map_.add(var->id_get(), var);
+                    else
+                    {
+                        declaration_ = true;
+                        arg->accept(*this);
+                        declaration_ = false;
+                    }
                 }
             }
         }
 
+        // Bind the body of the function/method
         s.body_get()->accept(*this);
 
         scope_map_.scope_end();
