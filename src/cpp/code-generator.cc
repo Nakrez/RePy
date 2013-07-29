@@ -214,7 +214,7 @@ namespace cpp
 
     void CodeGenerator::operator()(ast::NumeralExpr& ast)
     {
-        code_ << ast.value_get();
+        code_ << std::setprecision(10000) << ast.value_get();
     }
 
     void CodeGenerator::operator()(ast::FunctionVar& ast)

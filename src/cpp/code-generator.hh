@@ -3,6 +3,7 @@
 
 # include <list>
 # include <sstream>
+# include <iomanip>
 
 # include <misc/indent.hh>
 
