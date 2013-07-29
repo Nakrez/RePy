@@ -189,6 +189,8 @@ namespace ast
     void
     GenDefaultVisitor<Const>::operator()(typename Const<MethodVar>::type& v)
     {
+        v.field_get()->accept(*this);
+
         if (v.params_get())
             v.params_get()->accept(*this);
     }
