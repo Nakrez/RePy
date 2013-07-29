@@ -8,7 +8,7 @@ def fun(**arg):
 def fun(*args,**arg):
     return 1
     
-def fun(x,*arg,y,z = 1,**a):
+def fun(x,*arg,y,z,**a):
     return 1
     
 
