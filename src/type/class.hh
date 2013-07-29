@@ -21,6 +21,8 @@ namespace type
 
             bool component_add(const std::string& name, ast::Ast* dec);
 
+            const std::map<std::string, ast::Ast*>& content_get() const;
+
             virtual std::ostream& dump(std::ostream& o) const;
 
             virtual std::string cpp_type() const;

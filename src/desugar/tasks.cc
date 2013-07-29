@@ -21,9 +21,12 @@ namespace desugar
 
         ast::program_ast = desugar.cloned_ast_get();
 
-        bind::Binder bind;
-        bind.visit(ast::program_ast);
-
         delete old;
+
+        bind::Binder b;
+        b.visit(ast::program_ast);
+
+        type::TypeChecker c;
+        c.visit(ast::program_ast);
     }
 } // namespace desugar

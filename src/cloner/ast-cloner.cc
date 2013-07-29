@@ -91,9 +91,6 @@ namespace cloner
                                                    ast.name_get(), args, body);
         f->args_set(final_args);
 
-        f->type_set(ast.type_get());
-        f->to_generate_set(ast.to_generate_get());
-
         cloned_ast_ = f;
     }
 
@@ -113,8 +110,10 @@ namespace cloner
         if (ast.inherit_get())
             inherit = clone_list(*ast.inherit_get());
 
-        cloned_ast_ = new ast::ClassDec(ast.location_get(), ast.name_get(),
-                                        inherit, def);
+        ast::ClassDec* d = new ast::ClassDec(ast.location_get(), ast.name_get(),
+                                             inherit, def);
+
+        cloned_ast_ = d;
     }
 
     void AstCloner::operator()(ast::OpExpr& ast)
@@ -125,8 +124,6 @@ namespace cloner
         ast::OpExpr* e = new ast::OpExpr(ast.location_get(), lexpr,
                                          ast.op_get(), rexpr);
 
-        e->type_set(ast.type_get());
-
         cloned_ast_ = e;
     }
 
@@ -136,8 +133,6 @@ namespace cloner
 
         ast::UnaryExpr* e = new ast::UnaryExpr(ast.location_get(),
                                                ast.op_get(), expr);
-
-        e->type_set(ast.type_get());
 
         cloned_ast_ = e;
     }
@@ -150,8 +145,6 @@ namespace cloner
         ast::AssignExpr* e = new ast::AssignExpr(ast.location_get(), lvalue,
                                                  rvalue);
 
-        e->type_set(ast.type_get());
-
         cloned_ast_ = e;
     }
 
@@ -160,8 +153,6 @@ namespace cloner
         ast::NumeralExpr* e = new ast::NumeralExpr(ast.location_get(),
                                                    ast.value_get());
 
-        e->type_set(ast.type_get());
-
         cloned_ast_ = e;
     }
 
@@ -169,8 +160,6 @@ namespace cloner
     {
         ast::StringExpr* e = new ast::StringExpr(ast.location_get(),
                                                  ast.str_get());
-
-        e->type_set(ast.type_get());
 
         cloned_ast_ = e;
     }
@@ -181,8 +170,6 @@ namespace cloner
 
         ast::YieldExpr* e = new ast::YieldExpr(ast.location_get(), ret_value);
 
-        e->type_set(ast.type_get());
-
         cloned_ast_ = e;
     }
 
@@ -191,8 +178,6 @@ namespace cloner
         ast::Expr* e = clone(ast.expr_get());
 
         ast::StarExpr* se = new ast::StarExpr(ast.location_get(), e);
-
-        se->type_set(ast.type_get());
 
         cloned_ast_ = se;
     }
@@ -204,8 +189,6 @@ namespace cloner
         ast::DoubleStarExpr* de = new ast::DoubleStarExpr(ast.location_get(),
                                                          e);
 
-        de->type_set(ast.type_get());
-
         cloned_ast_ = de;
     }
 
@@ -213,7 +196,6 @@ namespace cloner
     {
         ast::IdVar* v = new ast::IdVar(ast.location_get(), ast.id_get());
 
-        v->type_set(ast.type_get());
         v->global_set(ast.global_get());
 
         // These binding conservations are only used by the cloning made by the
@@ -234,8 +216,6 @@ namespace cloner
 
         ast::FunctionVar* v = new ast::FunctionVar(ast.location_get(), var,
                                                    params);
-
-        v->type_set(ast.type_get());
 
         // These binding conservations are only used by the cloning made by the
         // type checker because they are still valid. They can't be used on a

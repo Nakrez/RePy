@@ -9,7 +9,7 @@ namespace ast
         , name_(name)
         , inherit_(inherit)
         , def_(def)
-        , type_(new type::Class(name))
+        , type_class_(new type::Class(name))
     {}
 
     ClassDec::~ClassDec()
@@ -48,14 +48,20 @@ namespace ast
         return def_;
     }
 
-    const type::Class* ClassDec::type_get() const
+    const type::Class* ClassDec::type_class_get() const
     {
-        return type_;
+        return type_class_;
     }
 
-    type::Class* ClassDec::type_get()
+    type::Class* ClassDec::type_class_get()
     {
-        return type_;
+        return type_class_;
+    }
+
+    void ClassDec::type_class_set(type::Class* c)
+    {
+        delete type_class_;
+        type_class_ = c;
     }
 
     void ClassDec::accept(Visitor& v)

@@ -30,6 +30,12 @@ namespace type
         return true;
     }
 
+
+    const std::map<std::string, ast::Ast*>& Class::content_get() const
+    {
+        return content_;
+    }
+
     std::ostream& Class::dump(std::ostream& o) const
     {
         o << "Class (" << name_ << ")";

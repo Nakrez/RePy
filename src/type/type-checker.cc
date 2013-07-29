@@ -144,9 +144,9 @@ namespace type
                    << ast.location_get() << " : Redeclaration of class"
                    << ast.name_get() << std::endl;
         else
-            declared_class_[ast.name_get()] = ast.type_get();
+            declared_class_[ast.name_get()] = ast.type_class_get();
 
-        current_class_ = ast.type_get();
+        current_class_ = ast.type_class_get();
         ast.def_get()->accept(*this);
         current_class_ = nullptr;
     }

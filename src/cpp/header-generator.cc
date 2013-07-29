@@ -41,15 +41,19 @@ namespace cpp
     {
         type::Class* old = current_class_;
 
-        current_class_ = ast.type_get();
+        current_class_ = ast.type_class_get();
 
         // Print all C++ stuff for class definition
         o_ << "class " << current_class_->name_get() << misc::iendl;
         o_ << "{" << misc::indentendl;
         o_ << "public:" << misc::indentendl;
 
-        // Print the body
-        ast.def_get()->accept(*this);
+        // Generates header for each field of the type (method + fields)
+        for (auto field : current_class_->content_get())
+        {
+            if (field.second)
+                field.second->accept(*this);
+        }
 
         // Close the definition
         o_ << misc::dedent << misc::dedentendl << "};" << misc::iendl;
@@ -80,9 +84,6 @@ namespace cpp
             params_ = false;
 
             o_ << ");" << misc::iendl;
-
-            // Recurse on the body to find global variables uses
-            ast.body_get()->accept(*this);
         }
     }
 

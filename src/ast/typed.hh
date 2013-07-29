@@ -11,8 +11,8 @@ namespace ast
             Typed();
             ~Typed();
 
-            const type::Type* type_get() const;
-            type::Type* type_get();
+            virtual const type::Type* type_get() const;
+            virtual type::Type* type_get();
 
             void type_set(type::Type* type);
 

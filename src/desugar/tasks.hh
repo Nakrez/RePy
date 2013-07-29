@@ -12,6 +12,11 @@
 # include <desugar/declaration-generator.hh>
 # include <desugar/global-desugar.hh>
 
+# include <bind/binder.hh>
+
+# include <type/type-checker.hh>
+
+
 namespace desugar
 {
     REGULAR_TASK("declaration-generator",
