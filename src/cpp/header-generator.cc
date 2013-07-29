@@ -6,6 +6,7 @@ namespace cpp
     HeaderGenerator::HeaderGenerator(std::ostream& o)
         : o_(o)
         , params_(false)
+        , current_class_(nullptr)
     {}
 
     HeaderGenerator::~HeaderGenerator()
@@ -38,10 +39,12 @@ namespace cpp
 
     void HeaderGenerator::operator()(ast::ClassDec& ast)
     {
-        type::Class* type = ast.type_get();
+        type::Class* old = current_class_;
+
+        current_class_ = ast.type_get();
 
         // Print all C++ stuff for class definition
-        o_ << "class " << type->name_get() << misc::iendl;
+        o_ << "class " << current_class_->name_get() << misc::iendl;
         o_ << "{" << misc::indentendl;
         o_ << "public:" << misc::indentendl;
 
@@ -50,6 +53,8 @@ namespace cpp
 
         // Close the definition
         o_ << misc::dedent << misc::dedentendl << "};" << misc::iendl;
+
+        current_class_ = old;
     }
 
     void HeaderGenerator::operator()(ast::FunctionDec& ast)
@@ -59,9 +64,16 @@ namespace cpp
         {
             ast.type_set(proto);
 
-            o_ << ast.type_get()->return_type_get()->cpp_type() << " "
-                << ast.name_get() << "(";
+            // If the method name is __init__ export it as C++ constructor
+            if (ast.name_get() == "__init__" && current_class_)
+                o_ << current_class_->name_get();
+            else
+                o_ << ast.type_get()->return_type_get()->cpp_type() << " "
+                << ast.name_get();
 
+            o_ << "(";
+
+            // Print parameters
             params_ = true;
             if (ast.args_get())
                 ast.args_get()->accept(*this);
@@ -69,6 +81,7 @@ namespace cpp
 
             o_ << ");" << misc::iendl;
 
+            // Recurse on the body to find global variables uses
             ast.body_get()->accept(*this);
         }
     }

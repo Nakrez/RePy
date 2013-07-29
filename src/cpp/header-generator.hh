@@ -5,6 +5,8 @@
 
 # include <ast/default-visitor.hh>
 
+# include <type/class.hh>
+
 namespace cpp
 {
     class HeaderGenerator : public ast::DefaultVisitor
@@ -25,6 +27,7 @@ namespace cpp
         protected:
             std::ostream& o_;
             bool params_;
+            type::Class* current_class_;
     };
 } // namespace cpp
 
