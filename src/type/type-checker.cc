@@ -153,7 +153,25 @@ namespace type
 
     void TypeChecker::operator()(ast::FunctionVar& e)
     {
+        // Check if the function is a constructor
+        ast::IdVar* v = dynamic_cast<ast::IdVar*> (e.var_get());
+
+        if (v && declared_class_[v->id_get()])
+        {
+            Class* t = declared_class_[v->id_get()];
+
+            ast::FunctionDec* c;
+            c = dynamic_cast<ast::FunctionDec*> (t->component_get("__init__"));
+
+            if (c)
+                e.def_set(c);
+        }
+
         type_callable(e);
+
+        // If is a constructor set the type
+        if (v && declared_class_[v->id_get()])
+            e.type_set(declared_class_[v->id_get()]);
     }
 
     void TypeChecker::operator()(ast::MethodVar& e)
