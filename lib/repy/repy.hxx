@@ -8,7 +8,7 @@ namespace repy
     template<class T>
     T __add__(T a, T b)
     {
-        return a.__add__(b);
+        return a->__add__(b);
     }
 
     template <>
@@ -17,10 +17,17 @@ namespace repy
         return a + b;
     }
 
+    template <>
+    __repy_string* __add__(__repy_string* a, __repy_string* b)
+    {
+        a->append(*b);
+        return a;
+    }
+
     template<class T>
     T __mul__(T a, T b)
     {
-        return a.__mul__(b);
+        return a->__mul__(b);
     }
 
     template <>
@@ -32,7 +39,7 @@ namespace repy
     template<class T>
     T __ge__(T a, T b)
     {
-        return a.__ge__(b);
+        return a->__ge__(b);
     }
 
     template <>
@@ -44,7 +51,7 @@ namespace repy
     template<class T>
     T __le__(T a, T b)
     {
-        return a.__le__(b);
+        return a->__le__(b);
     }
 
     template <>
