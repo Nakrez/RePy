@@ -62,6 +62,13 @@ namespace ast
     }
 
     template <class T>
+    void AnyList<T>::pop_front()
+    {
+        delete list_.front();
+        list_.pop_front();
+    }
+
+    template <class T>
     void AnyList<T>::splice(AnyList<T>* list)
     {
         list->set_delete(false);

@@ -24,6 +24,7 @@ namespace ast
 
             void push_back(T* elem);
             void push_front(T* elem);
+            void pop_front();
             void splice(AnyList<T>* list);
 
         protected:
