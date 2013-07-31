@@ -13,6 +13,9 @@ namespace repy
     T __mul__(T a, T b);
 
     template<class T>
+    T __floordiv__(T a, T b);
+
+    template<class T>
     T __mod__(T a, T b);
 
     template<class T>

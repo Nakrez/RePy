@@ -37,6 +37,18 @@ namespace repy
     }
 
     template<class T>
+    T __floordiv__(T a, T b)
+    {
+        return a->__floordiv__(b);
+    }
+
+    template <>
+    __repy_int __floordiv__(__repy_int a, __repy_int b)
+    {
+        return a / b;
+    }
+
+    template<class T>
     T __mod__(T a, T b)
     {
         return a->__mod__(b);
