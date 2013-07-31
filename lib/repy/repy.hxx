@@ -37,6 +37,18 @@ namespace repy
     }
 
     template<class T>
+    T __mod__(T a, T b)
+    {
+        return a->__mod__(b);
+    }
+
+    template <>
+    __repy_int __mod__(__repy_int a, __repy_int b)
+    {
+        return a % b;
+    }
+
+    template<class T>
     T __ge__(T a, T b)
     {
         return a->__ge__(b);
